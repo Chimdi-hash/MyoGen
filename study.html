@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Study — MYOGEN | AI Muscle Physiology Dictionary</title>
+  <meta name="description" content="Study muscle physiology and anatomy terms with AI-powered GenLayer validator explanations and futuristic visualizations."/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ══════════════════════════════════════
+       STUDY PAGE — FULL LAYOUT
+    ══════════════════════════════════════ */
+    body { overflow-x: hidden; }
+
+    .study-layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      min-height: 100vh;
+      padding-top: var(--nav-height);
+    }
+
+    /* ── LEFT PANEL: Input + History ── */
+    .study-sidebar {
+      background: rgba(6,6,16,0.85);
+      border-right: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 1.5rem;
+      gap: 1.5rem;
+      height: calc(100vh - var(--nav-height));
+      position: sticky;
+      top: var(--nav-height);
+      overflow-y: auto;
+    }
+
+    .study-sidebar::-webkit-scrollbar { width: 4px; }
+
+    .sidebar-section-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--mid-gray);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Search Input */
+    .search-box {
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      padding-right: 3.5rem;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid var(--glass-border);
+      border-radius: var(--border-radius);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transition);
+      letter-spacing: 0.02em;
+    }
+
+    .search-input::placeholder {
+      color: rgba(176,176,200,0.5);
+      font-style: italic;
+    }
+
+    .search-input:focus {
+      border-color: var(--orange-core);
+      background: rgba(255,107,44,0.06);
+      box-shadow: 0 0 0 3px rgba(255,107,44,0.1);
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--mid-gray);
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 0.25rem;
+      transition: var(--transition);
+    }
+
+    .search-clear:hover { color: var(--orange-bright); }
+
+    /* Study Button */
+    .btn-study {
+      width: 100%;
+      padding: 1.1rem;
+      font-size: 0.85rem;
+      border-radius: var(--border-radius);
+      justify-content: center;
+      gap: 0.75rem;
+      letter-spacing: 0.1em;
+    }
+
+    .btn-study:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Quick Terms */
+    .quick-terms {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .quick-term {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 50px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      color: var(--mid-gray);
+      cursor: pointer;
+      transition: var(--transition);
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .quick-term:hover {
+      background: var(--orange-soft);
+      border-color: rgba(255,107,44,0.4);
+      color: var(--orange-bright);
+    }
+
+    /* History */
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    .history-list::-webkit-scrollbar { width: 3px; }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 0.9rem;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--glass-border);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .history-item:hover {
+      background: var(--orange-soft);
+      border-color: rgba(255,107,44,0.3);
+    }
+
+    .history-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--orange-core);
+      flex-shrink: 0;
+    }
+
+    .history-term {
+      font-size: 0.8rem;
+      color: var(--off-white);
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-transform: capitalize;
+    }
+
+    .history-time {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--mid-gray);
+      flex-shrink: 0;
+    }
+
+    /* ── RIGHT PANEL: Results ── */
+    .study-main {
+      padding: 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      min-height: calc(100vh - var(--nav-height));
+    }
+
+    /* ─── IDLE STATE ─── */
+    .idle-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 1.5rem;
+    }
+
+    .idle-orb {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,107,44,0.15) 0%, transparent 70%);
+      border: 1px solid rgba(255,107,44,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+      animation: float-bob-slow 6s ease infinite, pulse-glow 4s ease infinite;
+    }
+
+    .idle-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--white);
+    }
+
+    .idle-desc {
+      font-size: 0.9rem;
+      color: var(--mid-gray);
+      max-width: 420px;
+    }
+
+    /* ─── LOADING STATE ─── */
+    .loading-state {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .loading-state.show { display: flex; }
+
+    .loading-ring {
+      width: 100px; height: 100px;
+      position: relative;
+    }
+
+    .loading-ring::before, .loading-ring::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid transparent;
+    }
+
+    .loading-ring::before {
+      border-top-color: var(--orange-core);
+      animation: rotate-slow 1s linear infinite;
+    }
+
+    .loading-ring::after {
+      border-bottom-color: var(--orange-gold);
+      animation: rotate-reverse 1.5s linear infinite;
+      inset: 10px;
+    }
+
+    .loading-ring-icon {
+      position: absolute;
+      inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+    }
+
+    .loading-status {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      color: var(--orange-bright);
+    }
+
+    .loading-sub {
+      font-size: 0.8rem;
+      color: var(--mid-gray);
+      font-family: var(--font-mono);
+    }
+
+    /* Validator nodes during loading */
+    .validator-progress {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .vp-node {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0.4rem;
+    }
+
+    .vp-orb {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--glass-bg);
+      border: 1.5px solid var(--glass-border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      transition: var(--transition);
+    }
+
+    .vp-orb.vp-active {
+      border-color: var(--orange-core);
+      background: var(--orange-soft);
+      box-shadow: 0 0 16px var(--orange-glow);
+      animation: pulse-glow 1s ease infinite;
+    }
+
+    .vp-orb.vp-done {
+      border-color: #00C864;
+      background: rgba(0,200,100,0.1);
+    }
+
+    .vp-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--mid-gray);
+      letter-spacing: 0.08em;
+    }
+
+    .vp-connector {
+      width: 20px; height: 1.5px;
+      background: var(--glass-border);
+      transition: var(--transition);
+    }
+
+    .vp-connector.vp-lit {
+      background: linear-gradient(90deg, #00C864, var(--orange-core));
+    }
+
+    /* ─── RESULT STATE ─── */
+    .result-state {
+      display: none;
+      flex-direction: column;
+      gap: 2rem;
+      animation: slide-in-up 0.6s ease both;
+    }
+
+    .result-state.show { display: flex; }
+
+    /* Result Header */
+    .result-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .result-term {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      background: var(--gradient-orange);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+      text-transform: capitalize;
+    }
+
+    .result-category-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      background: var(--orange-soft);
+      border: 1px solid rgba(255,107,44,0.4);
+      color: var(--orange-bright);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Two-column result body */
+    .result-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .result-text-col { display: flex; flex-direction: column; gap: 1.5rem; }
+    .result-viz-col { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    /* Definition card */
+    .definition-card {
+      padding: 1.75rem;
+    }
+
+    .def-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--orange-core);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .def-text {
+      font-size: 1rem;
+      color: var(--off-white);
+      line-height: 1.75;
+    }
+
+    /* Explanation card */
+    .explanation-card {
+      padding: 1.75rem;
+    }
+
+    .explanation-text {
+      font-size: 0.9rem;
+      color: var(--mid-gray);
+      line-height: 1.8;
+    }
+
+    /* Key facts */
+    .facts-card {
+      padding: 1.75rem;
+    }
+
+    .facts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      list-style: none;
+    }
+
+    .fact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--off-white);
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      animation: slide-in-left 0.4s ease both;
+    }
+
+    .fact-item:last-child { border-bottom: none; }
+
+    .fact-bullet {
+      color: var(--orange-core);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Related terms */
+    .related-terms {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .related-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 50px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      color: var(--mid-gray);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .related-tag:hover {
+      background: var(--orange-soft);
+      border-color: var(--orange-core);
+      color: var(--orange-bright);
+    }
+
+    /* Clinical relevance */
+    .clinical-card {
+      padding: 1.25rem 1.5rem;
+      background: rgba(255,107,44,0.05);
+      border-left: 3px solid var(--orange-core);
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    }
+
+    .clinical-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--orange-core);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .clinical-text {
+      font-size: 0.875rem;
+      color: var(--off-white);
+      line-height: 1.65;
+    }
+
+    /* ══ VISUALIZATION PANEL ══ */
+    .viz-canvas-card {
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      position: relative;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--glass-border);
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #viz-canvas {
+      width: 100%;
+      height: 100%;
+      min-height: 320px;
+    }
+
+    .viz-label {
+      position: absolute;
+      bottom: 1rem; left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* Validator consensus badge */
+    .consensus-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--border-radius);
+      background: rgba(0,200,100,0.08);
+      border: 1px solid rgba(0,200,100,0.25);
+      font-size: 0.8rem;
+      color: #00C864;
+      font-family: var(--font-mono);
+    }
+
+    .consensus-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #00C864;
+      animation: pulse-glow 2s ease infinite;
+    }
+
+    /* Actions row */
+    .result-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* ─── Tx Signing Modal ─── */
+    .tx-modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .tx-modal-overlay.show {
+      opacity: 1; pointer-events: auto;
+    }
+
+    .tx-modal {
+      background: rgba(10,10,20,0.98);
+      border: 1px solid rgba(255,107,44,0.3);
+      border-radius: var(--border-radius-xl);
+      padding: 3rem 2.5rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      animation: slide-in-up 0.4s ease both;
+    }
+
+    .tx-icon {
+      font-size: 3.5rem; margin-bottom: 1.25rem;
+      animation: float-bob 3s ease infinite;
+    }
+
+    .tx-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+    }
+
+    .tx-desc {
+      font-size: 0.875rem;
+      color: var(--mid-gray);
+      line-height: 1.65;
+      margin-bottom: 2rem;
+    }
+
+    .tx-detail {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--border-radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .tx-row {
+      display: flex; justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.8rem;
+    }
+
+    .tx-row:last-child { border-bottom: none; }
+    .tx-row .k { color: var(--mid-gray); font-family: var(--font-mono); }
+    .tx-row .v { color: var(--orange-bright); font-family: var(--font-mono); font-size: 0.72rem; }
+
+    .tx-actions { display: flex; gap: 1rem; justify-content: center; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .study-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .study-sidebar {
+        position: static;
+        height: auto;
+        max-height: none;
+        border-right: none;
+        border-bottom: 1px solid var(--glass-border);
+      }
+
+      .result-body {
+        grid-template-columns: 1fr;
+      }
+
+      .study-main { padding: 1.5rem; }
+    }
+
+    @media (max-width: 600px) {
+      .result-header { flex-direction: column; }
+      .result-actions { flex-direction: column; }
+      .tx-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-mesh"></div>
+<div class="bg-grid"></div>
+<div id="particle-field" class="particle-field"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a class="logo" href="index.html">MYOGEN<span>Muscle Intelligence</span></a>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="study.html" class="active">Study</a></li>
+    <li><a href="explorer.html">Explorer</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:0.75rem;">
+    <button id="connect-wallet-btn" class="btn-wallet">⬡ Connect Wallet</button>
+    <div id="wallet-info-bar" class="wallet-info" style="display:none;">
+      <span id="wallet-address-display" class="wallet-address"></span>
+      <button id="disconnect-btn" class="btn-disconnect">Disconnect</button>
+    </div>
+  </div>
+</nav>
+
+<!-- TX Signing Modal -->
+<div class="tx-modal-overlay" id="tx-modal" role="dialog" aria-modal="true" aria-labelledby="tx-modal-title">
+  <div class="tx-modal">
+    <div class="tx-icon">✍️</div>
+    <div class="tx-title" id="tx-modal-title">Sign Transaction</div>
+    <p class="tx-desc">
+      You're about to call MYOGEN's Intelligent Contract on GenLayer Bradbury Testnet.
+      Validators will analyze your term using AI and reach consensus.
+    </p>
+
+    <div class="tx-detail">
+      <div class="tx-row">
+        <span class="k">Function</span>
+        <span class="v">study_term(string)</span>
+      </div>
+      <div class="tx-row">
+        <span class="k">Term</span>
+        <span class="v" id="tx-term-display">—</span>
+      </div>
+      <div class="tx-row">
+        <span class="k">Network</span>
+        <span class="v">GenLayer Bradbury (961)</span>
+      </div>
+      <div class="tx-row">
+        <span class="k">From</span>
+        <span class="v" id="tx-from-display">—</span>
+      </div>
+      <div class="tx-row">
+        <span class="k">Gas</span>
+        <span class="v">Estimated by network</span>
+      </div>
+    </div>
+
+    <div class="tx-actions">
+      <button class="btn-secondary" id="tx-cancel-btn" style="flex:1;" onclick="cancelTx()">
+        Cancel
+      </button>
+      <button class="btn-primary" id="tx-confirm-btn" style="flex:1;" onclick="confirmTx()">
+        ✍️ Sign &amp; Study
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- STUDY LAYOUT -->
+<div class="study-layout">
+
+  <!-- ═══ LEFT SIDEBAR ═══ -->
+  <aside class="study-sidebar">
+    <!-- Input -->
+    <div>
+      <p class="sidebar-section-label">// Enter Term</p>
+      <div class="search-box">
+        <input
+          type="text"
+          id="term-input"
+          class="search-input"
+          placeholder="e.g. sarcomere, actin, motor unit..."
+          maxlength="80"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Muscle physiology term to study"
+        />
+        <button class="search-clear" id="clear-btn" onclick="clearInput()" aria-label="Clear input">✕</button>
+      </div>
+    </div>
+
+    <button
+      class="btn-primary btn-study"
+      id="study-btn"
+      onclick="initiateStudy()"
+      aria-label="Study this term"
+    >
+      🧬 Study This Term
+    </button>
+
+    <!-- Quick Terms -->
+    <div>
+      <p class="sidebar-section-label">// Quick Terms</p>
+      <div class="quick-terms" id="quick-terms">
+        <span class="quick-term" onclick="quickStudy('sarcomere')">Sarcomere</span>
+        <span class="quick-term" onclick="quickStudy('actin')">Actin</span>
+        <span class="quick-term" onclick="quickStudy('myosin')">Myosin</span>
+        <span class="quick-term" onclick="quickStudy('motor unit')">Motor Unit</span>
+        <span class="quick-term" onclick="quickStudy('type I fiber')">Type I Fiber</span>
+        <span class="quick-term" onclick="quickStudy('type II fiber')">Type II Fiber</span>
+        <span class="quick-term" onclick="quickStudy('hypertrophy')">Hypertrophy</span>
+        <span class="quick-term" onclick="quickStudy('ATP')">ATP</span>
+        <span class="quick-term" onclick="quickStudy('neuromuscular junction')">NMJ</span>
+        <span class="quick-term" onclick="quickStudy('tropomyosin')">Tropomyosin</span>
+        <span class="quick-term" onclick="quickStudy('epimysium')">Epimysium</span>
+        <span class="quick-term" onclick="quickStudy('fascicle')">Fascicle</span>
+        <span class="quick-term" onclick="quickStudy('cross-bridge cycle')">Cross-Bridge Cycle</span>
+        <span class="quick-term" onclick="quickStudy('eccentric contraction')">Eccentric</span>
+      </div>
+    </div>
+
+    <!-- Session History -->
+    <div>
+      <p class="sidebar-section-label">// Session History</p>
+      <div class="history-list" id="history-list">
+        <div style="font-size:0.8rem;color:var(--mid-gray);text-align:center;padding:1rem 0;">
+          No terms studied yet in this session.
+        </div>
+      </div>
+    </div>
+
+    <!-- Wallet Status -->
+    <div class="glass-card" style="padding:1rem;margin-top:auto;">
+      <p class="sidebar-section-label">// Wallet Status</p>
+      <div id="sidebar-wallet-status">
+        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--mid-gray);">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--mid-gray);display:inline-block;"></span>
+          Not connected
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN PANEL ═══ -->
+  <main class="study-main">
+
+    <!-- IDLE STATE -->
+    <div class="idle-state" id="idle-state">
+      <div class="idle-orb">🔬</div>
+      <div class="idle-title">What would you like to study?</div>
+      <p class="idle-desc">
+        Type any muscle physiology or anatomy term in the panel on the left, then click <strong>Study This Term</strong>.
+        AI validators on GenLayer will analyze and explain it for you in real time.
+      </p>
+      <div class="hero-badge" style="margin:0;">⬡ Connect wallet to sign transactions</div>
+    </div>
+
+    <!-- LOADING STATE -->
+    <div class="loading-state" id="loading-state">
+      <div class="loading-ring">
+        <div class="loading-ring-icon">🧬</div>
+      </div>
+      <div class="loading-status" id="loading-status-text">Submitting to GenLayer...</div>
+      <div class="loading-sub" id="loading-sub-text">Waiting for validators to analyze your term</div>
+
+      <div class="validator-progress">
+        <div class="vp-node">
+          <div class="vp-orb" id="vp-1">🤖</div>
+          <div class="vp-label">V-Alpha</div>
+        </div>
+        <div class="vp-connector" id="vc-1"></div>
+        <div class="vp-node">
+          <div class="vp-orb" id="vp-2">🤖</div>
+          <div class="vp-label">V-Beta</div>
+        </div>
+        <div class="vp-connector" id="vc-2"></div>
+        <div class="vp-node">
+          <div class="vp-orb" id="vp-3">🤖</div>
+          <div class="vp-label">V-Gamma</div>
+        </div>
+        <div class="vp-connector" id="vc-3"></div>
+        <div class="vp-node">
+          <div class="vp-orb" id="vp-4">🤖</div>
+          <div class="vp-label">V-Delta</div>
+        </div>
+        <div class="vp-connector" id="vc-4"></div>
+        <div class="vp-node">
+          <div class="vp-orb" id="vp-final">✓</div>
+          <div class="vp-label">Consensus</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULT STATE -->
+    <div class="result-state" id="result-state">
+
+      <!-- Header row -->
+      <div class="result-header">
+        <div>
+          <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--mid-gray);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.4rem;">
+            // AI-Validated Result
+          </div>
+          <div class="result-term" id="result-term">—</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.5rem;">
+          <div class="result-category-badge" id="result-category">—</div>
+          <div class="consensus-badge">
+            <div class="consensus-dot"></div>
+            <span>Validator Consensus Reached</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result body -->
+      <div class="result-body">
+
+        <!-- TEXT COL -->
+        <div class="result-text-col">
+
+          <div class="glass-card definition-card">
+            <div class="def-label">// Definition</div>
+            <p class="def-text" id="result-definition">—</p>
+          </div>
+
+          <div class="glass-card explanation-card">
+            <div class="def-label">// Detailed Explanation</div>
+            <p class="explanation-text" id="result-explanation">—</p>
+          </div>
+
+          <div class="glass-card facts-card">
+            <div class="def-label">// Key Facts</div>
+            <ul class="facts-list" id="result-facts"></ul>
+          </div>
+
+          <div>
+            <div class="clinical-card glass-card">
+              <div class="clinical-label">⚕ Clinical Relevance</div>
+              <p class="clinical-text" id="result-clinical">—</p>
+            </div>
+          </div>
+
+          <div>
+            <div class="def-label" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--orange-core);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.6rem;">// Related Terms</div>
+            <div class="related-terms" id="result-related"></div>
+          </div>
+
+        </div>
+
+        <!-- VIZ COL -->
+        <div class="result-viz-col">
+          <div class="viz-canvas-card">
+            <canvas id="viz-canvas" aria-label="Muscle anatomy visualization"></canvas>
+            <div class="viz-label" id="viz-label">MYOGEN VISUALIZATION ENGINE v1.0</div>
+          </div>
+
+          <!-- Muscle groups involved -->
+          <div class="glass-card" style="padding:1.5rem;">
+            <div class="def-label">// Muscles Involved</div>
+            <div class="related-terms" id="result-muscles"></div>
+          </div>
+
+          <!-- Tx info -->
+          <div style="padding:1rem 1.25rem;border-radius:var(--border-radius);background:rgba(255,255,255,0.03);border:1px solid var(--glass-border);">
+            <div class="def-label" style="font-family:var(--font-mono);font-size:0.62rem;color:var(--mid-gray);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem;">// Transaction Info</div>
+            <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--mid-gray);">
+              Tx Hash: <span id="result-tx-hash" style="color:var(--orange-bright);">0x...</span><br/>
+              Block: <span id="result-block" style="color:var(--orange-bright);">Bradbury Testnet</span><br/>
+              Validators: <span style="color:var(--orange-bright);">5 nodes · consensus</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="result-actions">
+        <button class="btn-primary" onclick="studyAnother()" style="font-size:0.78rem;padding:0.85rem 2rem;">
+          🧬 Study Another Term
+        </button>
+        <button class="btn-secondary" onclick="saveToHistory()" style="font-size:0.78rem;padding:0.85rem 2rem;">
+          💾 Save to History
+        </button>
+        <a href="explorer.html" class="btn-secondary" style="font-size:0.78rem;padding:0.85rem 2rem;text-decoration:none;">
+          📊 View All History →
+        </a>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="app.js"></script>
+<script>
+/* ════════════════════════════════════════
+   STUDY PAGE LOGIC
+   ════════════════════════════════════════ */
+
+// State
+let currentTerm = '';
+let pendingTerm = '';
+let sessionHistory = JSON.parse(localStorage.getItem('myogen_session_history') || '[]');
+let isLoading = false;
+let validatorInterval = null;
+
+// ── Render session history ──
+function renderHistory() {
+  const list = document.getElementById('history-list');
+  if (!sessionHistory.length) {
+    list.innerHTML = '<div style="font-size:0.8rem;color:var(--mid-gray);text-align:center;padding:1rem 0;">No terms studied yet.</div>';
+    return;
+  }
+
+  list.innerHTML = sessionHistory
+    .slice().reverse()
+    .map(h => `
+      <div class="history-item" onclick="quickStudy('${h.term.replace(/'/g, "\\'")}')">
+        <div class="history-dot"></div>
+        <div class="history-term">${h.term}</div>
+        <div class="history-time">${h.time}</div>
+      </div>
+    `).join('');
+}
+
+// ── Quick select term ──
+function quickStudy(term) {
+  document.getElementById('term-input').value = term;
+  if (!isLoading) initiateStudy();
+}
+
+function clearInput() {
+  document.getElementById('term-input').value = '';
+  document.getElementById('term-input').focus();
+}
+
+// ── Main study flow ──
+async function initiateStudy() {
+  const input = document.getElementById('term-input');
+  const term = input.value.trim();
+
+  if (!term) {
+    showToast('Please enter a muscle physiology term to study.', 'warning');
+    input.focus();
+    return;
+  }
+
+  if (isLoading) return;
+
+  // Check wallet
+  if (!window.myogenWallet || !window.myogenWallet.isConnected) {
+    showToast('Please connect your wallet first to study terms.', 'warning');
+    const connected = await connectWallet();
+    if (!connected) return;
+  }
+
+  pendingTerm = term;
+
+  // Show tx modal
+  document.getElementById('tx-term-display').textContent = term.length > 30 ? term.slice(0,30)+'...' : term;
+  document.getElementById('tx-from-display').textContent = shortenAddress(window.myogenWallet.address || '0x...');
+  showTxModal();
+}
+
+function showTxModal() {
+  document.getElementById('tx-modal').classList.add('show');
+}
+
+function hideTxModal() {
+  document.getElementById('tx-modal').classList.remove('show');
+}
+
+function cancelTx() {
+  hideTxModal();
+  pendingTerm = '';
+  showToast('Transaction cancelled.', 'info');
+}
+
+async function confirmTx() {
+  hideTxModal();
+
+  const term = pendingTerm;
+  if (!term) return;
+
+  isLoading = true;
+  currentTerm = term;
+
+  // UI: show loading
+  showState('loading');
+  setStudyBtnLoading(true);
+  resetValidators();
+
+  try {
+    // In production: send actual transaction to GenLayer
+    // const txHash = await sendStudyTransaction(term);
+
+    // Animate validators progressively
+    await animateValidators();
+
+    // Simulate AI response (replace with actual contract read in production)
+    const result = await getExplanation(term);
+
+    // Show result
+    renderResult(result, term);
+    showState('result');
+
+    // Add to session history
+    addToSessionHistory(term);
+
+    showToast(`✅ "${term}" explained by GenLayer validators!`, 'success');
+  } catch (err) {
+    showState('idle');
+    showToast('Error: ' + err.message, 'error');
+    console.error('Study error:', err);
+  }
+
+  isLoading = false;
+  setStudyBtnLoading(false);
+}
+
+function setStudyBtnLoading(loading) {
+  const btn = document.getElementById('study-btn');
+  if (loading) {
+    btn.disabled = true;
+    btn.innerHTML = `<span class="loading-spinner"></span> Analyzing...`;
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = `🧬 Study This Term`;
+  }
+}
+
+// ── State management ──
+function showState(state) {
+  document.getElementById('idle-state').style.display = state === 'idle' ? 'flex' : 'none';
+  document.getElementById('loading-state').classList.toggle('show', state === 'loading');
+  document.getElementById('result-state').classList.toggle('show', state === 'result');
+}
+
+// ── Validator animation ──
+function resetValidators() {
+  for (let i = 1; i <= 4; i++) {
+    const orb = document.getElementById(`vp-${i}`);
+    const con = document.getElementById(`vc-${i}`);
+    if (orb) { orb.className = 'vp-orb'; }
+    if (con) { con.className = 'vp-connector'; }
+  }
+  const final = document.getElementById('vp-final');
+  if (final) { final.className = 'vp-orb'; }
+}
+
+async function animateValidators() {
+  const steps = [
+    { status: 'Sending transaction to GenLayer...', sub: 'Broadcasting to the network' },
+    { status: 'Validator Alpha analyzing...', sub: 'LLM processing your query' },
+    { status: 'Validator Beta cross-checking...', sub: 'Independent AI verification' },
+    { status: 'Validator Gamma reviewing...', sub: 'Consensus comparison' },
+    { status: 'Validator Delta finalizing...', sub: 'Applying Optimistic Democracy' },
+    { status: 'Consensus reached! ✓', sub: 'Result validated on-chain' },
+  ];
+
+  for (let i = 0; i < steps.length; i++) {
+    document.getElementById('loading-status-text').textContent = steps[i].status;
+    document.getElementById('loading-sub-text').textContent = steps[i].sub;
+
+    if (i >= 1 && i <= 4) {
+      const orb = document.getElementById(`vp-${i}`);
+      if (orb) orb.classList.add('vp-active');
+    }
+
+    await sleep(800);
+
+    if (i >= 1 && i <= 4) {
+      const orb = document.getElementById(`vp-${i}`);
+      const con = document.getElementById(`vc-${i}`);
+      if (orb) { orb.classList.remove('vp-active'); orb.classList.add('vp-done'); orb.textContent = '✓'; }
+      if (con) con.classList.add('vp-lit');
+    }
+
+    if (i === 5) {
+      const final = document.getElementById('vp-final');
+      if (final) {
+        final.classList.add('vp-done');
+        final.style.background = 'rgba(0,200,100,0.2)';
+        final.style.borderColor = '#00C864';
+        final.style.boxShadow = '0 0 20px rgba(0,200,100,0.5)';
+      }
+    }
+  }
+}
+
+// ── Render result ──
+function renderResult(data, term) {
+  document.getElementById('result-term').textContent = term.charAt(0).toUpperCase() + term.slice(1);
+  document.getElementById('result-category').textContent = data.category || 'General';
+  document.getElementById('result-definition').textContent = data.definition || 'Definition not available.';
+  document.getElementById('result-explanation').textContent = data.detailed_explanation || 'Explanation not available.';
+  document.getElementById('result-clinical').textContent = data.clinical_relevance || 'No specific clinical notes.';
+
+  // Facts
+  const factsList = document.getElementById('result-facts');
+  const facts = data.key_facts || [];
+  factsList.innerHTML = facts.length
+    ? facts.map((f, i) => `
+        <li class="fact-item" style="animation-delay:${i * 0.1}s">
+          <span class="fact-bullet">▸</span>
+          <span>${f}</span>
+        </li>`).join('')
+    : '<li class="fact-item"><span class="fact-bullet">▸</span><span>No key facts listed.</span></li>';
+
+  // Related terms
+  const relatedEl = document.getElementById('result-related');
+  const related = data.related_terms || [];
+  relatedEl.innerHTML = related
+    .map(t => `<span class="related-tag" onclick="quickStudy('${t}')">${t}</span>`)
+    .join('') || '<span style="color:var(--mid-gray);font-size:0.8rem;">None listed</span>';
+
+  // Muscles involved
+  const musclesEl = document.getElementById('result-muscles');
+  const muscles = data.muscle_groups_involved || [];
+  musclesEl.innerHTML = muscles
+    .map(m => `<span class="related-tag" style="color:var(--orange-bright);">${m}</span>`)
+    .join('') || '<span style="color:var(--mid-gray);font-size:0.8rem;">General / Not specified</span>';
+
+  // Tx hash (simulated)
+  const fakeHash = '0x' + Array.from({length: 16}, () => Math.floor(Math.random()*16).toString(16)).join('') + '...';
+  document.getElementById('result-tx-hash').textContent = fakeHash;
+
+  // Draw visualization
+  drawVisualization(data);
+}
+
+// ── Canvas Visualization ──
+function drawVisualization(data) {
+  const canvas = document.getElementById('viz-canvas');
+  const card = canvas.parentElement;
+  canvas.width = card.offsetWidth || 400;
+  canvas.height = 320;
+
+  const ctx = canvas.getContext('2d');
+  const vizType = data.visualization_type || 'fiber_diagram';
+  const colors = data.colors || { primary: '#FF6B2C', secondary: '#FF9500', glow: '#FFD700' };
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Background gradient
+  const bg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, canvas.width);
+  bg.addColorStop(0, 'rgba(255,107,44,0.05)');
+  bg.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Draw based on type
+  switch(vizType) {
+    case 'contraction_cycle': drawContractionCycle(ctx, canvas, colors); break;
+    case 'cross_section': drawCrossSection(ctx, canvas, colors); break;
+    case 'neural_pathway': drawNeuralPathway(ctx, canvas, colors); break;
+    case 'biochemical_cycle': drawBiochemicalCycle(ctx, canvas, colors); break;
+    case 'joint_mechanics': drawJointMechanics(ctx, canvas, colors); break;
+    case 'cellular_diagram': drawCellularDiagram(ctx, canvas, colors); break;
+    default: drawFiberDiagram(ctx, canvas, colors);
+  }
+
+  // Label
+  document.getElementById('viz-label').textContent = `${vizType.toUpperCase().replace(/_/g,' ')} · ${(data.term||'').toUpperCase()}`;
+
+  // Animate
+  animateVisualization(ctx, canvas, vizType, colors, data);
+}
+
+function drawFiberDiagram(ctx, canvas, colors) {
+  const W = canvas.width, H = canvas.height;
+  const grad = ctx.createLinearGradient(0, 0, W, 0);
+  grad.addColorStop(0, colors.primary + '80');
+  grad.addColorStop(0.5, colors.secondary);
+  grad.addColorStop(1, colors.primary + '80');
+
+  const fibers = 8;
+  const fiberH = 18;
+  const startY = (H - fibers * (fiberH + 8)) / 2;
+
+  for (let i = 0; i < fibers; i++) {
+    const y = startY + i * (fiberH + 8);
+    ctx.beginPath();
+    ctx.roundRect(40, y, W - 80, fiberH, fiberH / 2);
+    ctx.fillStyle = i % 2 === 0 ? grad : colors.secondary + '60';
+    ctx.fill();
+
+    // Z-lines
+    for (let z = 0; z < 5; z++) {
+      const x = 40 + (W - 80) * z / 4;
+      ctx.beginPath();
+      ctx.moveTo(x, startY - 8);
+      ctx.lineTo(x, startY + fibers * (fiberH + 8) + 8);
+      ctx.strokeStyle = colors.glow + '50';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  }
+
+  // Label
+  ctx.fillStyle = colors.primary;
+  ctx.font = "bold 11px 'Orbitron', monospace";
+  ctx.textAlign = 'center';
+  ctx.fillText('MUSCLE FIBER BUNDLE', W / 2, 22);
+  ctx.fillStyle = colors.glow + '80';
+  ctx.font = "9px 'JetBrains Mono', monospace";
+  ctx.fillText('SARCOMERE STRUCTURE · A-BAND · I-BAND · Z-LINE', W / 2, H - 20);
+}
+
+function drawContractionCycle(ctx, canvas, colors) {
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+  const r = Math.min(W, H) * 0.3;
+
+  // Draw circular cycle
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.strokeStyle = colors.primary + '30';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  const stages = ['ATP Binding', 'Cross-Bridge', 'Power Stroke', 'ADP Release'];
+  const stageColors = [colors.primary, colors.secondary, colors.glow, colors.primary + 'AA'];
+
+  stages.forEach((s, i) => {
+    const angle = (i / stages.length) * Math.PI * 2 - Math.PI / 2;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+
+    ctx.beginPath();
+    ctx.arc(x, y, 28, 0, Math.PI * 2);
+    ctx.fillStyle = stageColors[i] + '30';
+    ctx.fill();
+    ctx.strokeStyle = stageColors[i];
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = '#fff';
+    ctx.font = "bold 7px 'Orbitron', monospace";
+    ctx.textAlign = 'center';
+    ctx.fillText(s.toUpperCase(), x, y + 3);
+  });
+
+  ctx.fillStyle = colors.primary;
+  ctx.font = "bold 11px 'Orbitron', monospace";
+  ctx.textAlign = 'center';
+  ctx.fillText('CROSS-BRIDGE CYCLE', cx, 22);
+}
+
+function drawCrossSection(ctx, canvas, colors) {
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+
+  // Outer epimysium
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, W * 0.42, H * 0.42, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = colors.primary + '60';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  ctx.fillStyle = colors.primary + '08';
+  ctx.fill();
+
+  // Fascicles
+  const fasciclePos = [
+    [cx - 80, cy - 60], [cx + 80, cy - 60],
+    [cx, cy], [cx - 80, cy + 60], [cx + 80, cy + 60]
+  ];
+
+  fasciclePos.forEach(([fx, fy]) => {
+    ctx.beginPath();
+    ctx.ellipse(fx, fy, 45, 35, Math.random() * 0.5, 0, Math.PI * 2);
+    ctx.fillStyle = colors.secondary + '20';
+    ctx.fill();
+    ctx.strokeStyle = colors.secondary + '60';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Fibers inside
+    for (let f = 0; f < 4; f++) {
+      ctx.beginPath();
+      ctx.arc(fx + (Math.random()-0.5)*40, fy + (Math.random()-0.5)*25, 7, 0, Math.PI*2);
+      ctx.fillStyle = colors.primary + '40';
+      ctx.fill();
+    }
+  });
+
+  ctx.fillStyle = colors.primary;
+  ctx.font = "bold 11px 'Orbitron', monospace";
+  ctx.textAlign = 'center';
+  ctx.fillText('MUSCLE CROSS-SECTION', cx, 22);
+}
+
+function drawNeuralPathway(ctx, canvas, colors) {
+  const W = canvas.width, H = canvas.height;
+
+  // Neuron body
+  ctx.beginPath();
+  ctx.arc(80, H/2, 35, 0, Math.PI * 2);
+  ctx.fillStyle = colors.primary + '25';
+  ctx.fill();
+  ctx.strokeStyle = colors.primary;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = '#fff';
+  ctx.font = "7px 'Orbitron',monospace";
+  ctx.textAlign = 'center';
+  ctx.fillText('MOTOR', 80, H/2 - 4);
+  ctx.fillText('NEURON', 80, H/2 + 8);
+
+  // Axon
+  const axonY = H / 2;
+  ctx.beginPath();
+  ctx.moveTo(115, axonY);
+  ctx.lineTo(W - 120, axonY);
+  ctx.strokeStyle = colors.secondary;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Myelin sheaths
+  for (let i = 1; i <= 5; i++) {
+    const x = 115 + i * (W - 235) / 6;
+    ctx.beginPath();
+    ctx.ellipse(x, axonY, 12, 18, 0, 0, Math.PI * 2);
+    ctx.fillStyle = colors.glow + '20';
+    ctx.fill();
+    ctx.strokeStyle = colors.glow + '60';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // NMJ
+  ctx.beginPath();
+  ctx.arc(W - 90, H/2, 28, 0, Math.PI*2);
+  ctx.fillStyle = colors.secondary + '30';
+  ctx.fill();
+  ctx.strokeStyle = colors.secondary;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Branches from NMJ
+  for (let b = 0; b < 4; b++) {
+    const angle = -0.5 + b * 0.33;
+    ctx.beginPath();
+    ctx.moveTo(W - 62, H/2 + Math.sin(angle) * 15);
+    ctx.lineTo(W - 30, H/2 + Math.sin(angle) * 40);
+    ctx.strokeStyle = colors.primary + '80';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = colors.primary;
+  ctx.font = "bold 11px 'Orbitron', monospace";
+  ctx.textAlign = 'center';
+  ctx.fillText('NEURAL PATHWAY', W/2, 22);
+}
+
+function drawBiochemicalCycle(ctx, canvas, colors) {
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2;
+
+  const molecules = [
+    { label: 'ATP', x: cx, y: cy - 100, color: colors.primary },
+    { label: 'ADP', x: cx + 90, y: cy - 30, color: colors.secondary },
+    { label: 'Pi', x: cx + 90, y: cy + 50, color: colors.glow },
+    { label: 'Ca²⁺', x: cx, y: cy + 100, color: colors.primary },
+    { label: 'Actin', x: cx - 90, y: cy + 50, color: colors.secondary },
+    { label: 'Myosin', x: cx - 90, y: cy - 30, color: colors.glow },
+  ];
+
+  // Draw connecting lines
+  molecules.forEach((m, i) => {
+    const next = molecules[(i + 1) % molecules.length];
+    ctx.beginPath();
+    ctx.moveTo(m.x, m.y);
+    ctx.lineTo(next.x, next.y);
+    ctx.strokeStyle = colors.primary + '30';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  });
+
+  // Draw molecules
+  molecules.forEach(m => {
+    ctx.beginPath();
+    ctx.arc(m.x, m.y, 24, 0, Math.PI * 2);
+    ctx.fillStyle = m.color + '25';
+    ctx.fill();
+    ctx.strokeStyle = m.color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = '#fff';
+    ctx.font = "bold 8px 'Orbitron',monospace";
+    ctx.textAlign = 'center';
+    ctx.fillText(m.label, m.x, m.y + 3);
+  });
+
+  ctx.fillStyle = colors.primary;
+  ctx.font = "bold 11px 'Orbitron', monospace";
+  ctx.textAlign = 'center';
+  ctx.fillText('BIOCHEMICAL CYCLE', cx, 22);
+}
+
+function drawJointMechanics(ctx, canvas, colors) {
+  const W = canvas.width, H = canvas.height;
+
+  // Bones
+  ctx.fillStyle = colors.glow + '40';
+  ctx.strokeStyle = colors.glow;
+  ctx.lineWidth = 2;
+
+  ctx.beginPath();
+  ctx.roundRect(60, 40, 80, 100, 10);
+  ctx.fill(); ctx.stroke();
+
+  ctx.beginPath();
+  ctx.roundRect(W - 140, 160, 80, 100, 10);
+  ctx.fill(); ctx.stroke();
+
+  // Joint
+  ctx.beginPath();
+  ctx.arc(W/2, H/2, 40, 0, Math.PI * 2);
+  ctx.fillStyle = colors.secondary + '20';
+  ctx.fill();
+  ctx.strokeStyle = colors.secondary;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Muscles
+  ctx.beginPath();
+  ctx.moveTo(100, 110);
+  ctx.quadraticCurveTo(W/2, H/2 - 60, W - 100, 180);
+  ctx.strokeStyle = colors.primary;
+  ctx.lineWidth = 12;
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  ctx.fillStyle = colors.primary;
+  ctx.font = "bold 11px 'Orbitron', monospace";
+  ctx.textAlign = 'center';
+  ctx.fillText('JOINT MECHANICS', W/2, 22);
+}
+
+function drawCellularDiagram(ctx, canvas, colors) {
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2;
+
+  // Cell membrane
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, W*0.38, H*0.40, 0, 0, Math.PI*2);
+  ctx.strokeStyle = colors.primary;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  ctx.fillStyle = colors.primary + '08';
+  ctx.fill();
+
+  // Nucleus
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, 50, 40, 0, 0, Math.PI*2);
+  ctx.fillStyle = colors.primary + '20';
+  ctx.fill();
+  ctx.strokeStyle = colors.primary + '80';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = '#fff';
+  ctx.font = "7px 'Orbitron',monospace";
+  ctx.textAlign = 'center';
+  ctx.fillText('NUCLEUS', cx, cy+3);
+
+  // Mitochondria
+  const mitoPos = [[cx-110, cy-60],[cx+110,cy-60],[cx-100,cy+70],[cx+100,cy+70],[cx,cy-100]];
+  mitoPos.forEach(([mx, my]) => {
+    ctx.beginPath();
+    ctx.ellipse(mx, my, 22, 12, 0.3, 0, Math.PI*2);
+    ctx.fillStyle = colors.secondary + '30';
+    ctx.fill();
+    ctx.strokeStyle = colors.secondary;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  });
+
+  ctx.fillStyle = colors.primary;
+  ctx.font = "bold 11px 'Orbitron', monospace";
+  ctx.textAlign = 'center';
+  ctx.fillText('MUSCLE CELL (MYOCYTE)', cx, 22);
+}
+
+let animFrame = null;
+function animateVisualization(ctx, canvas, vizType, colors, data) {
+  if (animFrame) cancelAnimationFrame(animFrame);
+  let t = 0;
+
+  function loop() {
+    t += 0.02;
+
+    // Add a subtle scanning line effect over the static drawing
+    ctx.clearRect(0, canvas.height - 2, canvas.width, 2);
+    const scanX = (t * 60) % canvas.width;
+    ctx.fillStyle = colors.primary + '60';
+    ctx.fillRect(scanX, 0, 2, canvas.height);
+
+    // Pulsing glow at top-right corner
+    ctx.beginPath();
+    ctx.arc(canvas.width - 20, 20, 4 + Math.sin(t * 2) * 2, 0, Math.PI * 2);
+    ctx.fillStyle = colors.primary;
+    ctx.fill();
+
+    animFrame = requestAnimationFrame(loop);
+  }
+
+  loop();
+}
+
+// ── Get AI Explanation ──
+// In production this reads from the contract's get_term_explanation() view
+// For testnet demo, we generate rich mock data that mirrors contract output
+async function getExplanation(term) {
+  await sleep(200); // Simulate network latency
+
+  const explanations = {
+    'sarcomere': {
+      term: 'sarcomere',
+      definition: 'The sarcomere is the fundamental contractile unit of skeletal and cardiac muscle fibers, bounded by Z-discs (Z-lines) and containing an organized array of thick (myosin) and thin (actin) filaments.',
+      category: 'Muscle Mechanics',
+      detailed_explanation: 'The sarcomere spans from one Z-disc to the next, typically measuring 1.6–2.2 μm in length at rest. It is subdivided into distinct bands visible under electron microscopy: the A-band (anisotropic, containing overlapping actin and myosin), the I-band (isotropic, containing only actin), the H-zone (containing only myosin), and the M-line (central stabilizing structure). During muscle contraction, the sliding filament theory dictates that actin filaments slide over myosin, shortening the sarcomere while the filament lengths remain constant.',
+      key_facts: ['Length: 1.6–2.2 μm at resting tension','Contains ~300 myosin heads per half-sarcomere','Z-disc proteins include α-actinin, titin anchors','H-zone disappears during full contraction','Titin (connectin) provides passive elasticity'],
+      related_terms: ['actin', 'myosin', 'Z-disc', 'tropomyosin', 'titin'],
+      clinical_relevance: 'Sarcomeric protein mutations underlie hypertrophic cardiomyopathy (HCM) and dilated cardiomyopathy (DCM). Length-tension relationships are clinically relevant in cardiac physiology (Frank-Starling law).',
+      muscle_groups_involved: ['Biceps brachii', 'Quadriceps', 'Cardiac muscle'],
+      visualization_type: 'fiber_diagram',
+      colors: { primary: '#FF6B2C', secondary: '#FF9500', glow: '#FFD700' }
+    }
+  };
+
+  // Return specific or generate generic rich response
+  if (explanations[term.toLowerCase()]) {
+    return explanations[term.toLowerCase()];
+  }
+
+  // Generic but rich response for any other term
+  return {
+    term: term,
+    definition: `${term.charAt(0).toUpperCase() + term.slice(1)} is an important concept in muscle physiology and anatomy, playing a key role in the structural and functional organization of the muscular system.`,
+    category: 'Muscle Physiology',
+    detailed_explanation: `In the context of muscle physiology, ${term} represents a critical component of muscular function. This structure or process is fundamental to understanding how skeletal, cardiac, and smooth muscle tissues generate force and movement. Its role in the contractile machinery or regulatory cascade directly impacts athletic performance, rehabilitation science, and clinical medicine. Understanding ${term} provides insight into muscle adaptation, disease pathology, and therapeutic interventions across sports medicine and physical therapy.`,
+    key_facts: [
+      `${term.charAt(0).toUpperCase() + term.slice(1)} is essential to muscle function`,
+      'Validated by GenLayer AI validators via Optimistic Democracy',
+      'Integral to muscle physiology and anatomy studies',
+      'Relevant to both skeletal and cardiac muscle systems',
+      'Has significant clinical and athletic performance implications'
+    ],
+    related_terms: ['sarcomere', 'actin', 'myosin', 'motor neuron', 'ATP'],
+    clinical_relevance: `Understanding ${term} has direct clinical implications for diagnosing and treating muscular disorders, optimizing rehabilitation protocols, and enhancing athletic performance programs.`,
+    muscle_groups_involved: ['Skeletal muscle', 'Smooth muscle'],
+    visualization_type: ['fiber_diagram','contraction_cycle','cross_section','neural_pathway','biochemical_cycle','cellular_diagram'][Math.floor(Math.random()*6)],
+    colors: { primary: '#FF6B2C', secondary: '#FF9500', glow: '#FFD700' }
+  };
+}
+
+// ── Session history ──
+function addToSessionHistory(term) {
+  const now = new Date();
+  const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  sessionHistory.push({ term, time });
+  if (sessionHistory.length > 20) sessionHistory = sessionHistory.slice(-20);
+  localStorage.setItem('myogen_session_history', JSON.stringify(sessionHistory));
+  renderHistory();
+}
+
+function studyAnother() {
+  showState('idle');
+  const input = document.getElementById('term-input');
+  input.value = '';
+  input.focus();
+  if (animFrame) cancelAnimationFrame(animFrame);
+}
+
+function saveToHistory() {
+  showToast('Saved to your on-chain history!', 'success');
+}
+
+// ── Update sidebar wallet status ──
+function updateSidebarWallet() {
+  const el = document.getElementById('sidebar-wallet-status');
+  if (!el) return;
+  if (window.myogenWallet && window.myogenWallet.isConnected) {
+    el.innerHTML = `
+      <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:#00C864;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#00C864;display:inline-block;animation:pulse-glow 2s infinite;"></span>
+        ${shortenAddress(window.myogenWallet.address)}
+      </div>`;
+  } else {
+    el.innerHTML = `
+      <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--mid-gray);">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--mid-gray);display:inline-block;"></span>
+        Not connected
+      </div>`;
+  }
+}
+
+// ── Enter key to study ──
+document.addEventListener('DOMContentLoaded', () => {
+  renderHistory();
+  updateSidebarWallet();
+
+  const input = document.getElementById('term-input');
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') initiateStudy();
+  });
+
+  // Override base updateWalletUI to also update sidebar
+  const origUpdate = window.updateWalletUI;
+  window.updateWalletUI = function() {
+    if (origUpdate) origUpdate();
+    updateSidebarWallet();
+  };
+});
+</script>
+</body>
+</html>

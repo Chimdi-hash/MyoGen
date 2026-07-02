@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About — MYOGEN | GenLayer Intelligent Contracts</title>
+  <meta name="description" content="Learn about MYOGEN — the decentralized AI-powered muscle physiology dictionary built on GenLayer's Bradbury Testnet using Intelligent Contracts."/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .about-page {
+      padding-top: var(--nav-height);
+    }
+
+    /* ── Hero ── */
+    .about-hero {
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,107,44,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, var(--orange-core) 20%, var(--orange-core) 80%, transparent);
+      transform: translateX(-50%);
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      align-items: flex-start;
+    }
+
+    .timeline-item:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .timeline-content {
+      flex: 1;
+      padding: 1.5rem;
+    }
+
+    .timeline-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--gradient-orange);
+      border: 2px solid var(--dark);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 12px var(--orange-glow);
+      margin-top: 1.5rem;
+    }
+
+    .timeline-step {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--orange-core);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-desc {
+      font-size: 0.875rem;
+      color: var(--mid-gray);
+      line-height: 1.7;
+    }
+
+    /* ── Tech stack ── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .tech-card {
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .tech-icon {
+      font-size: 2rem;
+    }
+
+    .tech-name {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--white);
+    }
+
+    .tech-desc {
+      font-size: 0.82rem;
+      color: var(--mid-gray);
+      line-height: 1.65;
+    }
+
+    .tech-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--orange-bright);
+      background: var(--orange-soft);
+      border: 1px solid rgba(255,107,44,0.25);
+      padding: 0.25rem 0.65rem;
+      border-radius: 50px;
+      width: fit-content;
+    }
+
+    /* ── GenLayer explanation ── */
+    .genlayer-card {
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .genlayer-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gradient-orange);
+    }
+
+    .genlayer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .genlayer-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .gl-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--orange-core);
+      text-transform: uppercase;
+    }
+
+    .gl-value {
+      font-size: 0.9rem;
+      color: var(--off-white);
+      line-height: 1.6;
+    }
+
+    /* ── Contract code display ── */
+    .code-display {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,107,44,0.2);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--off-white);
+      overflow-x: auto;
+      line-height: 1.8;
+    }
+
+    .code-display .kw { color: #FF6B2C; }
+    .code-display .fn { color: #FFD700; }
+    .code-display .str { color: #00C864; }
+    .code-display .cm { color: rgba(176,176,200,0.5); font-style: italic; }
+    .code-display .dec { color: #00BFFF; }
+
+    /* ── FAQ ── */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .faq-item {
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .faq-q-text {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--white);
+    }
+
+    .faq-toggle {
+      font-size: 1.2rem;
+      color: var(--orange-core);
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.open .faq-toggle { transform: rotate(45deg); }
+
+    .faq-answer {
+      font-size: 0.875rem;
+      color: var(--mid-gray);
+      line-height: 1.75;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      padding-top: 0;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+      padding-top: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .timeline::before { left: 24px; }
+      .timeline-item { flex-direction: row !important; }
+      .timeline-item:nth-child(even) { flex-direction: row !important; }
+      .timeline-dot { left: 24px; }
+      .genlayer-grid { grid-template-columns: 1fr; }
+      .genlayer-card { padding: 2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-mesh"></div>
+<div class="bg-grid"></div>
+<div id="particle-field" class="particle-field"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a class="logo" href="index.html">MYOGEN<span>Muscle Intelligence</span></a>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="study.html">Study</a></li>
+    <li><a href="explorer.html">Explorer</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:0.75rem;">
+    <button id="connect-wallet-btn" class="btn-wallet">⬡ Connect Wallet</button>
+    <div id="wallet-info-bar" class="wallet-info" style="display:none;">
+      <span id="wallet-address-display" class="wallet-address"></span>
+      <button id="disconnect-btn" class="btn-disconnect">Disconnect</button>
+    </div>
+  </div>
+</nav>
+
+<div class="about-page">
+
+  <!-- ════ HERO ════ -->
+  <section class="about-hero">
+    <div class="hero-badge" style="margin-bottom:1.5rem;">🧬 About MYOGEN</div>
+    <h1 class="section-title" style="font-size:clamp(2.5rem,6vw,4.5rem);">
+      Decentralized <span class="accent">Muscle</span> Intelligence
+    </h1>
+    <p class="section-desc" style="font-size:1.1rem;max-width:700px;margin:1.25rem auto 2.5rem;">
+      MYOGEN is the world's first blockchain-native, AI-validated dictionary for muscle physiology and anatomy — built on GenLayer's Bradbury Testnet using Intelligent Contracts and Optimistic Democracy.
+    </p>
+    <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
+      <a href="study.html" class="btn-primary">🧬 Start Studying</a>
+      <a href="https://docs.genlayer.com" target="_blank" rel="noopener" class="btn-secondary">GenLayer Docs ↗</a>
+    </div>
+  </section>
+
+  <!-- ════ GENLAYER SECTION ════ -->
+  <section class="section">
+    <div class="glass-card genlayer-card">
+      <span class="section-tag">// Powered By</span>
+      <h2 class="section-title">GenLayer <span class="accent">Intelligent Contracts</span></h2>
+      <p class="section-desc" style="margin:0;">MYOGEN's smart contract is written in Python as a GenLayer Intelligent Contract — the only blockchain where contracts can reason, judge, and call LLMs natively on-chain.</p>
+
+      <div class="genlayer-grid">
+        <div class="genlayer-item">
+          <div class="gl-label">Network</div>
+          <div class="gl-value">GenLayer Bradbury Testnet</div>
+        </div>
+        <div class="genlayer-item">
+          <div class="gl-label">Chain ID</div>
+          <div class="gl-value">961</div>
+        </div>
+        <div class="genlayer-item">
+          <div class="gl-label">RPC Endpoint</div>
+          <div class="gl-value" style="font-size:0.8rem;font-family:var(--font-mono);">https://rpc.bradbury.genlayer.com</div>
+        </div>
+        <div class="genlayer-item">
+          <div class="gl-label">Explorer</div>
+          <div class="gl-value" style="font-size:0.8rem;"><a href="https://explorer.bradbury.genlayer.com" target="_blank" rel="noopener" style="color:var(--orange-bright);">explorer.bradbury.genlayer.com ↗</a></div>
+        </div>
+        <div class="genlayer-item">
+          <div class="gl-label">Contract Language</div>
+          <div class="gl-value">Python (Intelligent Contracts)</div>
+        </div>
+        <div class="genlayer-item">
+          <div class="gl-label">Consensus Mechanism</div>
+          <div class="gl-value">Optimistic Democracy (5 validators)</div>
+        </div>
+        <div class="genlayer-item">
+          <div class="gl-label">Native Currency</div>
+          <div class="gl-value">GEN</div>
+        </div>
+        <div class="genlayer-item">
+          <div class="gl-label">AI Integration</div>
+          <div class="gl-value">gl.exec_prompt() — native LLM calls</div>
+        </div>
+      </div>
+
+      <div style="margin-top:2rem;">
+        <div class="gl-label" style="margin-bottom:1rem;">// Contract Code Preview</div>
+        <div class="code-display">
+<span class="cm"># MYOGEN Intelligent Contract — GenLayer Bradbury Testnet</span>
+<span class="kw">from</span> genlayer <span class="kw">import</span> *
+<span class="kw">import</span> json
+
+<span class="dec">@gl.contract</span>
+<span class="kw">class</span> <span class="fn">MyogenDictionary</span>:
+    registered_users: TreeMap[Address, dict]
+    query_history: TreeMap[Address, list]
+    all_terms_cache: TreeMap[str, dict]
+
+    <span class="dec">@gl.public.write</span>
+    <span class="kw">def</span> <span class="fn">study_term</span>(<span class="kw">self</span>, term: str) -> <span class="kw">None</span>:
+        <span class="cm"># AI validators analyze term via LLM</span>
+        result = gl.exec_prompt(<span class="str">f"""
+            Explain '{term}' in muscle physiology context.
+            Return structured JSON with definition,
+            key facts, clinical relevance...
+        """</span>)
+        <span class="cm"># Validators reach consensus via Optimistic Democracy</span>
+        <span class="kw">self</span>.all_terms_cache[term] = json.loads(result)
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ HOW IT WORKS TIMELINE ════ -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-tag">// Workflow</span>
+      <h2 class="section-title">The MYOGEN <span class="accent">Journey</span></h2>
+    </div>
+
+    <div class="timeline" style="position:relative;">
+      <div class="timeline-dot" style="top:20px;"></div>
+
+      <div class="timeline-item" data-animate>
+        <div class="glass-card timeline-content">
+          <div class="timeline-step">Step 01</div>
+          <div class="timeline-title">Connect Your Wallet</div>
+          <p class="timeline-desc">Use MetaMask or any EVM-compatible wallet. MYOGEN automatically configures GenLayer Bradbury Testnet (Chain ID 961) and registers your address on-chain.</p>
+        </div>
+        <div style="flex:1;"></div>
+      </div>
+
+      <div class="timeline-item" data-animate>
+        <div style="flex:1;"></div>
+        <div class="glass-card timeline-content">
+          <div class="timeline-step">Step 02</div>
+          <div class="timeline-title">Navigate to Study Room</div>
+          <p class="timeline-desc">The Study page presents an intuitive terminal-inspired interface with quick-select popular terms and a clean input field for custom queries.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-animate>
+        <div class="glass-card timeline-content">
+          <div class="timeline-step">Step 03</div>
+          <div class="timeline-title">Sign the Transaction</div>
+          <p class="timeline-desc">Clicking "Study" triggers MetaMask to sign a transaction calling MYOGEN's <code style="color:var(--orange-bright);font-family:var(--font-mono);font-size:0.85em;">study_term()</code> Intelligent Contract function on GenLayer.</p>
+        </div>
+        <div style="flex:1;"></div>
+      </div>
+
+      <div class="timeline-item" data-animate>
+        <div style="flex:1;"></div>
+        <div class="glass-card timeline-content">
+          <div class="timeline-step">Step 04</div>
+          <div class="timeline-title">AI Validators Analyze</div>
+          <p class="timeline-desc">5 GenLayer validators independently call an LLM with your term. Using Optimistic Democracy, they reach consensus on the most accurate physiological explanation.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-animate>
+        <div class="glass-card timeline-content">
+          <div class="timeline-step">Step 05</div>
+          <div class="timeline-title">Learn &amp; Visualize</div>
+          <p class="timeline-desc">The result — definition, key facts, clinical relevance, related terms — is displayed with an animated anatomical visualization. Study the next term immediately with no timeouts.</p>
+        </div>
+        <div style="flex:1;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ TECH STACK ════ -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-tag">// Technology</span>
+      <h2 class="section-title">Built With <span class="accent">Precision</span></h2>
+    </div>
+
+    <div class="tech-grid">
+      <div class="glass-card tech-card" data-animate>
+        <div class="tech-icon">⛓️</div>
+        <div class="tech-name">GenLayer Protocol</div>
+        <p class="tech-desc">Intelligent Contracts written in Python, powered by the GenVM and Optimistic Democracy consensus.</p>
+        <div class="tech-badge">⬡ Bradbury Testnet</div>
+      </div>
+
+      <div class="glass-card tech-card" data-animate>
+        <div class="tech-icon">🤖</div>
+        <div class="tech-name">LLM Integration</div>
+        <p class="tech-desc">Native gl.exec_prompt() calls allow validators to query large language models directly from the contract execution environment.</p>
+        <div class="tech-badge">gl.exec_prompt()</div>
+      </div>
+
+      <div class="glass-card tech-card" data-animate>
+        <div class="tech-icon">⚡</div>
+        <div class="tech-name">Optimistic Democracy</div>
+        <p class="tech-desc">5 independent validators analyze queries. Any divergent result can be appealed, ensuring decentralized truth and anti-manipulation.</p>
+        <div class="tech-badge">5-Validator Consensus</div>
+      </div>
+
+      <div class="glass-card tech-card" data-animate>
+        <div class="tech-icon">🦊</div>
+        <div class="tech-name">MetaMask &amp; EVM</div>
+        <p class="tech-desc">Standard EVM-compatible wallet integration. Users connect existing MetaMask wallets — no new tool installation required.</p>
+        <div class="tech-badge">Chain ID 961</div>
+      </div>
+
+      <div class="glass-card tech-card" data-animate>
+        <div class="tech-icon">🎨</div>
+        <div class="tech-name">Glassmorphism UI</div>
+        <p class="tech-desc">Pure HTML/CSS/JS frontend with glassmorphism design, animated Canvas visualizations, and futuristic Orbitron typography.</p>
+        <div class="tech-badge">Static Site · Vercel</div>
+      </div>
+
+      <div class="glass-card tech-card" data-animate>
+        <div class="tech-icon">🧬</div>
+        <div class="tech-name">Medical Knowledge Base</div>
+        <p class="tech-desc">300+ muscle physiology and anatomy terms covering sarcomeres to neural pathways, validated by AI and stored on-chain.</p>
+        <div class="tech-badge">On-Chain Cache</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ FAQ ════ -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-tag">// FAQ</span>
+      <h2 class="section-title">Common <span class="accent">Questions</span></h2>
+    </div>
+
+    <div class="faq-list" id="faq-list">
+      <div class="glass-card faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <div class="faq-q-text">What is GenLayer and why is MYOGEN built on it?</div>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">GenLayer is a blockchain that allows smart contracts ("Intelligent Contracts") to call large language models and access the web directly from on-chain execution. MYOGEN uses this to let AI validators analyze muscle physiology terms and reach consensus on accurate explanations — something impossible with traditional Solidity contracts.</div>
+      </div>
+
+      <div class="glass-card faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <div class="faq-q-text">Do I need real money to use MYOGEN?</div>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">No. MYOGEN runs on GenLayer's Bradbury Testnet, which uses GEN testnet tokens that have no real-world value. You may need a small amount of GEN for gas — check the GenLayer faucet at the Discord server for free testnet tokens.</div>
+      </div>
+
+      <div class="glass-card faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <div class="faq-q-text">Why do I need to sign a transaction just to look up a term?</div>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">MYOGEN is decentralized — meaning every query is a real blockchain transaction that goes to on-chain validators. This ensures the explanation you receive is validated by multiple independent AI nodes and permanently recorded on-chain, not served from a centralized server that could censor or manipulate results.</div>
+      </div>
+
+      <div class="glass-card faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <div class="faq-q-text">Can I study multiple terms back to back?</div>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">Absolutely. MYOGEN is designed for continuous learning. After viewing a result, click "Study Another Term" and immediately enter the next one. The contract caches previously validated terms so repeat queries are instant. No timeout errors will interrupt your study session.</div>
+      </div>
+
+      <div class="glass-card faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <div class="faq-q-text">How accurate are the AI-generated explanations?</div>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">MYOGEN uses GenLayer's Optimistic Democracy consensus — 5 validators independently query LLMs and compare results. Only responses that pass the equivalence principle are accepted on-chain. This multi-validator approach significantly reduces hallucination and single-model bias. However, always cross-reference with primary literature for clinical decisions.</div>
+      </div>
+
+      <div class="glass-card faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <div class="faq-q-text">What terms does MYOGEN cover?</div>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">MYOGEN covers muscle physiology, anatomy, kinesiology, exercise science, biomechanics, and sports medicine. This includes structural terms (sarcomere, fascicle), proteins (actin, myosin, troponin), physiological processes (cross-bridge cycle, hypertrophy), neural components (motor unit, NMJ), fiber types, and clinical pathologies. Any out-of-scope term will be flagged by the AI validators.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ CTA ════ -->
+  <section class="section">
+    <div style="text-align:center;padding:4rem 2rem;border-radius:var(--border-radius-xl);background:linear-gradient(135deg,rgba(255,107,44,0.08),rgba(255,215,0,0.06));border:1px solid rgba(255,107,44,0.15);">
+      <div class="hero-badge" style="margin-bottom:1.5rem;">🧬 Ready to Decode Muscle Science?</div>
+      <h2 class="section-title">Start Your <span class="accent">Journey</span> Now</h2>
+      <p style="color:var(--mid-gray);max-width:500px;margin:1rem auto 2rem;">
+        Connect your wallet, register on GenLayer Bradbury Testnet, and begin exploring the AI-validated world of muscle physiology.
+      </p>
+      <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
+        <a href="register.html" class="btn-primary">⬡ Connect Wallet</a>
+        <a href="study.html" class="btn-secondary">🔬 Go to Study Room</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-logo">MYOGEN</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="study.html">Study</a>
+    <a href="explorer.html">Explorer</a>
+    <a href="https://docs.genlayer.com" target="_blank" rel="noopener">GenLayer Docs ↗</a>
+    <a href="https://github.com/genlayerlabs" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+  <p class="footer-copy">© 2026 MYOGEN · Built on GenLayer Bradbury Testnet · Powered by Intelligent Contracts</p>
+  <div class="footer-network"><div class="network-dot"></div>Chain ID 961 · rpc.bradbury.genlayer.com</div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+  function toggleFaq(item) {
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+</script>
+</body>
+</html>

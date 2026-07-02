@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MYOGEN — Decentralized Muscle Physiology Dictionary | GenLayer</title>
+  <meta name="description" content="MYOGEN is the world's first decentralized AI-powered dictionary for muscle physiology and anatomy, built on GenLayer's Bradbury Testnet."/>
+  <meta name="theme-color" content="#FF6B2C"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── Landing Page Specific ── */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      animation: breath 6s ease infinite;
+    }
+    .orb-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255,107,44,0.12) 0%, transparent 70%);
+      top: -10%; left: 30%;
+      animation-delay: 0s;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(255,149,0,0.08) 0%, transparent 70%);
+      bottom: 10%; right: 15%;
+      animation-delay: 2s;
+    }
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(255,215,0,0.06) 0%, transparent 70%);
+      top: 40%; left: 5%;
+      animation-delay: 4s;
+    }
+
+    /* ── Muscle Fiber Hero Graphic ── */
+    .hero-graphic {
+      position: absolute;
+      right: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: min(420px, 40vw);
+      animation: float-bob-slow 8s ease infinite;
+      opacity: 0.85;
+    }
+
+    .hero-graphic-left {
+      position: absolute;
+      left: 3%;
+      top: 55%;
+      transform: translateY(-50%) scaleX(-1);
+      width: min(180px, 16vw);
+      animation: float-bob-slow 10s 2s ease infinite;
+      opacity: 0.5;
+    }
+
+    /* Floating DNA Helix chars */
+    .floating-dna {
+      position: absolute;
+      opacity: 0.15;
+      animation: glide linear infinite;
+      font-size: 2rem;
+      pointer-events: none;
+    }
+
+    /* ── Features Section ── */
+    .features-section {
+      position: relative;
+    }
+
+    .features-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 80px;
+      background: linear-gradient(180deg, transparent, var(--orange-core));
+    }
+
+    /* ── Marquee ── */
+    .marquee-wrapper {
+      overflow: hidden;
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--glass-border);
+      margin: 2rem 0;
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 3rem;
+      animation: marquee 25s linear infinite;
+      white-space: nowrap;
+    }
+
+    .marquee-track:hover { animation-play-state: paused; }
+
+    .marquee-item {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--mid-gray);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .marquee-item::before {
+      content: '◆';
+      color: var(--orange-core);
+      font-size: 0.5rem;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── Validator Section ── */
+    .validator-section {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .validator-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin: 3rem 0;
+      flex-wrap: wrap;
+    }
+
+    .v-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .v-orb {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      border: 2px solid var(--orange-core);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      box-shadow: 0 0 24px var(--orange-glow);
+      animation: pulse-glow 3s ease infinite;
+    }
+
+    .v-orb:nth-child(1) { animation-delay: 0s; }
+    .v-orb:nth-child(2) { animation-delay: 0.5s; }
+    .v-orb:nth-child(3) { animation-delay: 1s; }
+
+    .v-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--mid-gray);
+      letter-spacing: 0.1em;
+    }
+
+    .v-arrow {
+      font-size: 1.5rem;
+      color: var(--orange-core);
+      animation: pulse-glow 2s ease infinite;
+    }
+
+    .v-consensus {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: var(--gradient-orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 0 40px var(--orange-glow), 0 0 80px rgba(255,107,44,0.3);
+      animation: pulse-glow 2s ease infinite, float-bob 4s ease infinite;
+    }
+
+    /* ── CTA Section ── */
+    .cta-section {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--border-radius-xl);
+      padding: 5rem 3rem;
+      text-align: center;
+      background: linear-gradient(135deg,
+        rgba(255,107,44,0.1) 0%,
+        rgba(255,149,0,0.05) 50%,
+        rgba(255,215,0,0.08) 100%);
+      border: 1px solid rgba(255,107,44,0.2);
+    }
+
+    .cta-bg-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255,107,44,0.1);
+      pointer-events: none;
+    }
+
+    .cta-section .cta-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+
+    .network-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--orange-bright);
+      background: var(--orange-soft);
+      border: 1px solid rgba(255,107,44,0.3);
+      padding: 0.5rem 1.2rem;
+      border-radius: 50px;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero-graphic { display: none; }
+      .hero-graphic-left { display: none; }
+      .hero-content { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background Effects -->
+<div class="bg-mesh"></div>
+<div class="bg-grid"></div>
+<div id="particle-field" class="particle-field"></div>
+
+<!-- Floating Anatomy Characters -->
+<div class="floating-dna" style="top:20%; animation-duration:35s; animation-delay:-5s; font-size:1.5rem;">🧬</div>
+<div class="floating-dna" style="top:55%; animation-duration:42s; animation-delay:-12s; font-size:2rem;">💪</div>
+<div class="floating-dna" style="top:75%; animation-duration:38s; animation-delay:-20s; font-size:1.2rem;">🔬</div>
+<div class="floating-dna" style="top:35%; animation-duration:45s; animation-delay:-8s; font-size:1.8rem;">⚡</div>
+
+<!-- ════ NAVBAR ════ -->
+<nav class="navbar" id="navbar">
+  <a class="logo" href="index.html">MYOGEN<span>Muscle Intelligence</span></a>
+
+  <div class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="study.html">Study</a></li>
+    <li><a href="explorer.html">Explorer</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+
+  <!-- Wallet UI -->
+  <div style="display:flex; align-items:center; gap:0.75rem;">
+    <button id="connect-wallet-btn" class="btn-wallet" aria-label="Connect Wallet">
+      ⬡ Connect Wallet
+    </button>
+    <div id="wallet-info-bar" class="wallet-info" style="display:none;">
+      <span id="wallet-address-display" class="wallet-address"></span>
+      <button id="disconnect-btn" class="btn-disconnect" aria-label="Disconnect">Disconnect</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ════ HERO ════ -->
+<section class="hero">
+  <div class="hero-orb orb-1"></div>
+  <div class="hero-orb orb-2"></div>
+  <div class="hero-orb orb-3"></div>
+
+  <!-- Floating Muscle Fiber SVG (Right) -->
+  <svg class="hero-graphic" viewBox="0 0 400 350" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="fiberGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#FF6B2C;stop-opacity:0.8"/>
+        <stop offset="50%" style="stop-color:#FF9500;stop-opacity:1"/>
+        <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0.8"/>
+      </linearGradient>
+      <linearGradient id="fiberGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.6"/>
+        <stop offset="50%" style="stop-color:#FF6B2C;stop-opacity:0.9"/>
+        <stop offset="100%" style="stop-color:#FF9500;stop-opacity:0.6"/>
+      </linearGradient>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <!-- Muscle Bundle Illustration -->
+    <g filter="url(#glow)">
+      <!-- Main fibers -->
+      <rect x="30" y="80" width="340" height="18" rx="9" fill="url(#fiberGrad)" opacity="0.9">
+        <animate attributeName="width" values="340;320;340" dur="3s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="30" y="110" width="320" height="16" rx="8" fill="url(#fiberGrad2)" opacity="0.8">
+        <animate attributeName="width" values="320;300;320" dur="3.5s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="30" y="138" width="340" height="18" rx="9" fill="url(#fiberGrad)" opacity="0.9">
+        <animate attributeName="width" values="340;330;340" dur="2.8s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="30" y="168" width="310" height="15" rx="7.5" fill="url(#fiberGrad2)" opacity="0.7">
+        <animate attributeName="width" values="310;290;310" dur="4s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="30" y="194" width="340" height="18" rx="9" fill="url(#fiberGrad)" opacity="0.85">
+        <animate attributeName="width" values="340;325;340" dur="3.2s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="30" y="224" width="325" height="16" rx="8" fill="url(#fiberGrad2)" opacity="0.75">
+        <animate attributeName="width" values="325;305;325" dur="3.8s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="30" y="252" width="340" height="18" rx="9" fill="url(#fiberGrad)" opacity="0.8">
+        <animate attributeName="width" values="340;315;340" dur="3.1s" repeatCount="indefinite"/>
+      </rect>
+
+      <!-- Z-bands (vertical striations) -->
+      <line x1="100" y1="75" x2="100" y2="275" stroke="rgba(255,215,0,0.4)" stroke-width="2"/>
+      <line x1="170" y1="75" x2="170" y2="275" stroke="rgba(255,215,0,0.4)" stroke-width="2"/>
+      <line x1="240" y1="75" x2="240" y2="275" stroke="rgba(255,215,0,0.4)" stroke-width="2"/>
+      <line x1="310" y1="75" x2="310" y2="275" stroke="rgba(255,215,0,0.4)" stroke-width="2"/>
+
+      <!-- Labels -->
+      <text x="200" y="35" text-anchor="middle" fill="#FF9500" font-family="'Orbitron',monospace"
+            font-size="13" letter-spacing="4" font-weight="700" opacity="0.9">MUSCLE FIBER</text>
+      <text x="200" y="55" text-anchor="middle" fill="rgba(255,215,0,0.6)" font-family="'JetBrains Mono',monospace"
+            font-size="9" letter-spacing="2">SARCOMERE STRUCTURE</text>
+
+      <!-- Sarcomere labels -->
+      <text x="135" y="305" text-anchor="middle" fill="rgba(255,107,44,0.7)" font-family="'JetBrains Mono',monospace" font-size="8">A-BAND</text>
+      <text x="205" y="305" text-anchor="middle" fill="rgba(255,215,0,0.7)" font-family="'JetBrains Mono',monospace" font-size="8">Z-LINE</text>
+      <text x="275" y="305" text-anchor="middle" fill="rgba(255,107,44,0.7)" font-family="'JetBrains Mono',monospace" font-size="8">I-BAND</text>
+
+      <!-- Scanning line animation -->
+      <line x1="30" y1="80" x2="30" y2="275" stroke="rgba(255,255,255,0.5)" stroke-width="1.5">
+        <animate attributeName="x1" values="30;370;30" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="x2" values="30;370;30" dur="4s" repeatCount="indefinite"/>
+      </line>
+    </g>
+  </svg>
+
+  <!-- Small Left Graphic -->
+  <svg class="hero-graphic-left" viewBox="0 0 180 280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="cellGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#FF6B2C;stop-opacity:0.6"/>
+        <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0.4"/>
+      </linearGradient>
+    </defs>
+    <!-- Cell cross section -->
+    <ellipse cx="90" cy="140" rx="70" ry="100" fill="none" stroke="url(#cellGrad)" stroke-width="2" opacity="0.6">
+      <animate attributeName="rx" values="70;65;70" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="ry" values="100;105;100" dur="4s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="90" cy="140" rx="50" ry="75" fill="none" stroke="rgba(255,149,0,0.4)" stroke-width="1.5"/>
+    <circle cx="90" cy="140" r="20" fill="rgba(255,107,44,0.2)" stroke="rgba(255,107,44,0.5)" stroke-width="1.5">
+      <animate attributeName="r" values="20;17;20" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <!-- Mitochondria shapes -->
+    <ellipse cx="55" cy="100" rx="12" ry="7" fill="rgba(255,149,0,0.3)" stroke="rgba(255,149,0,0.5)" stroke-width="1"/>
+    <ellipse cx="130" cy="175" rx="10" ry="6" fill="rgba(255,149,0,0.3)" stroke="rgba(255,149,0,0.5)" stroke-width="1"/>
+    <ellipse cx="60" cy="190" rx="9" ry="5" fill="rgba(255,215,0,0.3)" stroke="rgba(255,215,0,0.5)" stroke-width="1"/>
+    <text x="90" y="25" text-anchor="middle" fill="rgba(255,107,44,0.7)" font-family="'JetBrains Mono',monospace" font-size="8" letter-spacing="1">MYOCYTE</text>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span>⬡ GenLayer Bradbury Testnet · Chain ID 961</span>
+    </div>
+
+    <h1 class="hero-title">
+      <span class="gradient-text">MYOGEN</span>
+      <span class="white-text">Muscle · Intelligence · Decentralized</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      The world's first <strong>AI-validated, on-chain dictionary</strong> for muscle physiology &amp; anatomy.
+      Powered by GenLayer's Intelligent Contracts and Optimistic Democracy consensus.
+    </p>
+
+    <div class="hero-actions">
+      <a href="register.html" class="btn-primary" id="cta-btn">
+        ⬡ Connect Wallet &amp; Begin
+      </a>
+      <a href="about.html" class="btn-secondary">
+        Learn More →
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ════ MARQUEE ════ -->
+<div class="marquee-wrapper">
+  <div class="marquee-track" aria-hidden="true">
+    <span class="marquee-item">Sarcomere</span>
+    <span class="marquee-item">Actin</span>
+    <span class="marquee-item">Myosin</span>
+    <span class="marquee-item">Motor Unit</span>
+    <span class="marquee-item">Hypertrophy</span>
+    <span class="marquee-item">Slow-Twitch Fiber</span>
+    <span class="marquee-item">ATP Synthesis</span>
+    <span class="marquee-item">Neuromuscular Junction</span>
+    <span class="marquee-item">Fascicle</span>
+    <span class="marquee-item">Epimysium</span>
+    <span class="marquee-item">Cross-Bridge Cycle</span>
+    <span class="marquee-item">Tropomyosin</span>
+    <span class="marquee-item">Troponin Complex</span>
+    <!-- Duplicate for seamless loop -->
+    <span class="marquee-item">Sarcomere</span>
+    <span class="marquee-item">Actin</span>
+    <span class="marquee-item">Myosin</span>
+    <span class="marquee-item">Motor Unit</span>
+    <span class="marquee-item">Hypertrophy</span>
+    <span class="marquee-item">Slow-Twitch Fiber</span>
+    <span class="marquee-item">ATP Synthesis</span>
+    <span class="marquee-item">Neuromuscular Junction</span>
+    <span class="marquee-item">Fascicle</span>
+    <span class="marquee-item">Epimysium</span>
+    <span class="marquee-item">Cross-Bridge Cycle</span>
+    <span class="marquee-item">Tropomyosin</span>
+    <span class="marquee-item">Troponin Complex</span>
+  </div>
+</div>
+
+<!-- ════ FEATURES ════ -->
+<section class="section features-section" aria-labelledby="features-title">
+  <div class="section-header">
+    <span class="section-tag">// Core Features</span>
+    <h2 class="section-title" id="features-title">Why <span class="accent">MYOGEN</span> ?</h2>
+    <p class="section-desc">Decentralized AI meets medical science. No central server, no single point of failure.</p>
+  </div>
+
+  <div class="features-grid">
+    <div class="glass-card feature-card" data-animate>
+      <div class="feature-icon">🧬</div>
+      <div class="feature-title">AI Validator Consensus</div>
+      <p class="feature-desc">Multiple GenLayer validators independently analyze your query using LLMs, then reach consensus via Optimistic Democracy — ensuring accurate, tamper-proof explanations.</p>
+    </div>
+
+    <div class="glass-card feature-card" data-animate>
+      <div class="feature-icon">⛓️</div>
+      <div class="feature-title">On-Chain Knowledge</div>
+      <p class="feature-desc">Every explanation is stored directly on GenLayer's Bradbury Testnet. Your study history is permanently recorded and verifiable on the blockchain.</p>
+    </div>
+
+    <div class="glass-card feature-card" data-animate>
+      <div class="feature-icon">💪</div>
+      <div class="feature-title">300+ Muscle Terms</div>
+      <p class="feature-desc">From sarcomeres to sport-specific biomechanics — MYOGEN covers the full spectrum of muscle physiology, anatomy, kinesiology, and pathology.</p>
+    </div>
+
+    <div class="glass-card feature-card" data-animate>
+      <div class="feature-icon">🎯</div>
+      <div class="feature-title">Visual Learning</div>
+      <p class="feature-desc">Every term comes with a futuristic animated graphical representation — fiber diagrams, contraction cycles, neural pathways, and biochemical cascades.</p>
+    </div>
+
+    <div class="glass-card feature-card" data-animate>
+      <div class="feature-icon">🔐</div>
+      <div class="feature-title">Wallet-Gated Access</div>
+      <p class="feature-desc">Register with your Web3 wallet. Your learning journey is cryptographically linked to your address — portable, owned by you, forever.</p>
+    </div>
+
+    <div class="glass-card feature-card" data-animate>
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title">Back-to-Back Study</div>
+      <p class="feature-desc">Study terms sequentially without interruption. MYOGEN caches validator results, so subsequent queries are lightning-fast with zero timeout errors.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════ STATS ════ -->
+<div class="section">
+  <div class="glass-card stats-bar" style="padding: 2.5rem;">
+    <div class="stat-item">
+      <div class="stat-number" id="stat-terms">0</div>
+      <div class="stat-label">Terms Available</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number" id="stat-queries">0</div>
+      <div class="stat-label">Queries Processed</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number" id="stat-users">0</div>
+      <div class="stat-label">Active Learners</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-number">5</div>
+      <div class="stat-label">Validators</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ HOW IT WORKS ════ -->
+<section class="section" aria-labelledby="howitworks-title">
+  <div class="section-header">
+    <span class="section-tag">// Workflow</span>
+    <h2 class="section-title" id="howitworks-title">How It <span class="accent">Works</span></h2>
+    <p class="section-desc">A seamless journey from wallet connection to AI-validated knowledge.</p>
+  </div>
+
+  <div class="steps-grid">
+    <div class="glass-card step-card" data-animate>
+      <div class="step-number">01</div>
+      <div class="step-title">Connect Wallet</div>
+      <p class="step-desc">Connect MetaMask and switch to GenLayer Bradbury Testnet (Chain ID 961). Register your address on-chain.</p>
+    </div>
+
+    <div class="glass-card step-card" data-animate>
+      <div class="step-number">02</div>
+      <div class="step-title">Enter Term</div>
+      <p class="step-desc">Navigate to the Study page and type any muscle physiology or anatomy term (e.g., "sarcomere", "motor unit", "type II fiber").</p>
+    </div>
+
+    <div class="glass-card step-card" data-animate>
+      <div class="step-number">03</div>
+      <div class="step-title">Sign Transaction</div>
+      <p class="step-desc">Click "Study" to trigger a GenLayer Intelligent Contract call. MetaMask prompts you to sign the transaction.</p>
+    </div>
+
+    <div class="glass-card step-card" data-animate>
+      <div class="step-number">04</div>
+      <div class="step-title">Validator Consensus</div>
+      <p class="step-desc">Multiple AI validators analyze your term using LLMs, then reach consensus via Optimistic Democracy — on-chain.</p>
+    </div>
+
+    <div class="glass-card step-card" data-animate>
+      <div class="step-number">05</div>
+      <div class="step-title">Learn &amp; Visualize</div>
+      <p class="step-desc">Receive a detailed AI explanation with animated graphical visualization. Study the next term immediately — no waiting.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════ VALIDATOR CONSENSUS DIAGRAM ════ -->
+<section class="section" aria-labelledby="validators-title">
+  <div class="glass-card validator-section">
+    <span class="section-tag">// GenLayer Protocol</span>
+    <h2 class="section-title" id="validators-title">Optimistic <span class="accent">Democracy</span></h2>
+    <p class="section-desc" style="margin-bottom:0;">Validators don't just execute code — they <em>reason</em>. Each independently queries an LLM and the majority consensus becomes truth on-chain.</p>
+
+    <div class="validator-diagram">
+      <div class="v-node">
+        <div class="v-orb">🤖</div>
+        <div class="v-label">Validator A</div>
+      </div>
+      <div class="v-arrow">→</div>
+      <div class="v-node">
+        <div class="v-orb">🤖</div>
+        <div class="v-label">Validator B</div>
+      </div>
+      <div class="v-arrow">→</div>
+      <div class="v-node">
+        <div class="v-orb">🤖</div>
+        <div class="v-label">Validator C</div>
+      </div>
+      <div class="v-arrow">⇒</div>
+      <div class="v-node">
+        <div class="v-consensus">✓</div>
+        <div class="v-label">Consensus</div>
+      </div>
+    </div>
+
+    <div class="network-badge">
+      <div class="network-dot"></div>
+      GenLayer Bradbury Testnet · RPC: rpc.bradbury.genlayer.com · Chain ID: 961
+    </div>
+  </div>
+</section>
+
+<!-- ════ CTA ════ -->
+<section class="section">
+  <div class="cta-section">
+    <div class="cta-bg-ring" style="width:400px;height:400px;top:-100px;left:-100px;"></div>
+    <div class="cta-bg-ring" style="width:300px;height:300px;bottom:-80px;right:-60px;"></div>
+
+    <div class="hero-badge" style="margin-bottom:1.5rem;">🧬 Start Your Journey Today</div>
+    <h2 class="cta-title">Ready to Decode the <span style="background:var(--gradient-orange);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Muscle?</span></h2>
+    <p style="color:var(--mid-gray);max-width:500px;margin:1rem auto 2rem;">
+      Connect your wallet, register on GenLayer's Bradbury Testnet, and start studying muscle physiology like never before.
+    </p>
+    <a href="register.html" class="btn-primary" style="font-size:0.85rem;">
+      ⬡ Get Started — It's Free
+    </a>
+  </div>
+</section>
+
+<!-- ════ FOOTER ════ -->
+<footer class="footer">
+  <div class="footer-logo">MYOGEN</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="study.html">Study</a>
+    <a href="explorer.html">Explorer</a>
+    <a href="about.html">About</a>
+    <a href="https://docs.genlayer.com" target="_blank" rel="noopener">GenLayer Docs ↗</a>
+  </div>
+  <p class="footer-copy">© 2026 MYOGEN · Built on GenLayer Bradbury Testnet</p>
+  <div class="footer-network">
+    <div class="network-dot"></div>
+    GenLayer Bradbury Testnet · Chain ID 961
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+  // Animate stats on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    const counters = [
+      { el: document.getElementById('stat-terms'), target: 300, delay: 300 },
+      { el: document.getElementById('stat-queries'), target: 1247, delay: 500 },
+      { el: document.getElementById('stat-users'), target: 89, delay: 700 },
+    ];
+
+    counters.forEach(({ el, target, delay }) => {
+      if (!el) return;
+      setTimeout(() => animateCounter(el, target), delay);
+    });
+
+    // CTA button redirect if already connected
+    if (localStorage.getItem('myogen_connected') === 'true') {
+      const ctaBtn = document.getElementById('cta-btn');
+      if (ctaBtn) {
+        ctaBtn.href = 'study.html';
+        ctaBtn.textContent = '⬡ Go to Study Room';
+      }
+    }
+  });
+</script>
+</body>
+</html>

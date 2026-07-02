@@ -1,0 +1,17 @@
+{
+  "name": "myogen",
+  "version": "1.0.0",
+  "description": "MYOGEN — Decentralized Muscle Physiology & Anatomy Dictionary on GenLayer Bradbury Testnet",
+  "private": true,
+  "keywords": ["genlayer", "web3", "muscle-physiology", "anatomy", "blockchain", "ai"],
+  "homepage": ".",
+  "scripts": {
+    "dev": "npx serve . -l 3000",
+    "start": "npx serve . -l 3000",
+    "build": "echo 'Static site — no build step needed'",
+    "deploy": "vercel --prod"
+  },
+  "devDependencies": {
+    "serve": "^14.2.3"
+  }
+}

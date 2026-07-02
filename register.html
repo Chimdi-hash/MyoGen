@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register — MYOGEN | Connect Wallet to GenLayer</title>
+  <meta name="description" content="Connect your MetaMask wallet to MYOGEN on GenLayer Bradbury Testnet and begin studying muscle physiology."/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .register-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--nav-height) 2rem 2rem;
+    }
+
+    .register-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      max-width: 1100px;
+      width: 100%;
+      align-items: center;
+    }
+
+    /* Left: Info Panel */
+    .register-info {
+      animation: slide-in-left 0.7s ease both;
+    }
+
+    .register-info .hero-badge {
+      margin-bottom: 1.5rem;
+    }
+
+    .register-info h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+
+    .register-info h1 .accent {
+      background: var(--gradient-orange);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .register-info p {
+      color: var(--mid-gray);
+      line-height: 1.75;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+
+    .perks-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .perk-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: var(--off-white);
+    }
+
+    .perk-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--orange-soft);
+      border: 1px solid rgba(255,107,44,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* Right: Connect Card */
+    .register-card {
+      padding: 3rem;
+      animation: slide-in-right 0.7s 0.15s ease both;
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .card-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--orange-soft);
+      border: 2px solid var(--orange-core);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 0 32px var(--orange-glow);
+      animation: pulse-glow 3s ease infinite, float-bob 4s ease infinite;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .card-subtitle {
+      font-size: 0.875rem;
+      color: var(--mid-gray);
+    }
+
+    /* Steps */
+    .connect-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .connect-step {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--glass-border);
+      font-size: 0.85rem;
+      transition: var(--transition);
+    }
+
+    .connect-step.done {
+      background: rgba(0,200,100,0.08);
+      border-color: rgba(0,200,100,0.3);
+    }
+
+    .connect-step.active-step {
+      background: var(--orange-soft);
+      border-color: rgba(255,107,44,0.4);
+    }
+
+    .step-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      border: 1.5px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      font-family: var(--font-display);
+      flex-shrink: 0;
+      transition: var(--transition);
+    }
+
+    .connect-step.done .step-dot {
+      background: rgba(0,200,100,0.2);
+      border-color: #00C864;
+      color: #00C864;
+    }
+
+    .connect-step.active-step .step-dot {
+      background: var(--orange-core);
+      border-color: var(--orange-bright);
+      color: var(--dark);
+      animation: pulse-glow 1.5s ease infinite;
+    }
+
+    .btn-connect-large {
+      width: 100%;
+      padding: 1.25rem;
+      font-size: 0.9rem;
+      border-radius: var(--border-radius);
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .btn-connect-large svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .btn-connect-large:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .network-info {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass-border);
+    }
+
+    .network-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.8rem;
+    }
+
+    .network-info-row:last-child { border-bottom: none; }
+
+    .network-info-row .label {
+      color: var(--mid-gray);
+      font-family: var(--font-mono);
+    }
+
+    .network-info-row .value {
+      color: var(--orange-bright);
+      font-family: var(--font-mono);
+      font-weight: 500;
+    }
+
+    /* Already connected panel */
+    .connected-panel {
+      display: none;
+      text-align: center;
+    }
+
+    .connected-panel.show { display: block; }
+
+    .address-display-large {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--orange-bright);
+      background: var(--orange-soft);
+      border: 1px solid var(--orange-core);
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      margin: 1rem 0;
+      word-break: break-all;
+    }
+
+    @media (max-width: 900px) {
+      .register-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .register-info { order: 2; }
+      .register-card { order: 1; }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-mesh"></div>
+<div class="bg-grid"></div>
+<div id="particle-field" class="particle-field"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a class="logo" href="index.html">MYOGEN<span>Muscle Intelligence</span></a>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="study.html">Study</a></li>
+    <li><a href="explorer.html">Explorer</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:0.75rem;">
+    <button id="connect-wallet-btn" class="btn-wallet">⬡ Connect Wallet</button>
+    <div id="wallet-info-bar" class="wallet-info" style="display:none;">
+      <span id="wallet-address-display" class="wallet-address"></span>
+      <button id="disconnect-btn" class="btn-disconnect">Disconnect</button>
+    </div>
+  </div>
+</nav>
+
+<!-- REGISTER PAGE -->
+<main class="register-page">
+  <div class="register-container">
+
+    <!-- LEFT: Info -->
+    <div class="register-info">
+      <div class="hero-badge">⬡ Step 1 of 2 · Wallet Registration</div>
+      <h1>Connect Your<br/><span class="accent">Web3 Wallet</span><br/>to Begin</h1>
+      <p>
+        MYOGEN uses your Ethereum-compatible wallet as your identity on the GenLayer Bradbury Testnet.
+        Your study history, queries, and progress are permanently linked to your wallet address — owned by you, forever.
+      </p>
+
+      <ul class="perks-list">
+        <li class="perk-item">
+          <div class="perk-icon">🔐</div>
+          <div>
+            <strong style="color:var(--white);">Self-Sovereign Identity</strong><br/>
+            <span style="color:var(--mid-gray);font-size:0.85rem;">Your wallet is your MYOGEN account. No passwords, no accounts to manage.</span>
+          </div>
+        </li>
+        <li class="perk-item">
+          <div class="perk-icon">🧬</div>
+          <div>
+            <strong style="color:var(--white);">On-Chain Study History</strong><br/>
+            <span style="color:var(--mid-gray);font-size:0.85rem;">Every term you study is recorded on GenLayer's blockchain, verifiable and immutable.</span>
+          </div>
+        </li>
+        <li class="perk-item">
+          <div class="perk-icon">⚡</div>
+          <div>
+            <strong style="color:var(--white);">AI Validator Access</strong><br/>
+            <span style="color:var(--mid-gray);font-size:0.85rem;">Only registered wallets can interact with MYOGEN's Intelligent Contract validators.</span>
+          </div>
+        </li>
+        <li class="perk-item">
+          <div class="perk-icon">🌐</div>
+          <div>
+            <strong style="color:var(--white);">GenLayer Bradbury Testnet</strong><br/>
+            <span style="color:var(--mid-gray);font-size:0.85rem;">Automatically configured — Chain ID 961, RPC: rpc.bradbury.genlayer.com</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- RIGHT: Connect Card -->
+    <div class="glass-card-strong register-card" id="connect-card">
+      <div class="card-header">
+        <div class="card-icon">⬡</div>
+        <div class="card-title">Connect &amp; Register</div>
+        <p class="card-subtitle">MetaMask or any EVM-compatible wallet</p>
+      </div>
+
+      <!-- Progress Steps -->
+      <div class="connect-steps" id="connect-steps">
+        <div class="connect-step active-step" id="step-1">
+          <div class="step-dot">1</div>
+          <span>Connect MetaMask wallet</span>
+        </div>
+        <div class="connect-step" id="step-2">
+          <div class="step-dot">2</div>
+          <span>Switch to GenLayer Bradbury Testnet</span>
+        </div>
+        <div class="connect-step" id="step-3">
+          <div class="step-dot">3</div>
+          <span>Register address on MYOGEN contract</span>
+        </div>
+      </div>
+
+      <!-- Connect Button -->
+      <div id="connect-action">
+        <button
+          class="btn-primary btn-connect-large"
+          id="register-connect-btn"
+          onclick="handleRegister()"
+          aria-label="Connect Wallet and Register"
+        >
+          <!-- MetaMask Fox Icon -->
+          <svg viewBox="0 0 212 189" xmlns="http://www.w3.org/2000/svg">
+            <g fill="none" fill-rule="evenodd">
+              <polygon fill="#E2761B" points="106 189 73.9 166.1 50.4 189"/>
+              <polygon fill="#E4761B" points="162.1 189 138.1 166.1 106 189"/>
+              <polygon fill="#D7C1B3" points="138.1 166.1 106 189 162.1 189"/>
+              <polygon fill="#233447" points="73.9 166.1 106 189 50.4 189"/>
+            </g>
+          </svg>
+          ⬡ Connect &amp; Register
+        </button>
+        <p style="text-align:center;font-size:0.75rem;color:var(--mid-gray);margin-top:1rem;">
+          No MetaMask? <a href="https://metamask.io/" target="_blank" rel="noopener" style="color:var(--orange-bright);">Install it free →</a>
+        </p>
+      </div>
+
+      <!-- Connected Panel -->
+      <div class="connected-panel" id="connected-panel">
+        <div style="font-size:3rem;margin-bottom:1rem;">✅</div>
+        <div class="card-title" style="color:#00C864;">Registered!</div>
+        <p style="color:var(--mid-gray);font-size:0.875rem;margin:0.5rem 0 1rem;">
+          Your wallet is connected and registered on MYOGEN.
+        </p>
+        <div class="address-display-large" id="reg-address-display"></div>
+        <a href="study.html" class="btn-primary btn-connect-large" style="margin-top:1rem;text-decoration:none;">
+          🧬 Start Studying →
+        </a>
+      </div>
+
+      <!-- Network Info -->
+      <div class="network-info">
+        <div class="network-info-row">
+          <span class="label">Network</span>
+          <span class="value">GenLayer Bradbury Testnet</span>
+        </div>
+        <div class="network-info-row">
+          <span class="label">Chain ID</span>
+          <span class="value">961</span>
+        </div>
+        <div class="network-info-row">
+          <span class="label">RPC</span>
+          <span class="value" style="font-size:0.7rem;">rpc.bradbury.genlayer.com</span>
+        </div>
+        <div class="network-info-row">
+          <span class="label">Currency</span>
+          <span class="value">GEN</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <p class="footer-copy">© 2026 MYOGEN · GenLayer Bradbury Testnet</p>
+  <div class="footer-network">
+    <div class="network-dot"></div>
+    Chain ID 961 · Intelligent Contracts
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+  let registrationInProgress = false;
+
+  async function handleRegister() {
+    if (registrationInProgress) return;
+    registrationInProgress = true;
+
+    const btn = document.getElementById('register-connect-btn');
+    btn.disabled = true;
+    btn.innerHTML = `<span class="loading-spinner"></span> Connecting...`;
+
+    try {
+      // Step 1: Connect wallet
+      updateStep(1, 'active');
+      const connected = await connectWallet();
+
+      if (!connected) {
+        btn.disabled = false;
+        btn.innerHTML = `⬡ Connect &amp; Register`;
+        registrationInProgress = false;
+        return;
+      }
+
+      updateStep(1, 'done');
+
+      // Step 2: Switch network (done inside connectWallet)
+      updateStep(2, 'active');
+      await sleep(600);
+      updateStep(2, 'done');
+
+      // Step 3: Register on contract (simulated for testnet)
+      updateStep(3, 'active');
+      btn.innerHTML = `<span class="loading-spinner"></span> Registering on-chain...`;
+
+      // In production: call contract's register_user function via eth_sendTransaction
+      // For now, we simulate the registration call
+      await simulateContractRegistration();
+
+      updateStep(3, 'done');
+
+      // Show success state
+      showConnectedPanel();
+
+    } catch (err) {
+      showToast('Registration failed: ' + err.message, 'error');
+      btn.disabled = false;
+      btn.innerHTML = `⬡ Connect &amp; Register`;
+    }
+
+    registrationInProgress = false;
+  }
+
+  async function simulateContractRegistration() {
+    // In production, this calls:
+    // await window.ethereum.request({
+    //   method: 'eth_sendTransaction',
+    //   params: [{
+    //     from: window.myogenWallet.address,
+    //     to: CONTRACT_ADDRESS,
+    //     data: encodeRegisterUser('Anonymous')
+    //   }]
+    // });
+    await sleep(1500); // Simulate tx time
+    showToast('Registration transaction submitted!', 'success');
+    await sleep(800);
+  }
+
+  function updateStep(stepNum, state) {
+    const stepEl = document.getElementById(`step-${stepNum}`);
+    if (!stepEl) return;
+
+    stepEl.classList.remove('active-step', 'done');
+
+    if (state === 'done') {
+      stepEl.classList.add('done');
+      stepEl.querySelector('.step-dot').textContent = '✓';
+    } else if (state === 'active') {
+      stepEl.classList.add('active-step');
+
+      // Move active indicator forward
+      for (let i = stepNum + 1; i <= 3; i++) {
+        const next = document.getElementById(`step-${i}`);
+        if (next) next.classList.remove('done', 'active-step');
+      }
+    }
+  }
+
+  function showConnectedPanel() {
+    document.getElementById('connect-action').style.display = 'none';
+    document.getElementById('connect-steps').style.display = 'none';
+
+    const panel = document.getElementById('connected-panel');
+    panel.classList.add('show');
+
+    const addrEl = document.getElementById('reg-address-display');
+    if (addrEl && window.myogenWallet.address) {
+      addrEl.textContent = window.myogenWallet.address;
+    }
+
+    showToast('🎉 Welcome to MYOGEN! You are now registered.', 'success', 5000);
+
+    // Auto redirect after 3 seconds
+    setTimeout(() => {
+      window.location.href = 'study.html';
+    }, 3000);
+  }
+
+  // Check if already connected on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      if (window.myogenWallet && window.myogenWallet.isConnected) {
+        showConnectedPanel();
+      }
+    }, 500);
+  });
+</script>
+</body>
+</html>
