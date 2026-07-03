@@ -451,6 +451,27 @@ body {
   padding-top: var(--nav-height);
 }
 
+.hero-hologram {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 85%;
+  max-height: 1000px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  opacity: 0.6;
+  filter: drop-shadow(0 0 30px var(--orange-glow));
+  animation: hologram-spin 25s linear infinite;
+  z-index: 1; /* Just behind content */
+  pointer-events: none;
+}
+
+@keyframes hologram-spin {
+  0% { transform: translate(-50%, -50%) rotateY(0deg); }
+  100% { transform: translate(-50%, -50%) rotateY(360deg); }
+}
+
 .hero-content {
   text-align: center;
   z-index: 10;
