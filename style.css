@@ -994,3 +994,75 @@ body {
   .stats-bar { gap: 2rem; }
   .stat-divider { display: none; }
 }
+
+/* ── Hexagonal Honeycomb Grid ── */
+.hex-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 2rem auto;
+  padding-bottom: 160px; /* Space for the shifted even items */
+}
+
+.hex-card {
+  width: 340px;
+  height: 294px; /* 340 * 0.866 */
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  margin: 4px -83px; /* -85px overlap + 2px extra for tiny space */
+  padding: 1.5rem 4rem; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  background: rgba(10,10,22,0.6);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.hex-card:hover {
+  background: rgba(255,107,44,0.08);
+  border-color: rgba(255,107,44,0.4);
+  z-index: 2;
+  transform: scale(1.02);
+}
+
+.hex-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gradient-orange);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hex-card:hover::before {
+  opacity: 1;
+}
+
+/* 3 columns */
+@media (min-width: 800px) {
+  .hex-grid { max-width: 770px; }
+  .hex-card:nth-child(3n+2) {
+    margin-top: 151px; /* 294/2 + 4px */
+  }
+}
+
+/* 2 columns */
+@media (max-width: 799px) and (min-width: 550px) {
+  .hex-grid { max-width: 520px; }
+  .hex-card:nth-child(2n+2) {
+    margin-top: 151px;
+  }
+}
+
+/* 1 column */
+@media (max-width: 549px) {
+  .hex-grid { max-width: 340px; padding-bottom: 2rem; }
+  .hex-card { margin: 4px auto; padding: 2rem 3rem; }
+}

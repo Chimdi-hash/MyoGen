@@ -414,7 +414,7 @@
   </div>
 
   <!-- Terms Grid -->
-  <div class="terms-grid" id="terms-grid">
+  <div class="hex-grid" id="terms-grid">
     <!-- Populated by JS -->
   </div>
 
@@ -579,7 +579,7 @@ function renderTerms() {
 
   empty.style.display = 'none';
   grid.innerHTML = filtered.map((t, i) => `
-    <div class="glass-card term-card" onclick="openDetail(${SAMPLE_TERMS.indexOf(t)})"
+    <div class="hex-card term-card" onclick="openDetail(${SAMPLE_TERMS.indexOf(t)})"
       style="animation: slide-in-up 0.5s ${i * 0.06}s ease both; opacity:0; animation-fill-mode: forwards;"
       tabindex="0" role="button" aria-label="View ${t.term}">
       <div class="term-card-header">
