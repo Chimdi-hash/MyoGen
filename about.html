@@ -314,66 +314,7 @@
       <h2 class="section-title">GenLayer <span class="accent">Intelligent Contracts</span></h2>
       <p class="section-desc" style="margin:0;">MYOGEN's smart contract is written in Python as a GenLayer Intelligent Contract — the only blockchain where contracts can reason, judge, and call LLMs natively on-chain.</p>
 
-      <div class="genlayer-grid">
-        <div class="genlayer-item">
-          <div class="gl-label">Network</div>
-          <div class="gl-value">GenLayer Bradbury Testnet</div>
-        </div>
-        <div class="genlayer-item">
-          <div class="gl-label">Chain ID</div>
-          <div class="gl-value">961</div>
-        </div>
-        <div class="genlayer-item">
-          <div class="gl-label">RPC Endpoint</div>
-          <div class="gl-value" style="font-size:0.8rem;font-family:var(--font-mono);">https://rpc.bradbury.genlayer.com</div>
-        </div>
-        <div class="genlayer-item">
-          <div class="gl-label">Explorer</div>
-          <div class="gl-value" style="font-size:0.8rem;"><a href="https://explorer.bradbury.genlayer.com" target="_blank" rel="noopener" style="color:var(--orange-bright);">explorer.bradbury.genlayer.com ↗</a></div>
-        </div>
-        <div class="genlayer-item">
-          <div class="gl-label">Contract Language</div>
-          <div class="gl-value">Python (Intelligent Contracts)</div>
-        </div>
-        <div class="genlayer-item">
-          <div class="gl-label">Consensus Mechanism</div>
-          <div class="gl-value">Optimistic Democracy (5 validators)</div>
-        </div>
-        <div class="genlayer-item">
-          <div class="gl-label">Native Currency</div>
-          <div class="gl-value">GEN</div>
-        </div>
-        <div class="genlayer-item">
-          <div class="gl-label">AI Integration</div>
-          <div class="gl-value">gl.exec_prompt() — native LLM calls</div>
-        </div>
-      </div>
 
-      <div style="margin-top:2rem;">
-        <div class="gl-label" style="margin-bottom:1rem;">// Contract Code Preview</div>
-        <div class="code-display">
-<span class="cm"># MYOGEN Intelligent Contract — GenLayer Bradbury Testnet</span>
-<span class="kw">from</span> genlayer <span class="kw">import</span> *
-<span class="kw">import</span> json
-
-<span class="dec">@gl.contract</span>
-<span class="kw">class</span> <span class="fn">MyogenDictionary</span>:
-    registered_users: TreeMap[Address, dict]
-    query_history: TreeMap[Address, list]
-    all_terms_cache: TreeMap[str, dict]
-
-    <span class="dec">@gl.public.write</span>
-    <span class="kw">def</span> <span class="fn">study_term</span>(<span class="kw">self</span>, term: str) -> <span class="kw">None</span>:
-        <span class="cm"># AI validators analyze term via LLM</span>
-        result = gl.exec_prompt(<span class="str">f"""
-            Explain '{term}' in muscle physiology context.
-            Return structured JSON with definition,
-            key facts, clinical relevance...
-        """</span>)
-        <span class="cm"># Validators reach consensus via Optimistic Democracy</span>
-        <span class="kw">self</span>.all_terms_cache[term] = json.loads(result)
-        </div>
-      </div>
     </div>
   </section>
 
