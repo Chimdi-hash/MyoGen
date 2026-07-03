@@ -494,16 +494,6 @@
     </div>
     <div class="stat-divider"></div>
     <div class="stat-item">
-      <div class="stat-number" id="stat-queries">0</div>
-      <div class="stat-label">Queries Processed</div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <div class="stat-number" id="stat-users">0</div>
-      <div class="stat-label">Active Learners</div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
       <div class="stat-number">5</div>
       <div class="stat-label">Validators</div>
     </div>
@@ -589,9 +579,7 @@
   // Animate stats on page load
   document.addEventListener('DOMContentLoaded', () => {
     const counters = [
-      { el: document.getElementById('stat-terms'), target: 300, delay: 300 },
-      { el: document.getElementById('stat-queries'), target: 1247, delay: 500 },
-      { el: document.getElementById('stat-users'), target: 89, delay: 700 },
+      { el: document.getElementById('stat-terms'), target: 300, delay: 300 }
     ];
 
     counters.forEach(({ el, target, delay }) => {
