@@ -593,8 +593,7 @@ function renderTerms() {
     </div>
   `).join('');
 
-  // Update stats
-  document.getElementById('es-terms').textContent = filtered.length;
+  // Stat updates moved to DOMContentLoaded to reflect real user participation instead of filtered mock length
 }
 
 function setFilter(cat, btn) {
@@ -657,7 +656,13 @@ document.addEventListener('keydown', e => {
 // ═══ Init ═══
 document.addEventListener('DOMContentLoaded', () => {
   renderTerms();
-  animateCounter(document.getElementById('es-sessions'), 24, 1500);
+
+  // Read real participation data from localStorage
+  const history = JSON.parse(localStorage.getItem('myogen_session_history') || '[]');
+  const uniqueTerms = new Set(history.map(h => h.term.toLowerCase())).size;
+  
+  document.getElementById('es-terms').textContent = uniqueTerms;
+  animateCounter(document.getElementById('es-sessions'), history.length, 1500);
 
   // Pick up term from study page if redirected
   const savedTerm = sessionStorage.getItem('myogen_study_term');
