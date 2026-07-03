@@ -999,7 +999,7 @@ body {
 .hex-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   margin: 2rem auto;
   padding-bottom: 160px; /* Space for the shifted even items */
@@ -1048,7 +1048,7 @@ body {
 
 /* 3 columns */
 @media (min-width: 800px) {
-  .hex-grid { max-width: 790px; } /* 3 * (340 - 82) + margin offset */
+  .hex-grid { max-width: 774px; } /* 3 * 258px */
   .hex-card:nth-child(3n+2) {
     margin-top: 151px; /* 294/2 + 4px */
     margin-bottom: -151px; /* Kill the extra flex line height */
@@ -1057,7 +1057,7 @@ body {
 
 /* 2 columns */
 @media (max-width: 799px) and (min-width: 550px) {
-  .hex-grid { max-width: 530px; }
+  .hex-grid { max-width: 516px; } /* 2 * 258px */
   .hex-card:nth-child(2n+2) {
     margin-top: 151px;
     margin-bottom: -151px;
