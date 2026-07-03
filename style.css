@@ -40,7 +40,7 @@
   --font-mono: 'JetBrains Mono', monospace;
 
   /* Spacing */
-  --nav-height: 72px;
+  --nav-height: 60px;
   --border-radius: 16px;
   --border-radius-lg: 24px;
   --border-radius-xl: 32px;
@@ -104,7 +104,7 @@ body {
 
 .logo {
   font-family: var(--font-display);
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: 0.15em;
   background: var(--gradient-orange);
@@ -116,6 +116,9 @@ body {
   text-decoration: none;
   cursor: pointer;
   transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
 }
 
 .logo:hover {

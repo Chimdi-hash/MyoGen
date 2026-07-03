@@ -243,15 +243,9 @@
 <div class="bg-grid"></div>
 <div id="particle-field" class="particle-field"></div>
 
-<!-- Floating Anatomy Characters -->
-<div class="floating-dna" style="top:20%; animation-duration:35s; animation-delay:-5s; font-size:1.5rem;">🧬</div>
-<div class="floating-dna" style="top:55%; animation-duration:42s; animation-delay:-12s; font-size:2rem;">💪</div>
-<div class="floating-dna" style="top:75%; animation-duration:38s; animation-delay:-20s; font-size:1.2rem;">🔬</div>
-<div class="floating-dna" style="top:35%; animation-duration:45s; animation-delay:-8s; font-size:1.8rem;">⚡</div>
-
 <!-- ════ NAVBAR ════ -->
 <nav class="navbar" id="navbar">
-  <a class="logo" href="index.html">MYOGEN<span>Muscle Intelligence</span></a>
+  <a class="logo" href="index.html">MYOGEN</a>
 
   <div class="hamburger" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -282,106 +276,14 @@
   <div class="hero-orb orb-2"></div>
   <div class="hero-orb orb-3"></div>
 
-  <!-- Floating Muscle Fiber SVG (Right) -->
-  <svg class="hero-graphic" viewBox="0 0 400 350" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <defs>
-      <linearGradient id="fiberGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" style="stop-color:#FF6B2C;stop-opacity:0.8"/>
-        <stop offset="50%" style="stop-color:#FF9500;stop-opacity:1"/>
-        <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0.8"/>
-      </linearGradient>
-      <linearGradient id="fiberGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.6"/>
-        <stop offset="50%" style="stop-color:#FF6B2C;stop-opacity:0.9"/>
-        <stop offset="100%" style="stop-color:#FF9500;stop-opacity:0.6"/>
-      </linearGradient>
-      <filter id="glow">
-        <feGaussianBlur stdDeviation="3" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>
-    <!-- Muscle Bundle Illustration -->
-    <g filter="url(#glow)">
-      <!-- Main fibers -->
-      <rect x="30" y="80" width="340" height="18" rx="9" fill="url(#fiberGrad)" opacity="0.9">
-        <animate attributeName="width" values="340;320;340" dur="3s" repeatCount="indefinite"/>
-      </rect>
-      <rect x="30" y="110" width="320" height="16" rx="8" fill="url(#fiberGrad2)" opacity="0.8">
-        <animate attributeName="width" values="320;300;320" dur="3.5s" repeatCount="indefinite"/>
-      </rect>
-      <rect x="30" y="138" width="340" height="18" rx="9" fill="url(#fiberGrad)" opacity="0.9">
-        <animate attributeName="width" values="340;330;340" dur="2.8s" repeatCount="indefinite"/>
-      </rect>
-      <rect x="30" y="168" width="310" height="15" rx="7.5" fill="url(#fiberGrad2)" opacity="0.7">
-        <animate attributeName="width" values="310;290;310" dur="4s" repeatCount="indefinite"/>
-      </rect>
-      <rect x="30" y="194" width="340" height="18" rx="9" fill="url(#fiberGrad)" opacity="0.85">
-        <animate attributeName="width" values="340;325;340" dur="3.2s" repeatCount="indefinite"/>
-      </rect>
-      <rect x="30" y="224" width="325" height="16" rx="8" fill="url(#fiberGrad2)" opacity="0.75">
-        <animate attributeName="width" values="325;305;325" dur="3.8s" repeatCount="indefinite"/>
-      </rect>
-      <rect x="30" y="252" width="340" height="18" rx="9" fill="url(#fiberGrad)" opacity="0.8">
-        <animate attributeName="width" values="340;315;340" dur="3.1s" repeatCount="indefinite"/>
-      </rect>
-
-      <!-- Z-bands (vertical striations) -->
-      <line x1="100" y1="75" x2="100" y2="275" stroke="rgba(255,215,0,0.4)" stroke-width="2"/>
-      <line x1="170" y1="75" x2="170" y2="275" stroke="rgba(255,215,0,0.4)" stroke-width="2"/>
-      <line x1="240" y1="75" x2="240" y2="275" stroke="rgba(255,215,0,0.4)" stroke-width="2"/>
-      <line x1="310" y1="75" x2="310" y2="275" stroke="rgba(255,215,0,0.4)" stroke-width="2"/>
-
-      <!-- Labels -->
-      <text x="200" y="35" text-anchor="middle" fill="#FF9500" font-family="'Orbitron',monospace"
-            font-size="13" letter-spacing="4" font-weight="700" opacity="0.9">MUSCLE FIBER</text>
-      <text x="200" y="55" text-anchor="middle" fill="rgba(255,215,0,0.6)" font-family="'JetBrains Mono',monospace"
-            font-size="9" letter-spacing="2">SARCOMERE STRUCTURE</text>
-
-      <!-- Sarcomere labels -->
-      <text x="135" y="305" text-anchor="middle" fill="rgba(255,107,44,0.7)" font-family="'JetBrains Mono',monospace" font-size="8">A-BAND</text>
-      <text x="205" y="305" text-anchor="middle" fill="rgba(255,215,0,0.7)" font-family="'JetBrains Mono',monospace" font-size="8">Z-LINE</text>
-      <text x="275" y="305" text-anchor="middle" fill="rgba(255,107,44,0.7)" font-family="'JetBrains Mono',monospace" font-size="8">I-BAND</text>
-
-      <!-- Scanning line animation -->
-      <line x1="30" y1="80" x2="30" y2="275" stroke="rgba(255,255,255,0.5)" stroke-width="1.5">
-        <animate attributeName="x1" values="30;370;30" dur="4s" repeatCount="indefinite"/>
-        <animate attributeName="x2" values="30;370;30" dur="4s" repeatCount="indefinite"/>
-      </line>
-    </g>
-  </svg>
-
-  <!-- Small Left Graphic -->
-  <svg class="hero-graphic-left" viewBox="0 0 180 280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <defs>
-      <linearGradient id="cellGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#FF6B2C;stop-opacity:0.6"/>
-        <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0.4"/>
-      </linearGradient>
-    </defs>
-    <!-- Cell cross section -->
-    <ellipse cx="90" cy="140" rx="70" ry="100" fill="none" stroke="url(#cellGrad)" stroke-width="2" opacity="0.6">
-      <animate attributeName="rx" values="70;65;70" dur="4s" repeatCount="indefinite"/>
-      <animate attributeName="ry" values="100;105;100" dur="4s" repeatCount="indefinite"/>
-    </ellipse>
-    <ellipse cx="90" cy="140" rx="50" ry="75" fill="none" stroke="rgba(255,149,0,0.4)" stroke-width="1.5"/>
-    <circle cx="90" cy="140" r="20" fill="rgba(255,107,44,0.2)" stroke="rgba(255,107,44,0.5)" stroke-width="1.5">
-      <animate attributeName="r" values="20;17;20" dur="3s" repeatCount="indefinite"/>
-    </circle>
-    <!-- Mitochondria shapes -->
-    <ellipse cx="55" cy="100" rx="12" ry="7" fill="rgba(255,149,0,0.3)" stroke="rgba(255,149,0,0.5)" stroke-width="1"/>
-    <ellipse cx="130" cy="175" rx="10" ry="6" fill="rgba(255,149,0,0.3)" stroke="rgba(255,149,0,0.5)" stroke-width="1"/>
-    <ellipse cx="60" cy="190" rx="9" ry="5" fill="rgba(255,215,0,0.3)" stroke="rgba(255,215,0,0.5)" stroke-width="1"/>
-    <text x="90" y="25" text-anchor="middle" fill="rgba(255,107,44,0.7)" font-family="'JetBrains Mono',monospace" font-size="8" letter-spacing="1">MYOCYTE</text>
-  </svg>
-
   <div class="hero-content">
-    <div class="hero-badge">
-      <span>⬡ GenLayer Bradbury Testnet · Chain ID 961</span>
+    <div class="hero-badge" style="margin-top: 3rem; margin-bottom: 2rem;">
+      <span>⬡ Bradbury Testnet</span>
     </div>
 
-    <h1 class="hero-title">
+    <h1 class="hero-title" style="font-size: clamp(2.5rem, 6vw, 4rem);">
       <span class="gradient-text">MYOGEN</span>
-      <span class="white-text">Muscle · Intelligence · Decentralized</span>
+      <span class="white-text" style="font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-weight: 300; text-transform: capitalize; letter-spacing: 2px; color: #f0f0f0; font-size: 0.6em; margin-top: 0.2em; display: block;">Smart Muscle Data</span>
     </h1>
 
     <p class="hero-subtitle">
