@@ -876,7 +876,6 @@ body {
   letter-spacing: 0.1em;
 }
 
-/* ── Footer ── */
 .footer {
   border-top: 1px solid var(--glass-border);
   padding: 2rem clamp(1.5rem, 5vw, 4rem);
@@ -884,6 +883,7 @@ body {
   flex-direction: column;
   align-items: flex-start;
   gap: 0.75rem;
+  position: relative;
 }
 
 .footer-logo {
@@ -916,6 +916,15 @@ body {
 .footer-copy {
   font-size: 0.75rem;
   color: rgba(176,176,200,0.5);
+}
+
+.footer-credit {
+  position: absolute;
+  right: clamp(1.5rem, 5vw, 4rem);
+  bottom: 2rem;
+  font-size: 0.8rem;
+  color: var(--mid-gray);
+  font-family: var(--font-mono);
 }
 
 .footer-network {
