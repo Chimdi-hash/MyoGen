@@ -319,7 +319,7 @@ function initNavbar() {
 }
 
 // ── Counter Animation ──
-function animateCounter(element, target, duration = 2000) {
+function animateCounter(element, target, suffix = "", duration = 2000) {
   const start = 0;
   const step = target / (duration / 16);
   let current = start;
@@ -330,7 +330,7 @@ function animateCounter(element, target, duration = 2000) {
       current = target;
       clearInterval(timer);
     }
-    element.textContent = Math.floor(current).toLocaleString();
+    element.textContent = Math.floor(current).toLocaleString() + suffix;
   }, 16);
 }
 

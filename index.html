@@ -579,12 +579,12 @@
   // Animate stats on page load
   document.addEventListener('DOMContentLoaded', () => {
     const counters = [
-      { el: document.getElementById('stat-terms'), target: 300, delay: 300 }
+      { el: document.getElementById('stat-terms'), target: 300, suffix: '+', delay: 300 }
     ];
 
-    counters.forEach(({ el, target, delay }) => {
+    counters.forEach(({ el, target, suffix, delay }) => {
       if (!el) return;
-      setTimeout(() => animateCounter(el, target), delay);
+      setTimeout(() => animateCounter(el, target, suffix || ""), delay);
     });
 
     // CTA button redirect if already connected
