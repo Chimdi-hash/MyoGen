@@ -1009,11 +1009,12 @@ body {
   width: 340px;
   height: 294px; /* 340 * 0.866 */
   clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-  margin: 4px -83px; /* -85px overlap + 2px extra for tiny space */
-  padding: 1.5rem 4rem; 
+  margin: 4px -41px; /* -82px total overlap for 340px hex, leaves 3px gap */
+  padding: 2.5rem 3.5rem; 
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   text-align: center;
   background: rgba(10,10,22,0.6);
   border: 1px solid var(--glass-border);
@@ -1047,7 +1048,7 @@ body {
 
 /* 3 columns */
 @media (min-width: 800px) {
-  .hex-grid { max-width: 770px; }
+  .hex-grid { max-width: 790px; } /* 3 * (340 - 82) + margin offset */
   .hex-card:nth-child(3n+2) {
     margin-top: 151px; /* 294/2 + 4px */
   }
@@ -1055,7 +1056,7 @@ body {
 
 /* 2 columns */
 @media (max-width: 799px) and (min-width: 550px) {
-  .hex-grid { max-width: 520px; }
+  .hex-grid { max-width: 530px; }
   .hex-card:nth-child(2n+2) {
     margin-top: 151px;
   }
@@ -1064,5 +1065,5 @@ body {
 /* 1 column */
 @media (max-width: 549px) {
   .hex-grid { max-width: 340px; padding-bottom: 2rem; }
-  .hex-card { margin: 4px auto; padding: 2rem 3rem; }
+  .hex-card { margin: 4px auto; padding: 2.5rem 3rem; clip-path: polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%); }
 }
