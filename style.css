@@ -880,7 +880,10 @@ body {
 .footer {
   border-top: 1px solid var(--glass-border);
   padding: 3rem clamp(1.5rem, 5vw, 4rem);
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
 }
 
 .footer-logo {
@@ -892,15 +895,12 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 1rem;
 }
 
 .footer-links {
   display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
+  flex-direction: column;
+  gap: 0.85rem;
 }
 
 .footer-links a {
@@ -915,6 +915,7 @@ body {
 .footer-copy {
   font-size: 0.8rem;
   color: rgba(176,176,200,0.5);
+  margin-top: 0.75rem;
 }
 
 .footer-network {
