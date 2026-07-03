@@ -1051,6 +1051,7 @@ body {
   .hex-grid { max-width: 790px; } /* 3 * (340 - 82) + margin offset */
   .hex-card:nth-child(3n+2) {
     margin-top: 151px; /* 294/2 + 4px */
+    margin-bottom: -151px; /* Kill the extra flex line height */
   }
 }
 
@@ -1059,6 +1060,7 @@ body {
   .hex-grid { max-width: 530px; }
   .hex-card:nth-child(2n+2) {
     margin-top: 151px;
+    margin-bottom: -151px;
   }
 }
 
