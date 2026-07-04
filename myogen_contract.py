@@ -103,7 +103,7 @@ Provide a comprehensive, accurate, educational explanation following this EXACT 
 {{
     "term": "{term}",
     "definition": "A clear 2-3 sentence definition suitable for medical students",
-    "category": "one of: Muscle Fiber Types | Muscle Mechanics | Anatomy | Biochemistry | Neural Control | Pathology | Exercise Physiology",
+    "category": "one of: Muscle Fiber Types | Muscle Mechanics | Anatomy & Physiology | Biochemistry | Neural Control | Pathology | Exercise Physiology",
     "detailed_explanation": "A thorough 4-6 sentence explanation covering the biological mechanism, function, and clinical relevance",
     "key_facts": [
         "Key fact 1",
