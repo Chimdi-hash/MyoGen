@@ -3,18 +3,18 @@
    GenLayer Bradbury Testnet Integration
    =================================================== */
 
-// ── GenLayer Bradbury Testnet Config ──
+// ── GenLayer Studio Config ──
 const GENLAYER_CONFIG = {
-  chainId: '0x107D',        // 4221 in hex
-  chainIdDec: 4221,
-  chainName: 'GenLayer Bradbury Testnet',
-  rpcUrls: ['https://rpc.bradbury.genlayer.com'],
+  chainId: '0xF22F',        // 61999 in hex
+  chainIdDec: 61999,
+  chainName: 'GenLayer Studio',
+  rpcUrls: ['https://studio.genlayer.com/api'],
   nativeCurrency: {
     name: 'GEN',
     symbol: 'GEN',
     decimals: 18
   },
-  blockExplorerUrls: ['https://explorer.bradbury.genlayer.com']
+  blockExplorerUrls: []
 };
 
 // ── Contract Address (set after deployment) ──
@@ -130,7 +130,7 @@ async function switchToGenLayer() {
         throw addError;
       }
     } else if (switchError.code === 4001) {
-      showToast('Please switch to GenLayer Bradbury Testnet.', 'warning');
+      showToast('Please switch to GenLayer Studio network.', 'warning');
     }
   }
 }
