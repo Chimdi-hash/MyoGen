@@ -934,12 +934,10 @@ async function executeStudyLogic(term) {
 
     showToast('Please sign the transaction in your wallet...', 'info');
     
-    // Instead of raw eth_sendTransaction, we use genlayer-js (loaded in genlayer_bundle.js)
-    // which automatically encodes the payload and routes it to the official execution proxy!
     if (!window.callGenLayer) {
       throw new Error("GenLayer SDK not loaded.");
     }
-    const txHash = await window.callGenLayer(CONTRACT_ADDRESS, 'study_term', [term, webData]);
+    const txHash = await window.callGenLayer(CONTRACT_ADDRESS, 'study_term', [term, webData], window.myogenWallet.address);
 
     showToast(`Transaction sent! Waiting for GenLayer consensus...`, 'success');
 
