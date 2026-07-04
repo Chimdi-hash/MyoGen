@@ -445,7 +445,7 @@ body {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Align content to the left */
   position: relative;
   overflow: hidden;
   padding-top: var(--nav-height);
@@ -454,10 +454,11 @@ body {
 .hologram-container {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(80vw, 800px);
-  height: min(80vw, 800px);
+  right: -5%; /* Push it to the right side */
+  left: auto;
+  transform: translateY(-50%);
+  width: min(80vw, 700px);
+  height: min(80vw, 700px);
   z-index: 1;
   pointer-events: none;
   perspective: 1000px;
@@ -470,9 +471,13 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   height: 90%;
-  object-fit: contain;
+  width: 90%;
+  object-fit: cover; /* Fill the masked area */
   mix-blend-mode: screen;
   opacity: 0.8;
+  /* Apply a perfect spherical mask to fade out the square edges */
+  -webkit-mask-image: radial-gradient(circle, black 40%, transparent 65%);
+  mask-image: radial-gradient(circle, black 40%, transparent 65%);
   filter: drop-shadow(0 0 30px var(--orange-glow));
   animation: hologram-float 8s ease-in-out infinite;
 }
@@ -529,10 +534,10 @@ body {
 }
 
 .hero-content {
-  text-align: center;
+  text-align: left;
   z-index: 10;
-  max-width: 900px;
-  padding: 0 2rem;
+  max-width: 650px;
+  padding: 0 4rem;
 }
 
 .hero-badge {
@@ -593,20 +598,22 @@ body {
   color: var(--mid-gray);
   font-weight: 300;
   max-width: 600px;
-  margin: 0 auto 3rem;
+  margin-bottom: 2.5rem;
   animation: slide-in-up 0.7s 0.2s ease both;
 }
 
-.hero-subtitle strong {
-  color: var(--orange-bright);
-  font-weight: 500;
+.hero-desc {
+  font-size: clamp(1.1rem, 2vw, 1.25rem);
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
 }
 
 .hero-actions {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  justify-content: flex-start; /* Align buttons left */
+  gap: 1.5rem;
   flex-wrap: wrap;
   animation: slide-in-up 0.7s 0.3s ease both;
 }
@@ -1071,6 +1078,15 @@ body {
   }
 
   .steps-grid::before { display: none; }
+  
+  .hologram-container {
+    opacity: 0.15;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    pointer-events: none;
+  }
+  
   .stats-bar { gap: 2rem; }
   .stat-divider { display: none; }
 }
