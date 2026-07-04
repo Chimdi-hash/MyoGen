@@ -246,18 +246,19 @@
     <li><a href="study.html">Study</a></li>
     <li><a href="explorer.html">Explorer</a></li>
     <li><a href="about.html">About</a></li>
+    <!-- Wallet UI housed inside the hamburger menu for mobile -->
+    <li class="wallet-nav-item">
+      <div class="wallet-wrapper">
+        <button id="connect-wallet-btn" class="btn-wallet" aria-label="Connect Wallet">
+          ⬡ Connect Wallet
+        </button>
+        <div id="wallet-info-bar" class="wallet-info" style="display:none;">
+          <span id="wallet-address-display" class="wallet-address"></span>
+          <button id="disconnect-btn" class="btn-disconnect" aria-label="Disconnect">Disconnect</button>
+        </div>
+      </div>
+    </li>
   </ul>
-
-  <!-- Wallet UI -->
-  <div style="display:flex; align-items:center; gap:0.75rem;">
-    <button id="connect-wallet-btn" class="btn-wallet" aria-label="Connect Wallet">
-      ⬡ Connect Wallet
-    </button>
-    <div id="wallet-info-bar" class="wallet-info" style="display:none;">
-      <span id="wallet-address-display" class="wallet-address"></span>
-      <button id="disconnect-btn" class="btn-disconnect" aria-label="Disconnect">Disconnect</button>
-    </div>
-  </div>
 </nav>
 
 <!-- ════ HERO ════ -->
