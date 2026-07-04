@@ -1243,8 +1243,9 @@ body {
 /* Perfect Scaled 2-column Honeycomb on Mobile Phones */
 @media (max-width: 549px) {
   .hex-grid { 
-    width: 516px !important; /* Force virtual width to prevent wrapping into 1 column */
-    max-width: 516px !important; 
+    width: 525px !important; /* Slightly larger than 516px to prevent rounding errors causing wraps */
+    max-width: 525px !important; 
+    flex-shrink: 0 !important; /* Force it to keep width even in flex wrappers */
     transform-origin: top center;
     transform: scale(0.65); /* Scale the honeycomb down perfectly */
     margin-bottom: -150px; /* Adjust spacing after scaling */
