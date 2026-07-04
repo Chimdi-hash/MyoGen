@@ -10,9 +10,7 @@
 from genlayer import *
 import json
 
-
-@gl.contract
-class MyogenDictionary:
+class MyogenDictionary(gl.Contract):
     """
     MYOGEN: A decentralized AI-powered dictionary for muscle physiology
     and anatomy terminology. Uses GenLayer's Intelligent Contracts with
@@ -96,8 +94,8 @@ class MyogenDictionary:
         # ── AI Validator Analysis ──
         # Each validator runs this LLM prompt independently.
         # Optimistic Democracy ensures consensus across validators.
-        explanation_result = gl.exec_prompt(
-            f"""You are MYOGEN, an expert AI system specializing in muscle physiology,
+        def build_prompt() -> str:
+            return f"""You are MYOGEN, an expert AI system specializing in muscle physiology,
 anatomy, kinesiology, and sports science. A student wants to understand: "{term}"
 
 Here is some web data scraped by the frontend to provide context:
@@ -139,6 +137,15 @@ If the term is NOT related to muscle physiology, anatomy, or exercise science (e
 }}
 
 Return ONLY the JSON object, no other text."""
+
+        explanation_result = gl.eq_principle.prompt_non_comparative(
+            build_prompt,
+            task="Analyze the medical term based on context and return the requested JSON object.",
+            criteria="""
+                The response must be valid JSON matching the exact structure requested.
+                The explanation must be medically accurate and relevant to the term provided.
+                It should correctly classify if the term is out of scope.
+            """
         )
 
         # Parse the LLM result
