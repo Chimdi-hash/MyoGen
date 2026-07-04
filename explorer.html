@@ -535,42 +535,42 @@ const SAMPLE_TERMS = [
     key_facts: ['Spans 7 actin monomers per molecule', 'Three positions: blocked, closed, open', 'Works cooperatively with troponin', 'α and β isoforms in skeletal muscle', 'Cardiac isoforms differ (α-Tm predominant)'],
     clinical_relevance: 'Tropomyosin mutations (TPM1, TPM2) cause hypertrophic and dilated cardiomyopathy. Nemaline myopathy can result from TPM2/TPM3 mutations affecting thin filament structure.',
   },
-  {
-    term: 'ATP',
-    category: 'Biochemistry',
-    definition: 'Adenosine triphosphate — the universal energy currency of muscle cells, whose hydrolysis to ADP and inorganic phosphate (Pi) powers the myosin cross-bridge cycle, ion pumps, and metabolic processes.',
-    detailed_explanation: 'In muscle, ATP is consumed at three key steps: myosin ATPase (cross-bridge cycle), SERCA Ca²⁺-ATPase (resequestration into SR), and Na⁺/K⁺-ATPase (membrane repolarization). At rest, ~0.5 mM/s ATP turnover rate. During maximal exercise, this increases 1000-fold. ATP is replenished via the phosphocreatine (PCr) system (0–10s), anaerobic glycolysis (10–120s), and oxidative phosphorylation (>2 min).',
-    key_facts: ['Concentration in muscle: ~5–8 mM', 'Consumed by myosin, SERCA, Na⁺/K⁺-ATPase', '3 resynthesis systems by duration', 'ADP/ATP ratio regulates glycolysis', 'Rigor mortis from ATP depletion'],
-    clinical_relevance: 'McArdle disease (GSD V) impairs glycogen use, limiting exercise ATP resynthesis. Mitochondrial myopathies reduce oxidative ATP production, causing weakness and exercise intolerance.',
-  },
-  {
-    term: 'epimysium',
-    category: 'Anatomy & Physiology',
-    definition: 'The outermost connective tissue layer enveloping an entire skeletal muscle, continuous with the deep fascia and transmitting forces between the muscle belly and its tendons.',
-    detailed_explanation: 'The epimysium is composed of dense irregular connective tissue (primarily Type I collagen) and surrounds the entire muscle belly. It is continuous with the perimysium (which wraps individual fascicles) and endomysium (surrounding individual fibers). Force transmission in muscle occurs both directly (myotendinous junction) and via this connective tissue framework (lateral force transmission — up to 80% in some models).',
-    key_facts: ['Outermost muscle layer', 'Continuous with perimysium and endomysium', 'Composed primarily of Type I collagen', 'Contains nerves and blood vessels', 'Contributes to lateral force transmission'],
-    clinical_relevance: 'Fibrosis of the epimysium and perimysium reduces muscle compliance and force output in conditions like Duchenne muscular dystrophy. Fasciotomy cuts the epimysium/fascia to relieve compartment syndrome.',
-  },
-  {
-    term: 'fascicle',
-    category: 'Anatomy & Physiology',
-    definition: 'A bundle of 10–100 muscle fibers enclosed within a perimysium sheath, forming the intermediate organizational level between individual fibers and the whole muscle belly.',
-    detailed_explanation: 'Fascicle architecture (pennation angle, fascicle length) is a key determinant of muscle mechanical properties. Parallel-fibered muscles (e.g., sartorius) have long fascicles aligned with the force axis, maximizing shortening velocity. Pennate muscles (e.g., vastus lateralis) have oblique fascicles, packing more fibers per cross-section for greater force production at the cost of shortening velocity.',
-    key_facts: ['Contains 10–100 individual muscle fibers', 'Enclosed by perimysium', 'Pennation angle determines force-velocity tradeoff', 'Fascicle length correlates with shortening velocity', 'Visible to naked eye as muscle grain'],
-    clinical_relevance: 'Ultrasound imaging of fascicle architecture provides non-invasive assessment of muscle hypertrophy and pennation changes with training. Fascicle length decreases pathologically in spasticity.',
-  }
-];
-
+let allTermsData = [];
 let currentFilter = 'all';
 let currentFilterText = '';
 let selectedTermData = null;
+
+async function loadTermsFromContract() {
+  const grid = document.getElementById('terms-grid');
+  grid.innerHTML = '<div style="color: var(--black-core); text-align: center; grid-column: 1/-1; padding: 3rem;">Syncing with Bradbury Testnet...</div>';
+
+  try {
+    const termsList = await callContractView('get_popular_terms');
+    if (!termsList || termsList.length === 0) {
+      renderTerms();
+      return;
+    }
+
+    allTermsData = [];
+    for (const term of termsList) {
+      const termData = await callContractView('get_cached_term', [term]);
+      if (termData && termData.explanation) {
+        allTermsData.push(termData.explanation);
+      }
+    }
+    renderTerms();
+  } catch (err) {
+    console.error("Failed to load terms from contract:", err);
+    grid.innerHTML = '<div style="color: red; text-align: center; grid-column: 1/-1; padding: 3rem;">Error syncing with contract. Please ensure you are connected to GenLayer.</div>';
+  }
+}
 
 // ═══ Render terms ═══
 function renderTerms() {
   const grid = document.getElementById('terms-grid');
   const empty = document.getElementById('empty-state');
 
-  let filtered = SAMPLE_TERMS;
+  let filtered = allTermsData;
 
   // Text filter
   if (currentFilterText) {
@@ -594,7 +594,7 @@ function renderTerms() {
 
   empty.style.display = 'none';
   grid.innerHTML = filtered.map((t, i) => `
-    <div class="hex-card term-card" onclick="openDetail(${SAMPLE_TERMS.indexOf(t)})"
+    <div class="hex-card term-card" onclick="openDetail(${allTermsData.indexOf(t)})"
       style="animation: slide-in-up 0.5s ${i * 0.06}s ease both; opacity:0; animation-fill-mode: forwards;"
       tabindex="0" role="button" aria-label="View ${t.term}">
       <div class="term-card-header">
@@ -608,8 +608,6 @@ function renderTerms() {
       </div>
     </div>
   `).join('');
-
-  // Stat updates moved to DOMContentLoaded to reflect real user participation instead of filtered mock length
 }
 
 function setFilter(cat, btn) {
@@ -626,7 +624,7 @@ function filterTerms() {
 
 // ═══ Detail Modal ═══
 function openDetail(idx) {
-  const t = SAMPLE_TERMS[idx];
+  const t = allTermsData[idx];
   selectedTermData = t;
 
   document.getElementById('detail-term-title').textContent = t.term.charAt(0).toUpperCase() + t.term.slice(1);
@@ -670,15 +668,20 @@ document.addEventListener('keydown', e => {
 });
 
 // ═══ Init ═══
-document.addEventListener('DOMContentLoaded', () => {
-  renderTerms();
+document.addEventListener('DOMContentLoaded', async () => {
+  // Read real contract stats
+  try {
+    const stats = await callContractView('get_stats');
+    if (stats) {
+      document.getElementById('es-terms').textContent = stats.terms_cached || 0;
+      animateCounter(document.getElementById('es-sessions'), stats.total_users || 0);
+    }
+  } catch(e) {
+    console.error("Could not load stats", e);
+  }
 
-  // Read real participation data from localStorage
-  const history = JSON.parse(localStorage.getItem('myogen_session_history') || '[]');
-  const uniqueTerms = new Set(history.map(h => h.term.toLowerCase())).size;
-  
-  document.getElementById('es-terms').textContent = uniqueTerms;
-  animateCounter(document.getElementById('es-sessions'), history.length);
+  // Load terms from GenLayer Contract
+  await loadTermsFromContract();
 
   // Pick up term from study page if redirected
   const savedTerm = sessionStorage.getItem('myogen_study_term');
