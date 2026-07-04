@@ -9,12 +9,12 @@
 /* ── CSS Variables ── */
 :root {
   /* Colors */
-  --white: #FFFFFF;
-  --off-white: #F8F9FF;
-  --light-gray: #EAEAF5;
-  --mid-gray: #B0B0C8;
-  --dark: #0A0A14;
-  --darker: #060610;
+  --white: #060610;
+  --off-white: #1A1A24;
+  --light-gray: #303040;
+  --mid-gray: #606078;
+  --dark: #F0F0F5;
+  --darker: #FFFFFF;
 
   /* Orange Palette */
   --orange-core: #FF6B2C;
@@ -24,15 +24,15 @@
   --orange-glow: rgba(255,107,44,0.4);
 
   /* Glassmorphism */
-  --glass-bg: rgba(255,255,255,0.08);
-  --glass-border: rgba(255,255,255,0.15);
-  --glass-shadow: 0 8px 32px rgba(0,0,0,0.3);
-  --glass-bg-strong: rgba(255,255,255,0.12);
+  --glass-bg: rgba(0,0,0,0.04);
+  --glass-border: rgba(0,0,0,0.1);
+  --glass-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  --glass-bg-strong: rgba(0,0,0,0.08);
 
   /* Gradients */
   --gradient-orange: linear-gradient(135deg, #FF6B2C, #FF9500, #FFD700);
-  --gradient-dark: linear-gradient(180deg, #0A0A14 0%, #12121F 100%);
-  --gradient-hero: radial-gradient(ellipse at 50% 40%, rgba(255,107,44,0.2) 0%, rgba(10,10,20,0) 70%);
+  --gradient-dark: linear-gradient(180deg, #F0F0F5 0%, #FFFFFF 100%);
+  --gradient-hero: radial-gradient(ellipse at 50% 40%, rgba(255,107,44,0.1) 0%, rgba(255,255,255,0) 70%);
 
   /* Typography */
   --font-display: 'Orbitron', monospace;
@@ -91,7 +91,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 clamp(1.5rem, 5vw, 4rem);
-  background: rgba(6, 6, 16, 0.7);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--glass-border);
@@ -99,7 +99,7 @@ body {
 }
 
 .navbar.scrolled {
-  background: rgba(6, 6, 16, 0.95);
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .logo {
@@ -313,7 +313,7 @@ body {
   background: var(--glass-bg-strong);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(0,0,0,0.15);
   border-radius: var(--border-radius-xl);
   box-shadow: 0 16px 48px rgba(0,0,0,0.4);
 }
@@ -334,8 +334,8 @@ body {
   inset: 0;
   z-index: -1;
   background-image:
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse 80% 80% at center, black 0%, transparent 100%);
 }
@@ -888,7 +888,7 @@ body {
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 2px solid rgba(255,255,255,0.2);
+  border: 2px solid rgba(0,0,0,0.15);
   border-top-color: var(--orange-core);
   border-radius: 50%;
   animation: rotate-slow 0.8s linear infinite;
@@ -1066,7 +1066,7 @@ body {
     top: var(--nav-height);
     left: 0;
     right: 0;
-    background: rgba(6, 6, 16, 0.98);
+    background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(24px);
     flex-direction: column;
     padding: 2rem;
@@ -1110,7 +1110,7 @@ body {
     margin-top: 1rem;
     width: 100%;
     padding-top: 1.5rem;
-    border-top: 1px solid rgba(255,255,255,0.05);
+    border-top: 1px solid rgba(0,0,0,0.05);
   }
 
   .wallet-wrapper {
@@ -1192,7 +1192,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  background: rgba(10,10,22,0.6);
+  background: rgba(255,255,255,0.6);
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
