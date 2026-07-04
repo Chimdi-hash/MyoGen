@@ -29,9 +29,6 @@ class MyogenDictionary(gl.Contract):
         """Initialize the MYOGEN contract storage."""
         self.total_queries = 0
         self.total_users = 0
-        self.registered_users = TreeMap()
-        self.query_history = TreeMap()
-        self.all_terms_cache = TreeMap()
 
     # ─────────────────────── Registration ───────────────────────
 
