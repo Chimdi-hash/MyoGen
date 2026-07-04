@@ -1055,26 +1055,37 @@ async function confirmTx() {
   isLoading = true;
   currentTerm = term;
 
-  // UI: show loading
   showState('loading');
   setStudyBtnLoading(true);
   resetValidators();
 
   try {
-    // In production: send actual transaction to GenLayer
-    // const txHash = await sendStudyTransaction(term);
+    showToast(`Scraping web data for "${term}"...`, 'info');
+    const webData = await scrapeWikipedia(term);
 
-    // Animate validators progressively
+    showToast('Please sign the transaction in your wallet...', 'info');
+    
+    const callData = JSON.stringify({ method: 'study_term', params: [term, webData] });
+    const hexData = '0x' + Array.from(new TextEncoder().encode(callData)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+    const txHash = await window.ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [{
+        from: window.myogenWallet.address,
+        to: CONTRACT_ADDRESS,
+        data: hexData
+      }]
+    });
+
+    showToast(`Transaction sent! Waiting for GenLayer consensus...`, 'success');
+
     await animateValidators();
 
-    // Simulate AI response (replace with actual contract read in production)
     const result = await getExplanation(term);
 
-    // Show result
     renderResult(result, term);
     showState('result');
 
-    // Add to session history
     addToSessionHistory(term);
 
     showToast(`✅ "${term}" explained by GenLayer validators!`, 'success');
@@ -1580,51 +1591,31 @@ function animateVisualization(ctx, canvas, vizType, colors, data) {
   loop();
 }
 
-// ── Get AI Explanation ──
-// In production this reads from the contract's get_term_explanation() view
-// For testnet demo, we generate rich mock data that mirrors contract output
-async function getExplanation(term) {
-  await sleep(200); // Simulate network latency
-
-  const explanations = {
-    'sarcomere': {
-      term: 'sarcomere',
-      definition: 'The sarcomere is the fundamental contractile unit of skeletal and cardiac muscle fibers, bounded by Z-discs (Z-lines) and containing an organized array of thick (myosin) and thin (actin) filaments.',
-      category: 'Muscle Mechanics',
-      detailed_explanation: 'The sarcomere spans from one Z-disc to the next, typically measuring 1.6–2.2 μm in length at rest. It is subdivided into distinct bands visible under electron microscopy: the A-band (anisotropic, containing overlapping actin and myosin), the I-band (isotropic, containing only actin), the H-zone (containing only myosin), and the M-line (central stabilizing structure). During muscle contraction, the sliding filament theory dictates that actin filaments slide over myosin, shortening the sarcomere while the filament lengths remain constant.',
-      key_facts: ['Length: 1.6–2.2 μm at resting tension','Contains ~300 myosin heads per half-sarcomere','Z-disc proteins include α-actinin, titin anchors','H-zone disappears during full contraction','Titin (connectin) provides passive elasticity'],
-      related_terms: ['actin', 'myosin', 'Z-disc', 'tropomyosin', 'titin'],
-      clinical_relevance: 'Sarcomeric protein mutations underlie hypertrophic cardiomyopathy (HCM) and dilated cardiomyopathy (DCM). Length-tension relationships are clinically relevant in cardiac physiology (Frank-Starling law).',
-      muscle_groups_involved: ['Biceps brachii', 'Quadriceps', 'Cardiac muscle'],
-      visualization_type: 'fiber_diagram',
-      colors: { primary: '#FF6B2C', secondary: '#FF9500', glow: '#FFD700' }
+async function scrapeWikipedia(term) {
+  try {
+    const response = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term)}`);
+    if (response.ok) {
+      const data = await response.json();
+      return data.extract || "";
     }
-  };
-
-  // Return specific or generate generic rich response
-  if (explanations[term.toLowerCase()]) {
-    return explanations[term.toLowerCase()];
+  } catch (err) {
+    console.warn("Wikipedia scrape failed:", err);
   }
+  return "";
+}
 
-  // Generic but rich response for any other term
-  return {
-    term: term,
-    definition: `${term.charAt(0).toUpperCase() + term.slice(1)} is an important concept in muscle physiology and anatomy, playing a key role in the structural and functional organization of the muscular system.`,
-    category: 'Muscle Physiology',
-    detailed_explanation: `In the context of muscle physiology, ${term} represents a critical component of muscular function. This structure or process is fundamental to understanding how skeletal, cardiac, and smooth muscle tissues generate force and movement. Its role in the contractile machinery or regulatory cascade directly impacts athletic performance, rehabilitation science, and clinical medicine. Understanding ${term} provides insight into muscle adaptation, disease pathology, and therapeutic interventions across sports medicine and physical therapy.`,
-    key_facts: [
-      `${term.charAt(0).toUpperCase() + term.slice(1)} is essential to muscle function`,
-      'Validated by GenLayer AI validators via Optimistic Democracy',
-      'Integral to muscle physiology and anatomy studies',
-      'Relevant to both skeletal and cardiac muscle systems',
-      'Has significant clinical and athletic performance implications'
-    ],
-    related_terms: ['sarcomere', 'actin', 'myosin', 'motor neuron', 'ATP'],
-    clinical_relevance: `Understanding ${term} has direct clinical implications for diagnosing and treating muscular disorders, optimizing rehabilitation protocols, and enhancing athletic performance programs.`,
-    muscle_groups_involved: ['Skeletal muscle', 'Smooth muscle'],
-    visualization_type: ['fiber_diagram','contraction_cycle','cross_section','neural_pathway','biochemical_cycle','cellular_diagram'][Math.floor(Math.random()*6)],
-    colors: { primary: '#FF6B2C', secondary: '#FF9500', glow: '#FFD700' }
-  };
+async function getExplanation(term) {
+  let result = null;
+  let retries = 0;
+  while (retries < 15) {
+    await sleep(2000);
+    result = await callContractView('get_cached_term', [term]);
+    if (result && result.explanation) {
+      return result.explanation;
+    }
+    retries++;
+  }
+  throw new Error("Transaction took too long or GenLayer consensus failed.");
 }
 
 // ── Session history ──

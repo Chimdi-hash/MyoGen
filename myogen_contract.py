@@ -60,10 +60,18 @@ class MyogenDictionary:
             return self.registered_users[user_address]
         return {"is_registered": False}
 
+    @gl.public.view
+    def get_cached_term(self, term: str) -> dict:
+        """Fetch a term directly from the cache if it has been validated."""
+        term_lower = term.strip().lower()
+        if term_lower in self.all_terms_cache:
+            return self.all_terms_cache[term_lower]
+        return {}
+
     # ─────────────────────── Core Study Function ───────────────────────
 
     @gl.public.write
-    def study_term(self, term: str) -> None:
+    def study_term(self, term: str, web_data: str) -> None:
         """
         Primary function: User submits a muscle physiology/anatomy term.
         Validators analyze the term using LLM and reach consensus via
@@ -87,6 +95,9 @@ class MyogenDictionary:
             f"""You are MYOGEN, an expert AI system specializing in muscle physiology,
 anatomy, kinesiology, and sports science. A student wants to understand: "{term}"
 
+Here is some web data scraped by the frontend to provide context:
+{web_data}
+
 Provide a comprehensive, accurate, educational explanation following this EXACT JSON structure:
 
 {{
@@ -108,10 +119,10 @@ Provide a comprehensive, accurate, educational explanation following this EXACT 
     "color_theme": "one of: red-orange | blue-cyan | green-teal | purple-violet | gold-amber"
 }}
 
-If the term is NOT related to muscle physiology, anatomy, or exercise science, return:
+If the term is NOT related to muscle physiology, anatomy, or exercise science (evaluate based on the term and the web data context), return exactly this JSON:
 {{
     "term": "{term}",
-    "definition": "This term is outside the scope of MYOGEN's muscle physiology database.",
+    "definition": "this is not a muscle term",
     "category": "Out of Scope",
     "detailed_explanation": "MYOGEN specializes exclusively in muscle physiology, anatomy, kinesiology, and related sports science. Please enter a relevant anatomical or physiological term.",
     "key_facts": [],
