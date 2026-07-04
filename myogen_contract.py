@@ -20,9 +20,9 @@ class MyogenDictionary:
     """
 
     # ─────────────────────── Storage ───────────────────────
-    registered_users: TreeMap[Address, dict]  # addr → {timestamp, name, query_count}
-    query_history: TreeMap[Address, list]     # addr → [{term, explanation, timestamp}]
-    all_terms_cache: TreeMap[str, dict]       # term → {explanation, graphical_data, validated_at}
+    registered_users: TreeMap[Address, str]  # addr → JSON str of {timestamp, name, query_count}
+    query_history: TreeMap[Address, str]     # addr → JSON str of [{term, explanation, timestamp}]
+    all_terms_cache: TreeMap[str, str]       # term → JSON str of {explanation, graphical_data, validated_at}
     total_queries: u256
     total_users: u256
 
@@ -44,12 +44,12 @@ class MyogenDictionary:
         """
         caller = gl.message.sender_address
         if caller not in self.registered_users:
-            self.registered_users[caller] = {
+            self.registered_users[caller] = json.dumps({
                 "display_name": display_name if display_name else "Anonymous",
                 "registered_at": gl.message.timestamp if hasattr(gl.message, 'timestamp') else 0,
                 "query_count": 0,
                 "is_registered": True
-            }
+            })
             self.total_users += 1
 
     @gl.public.view
@@ -61,7 +61,7 @@ class MyogenDictionary:
     def get_user_info(self, user_address: Address) -> dict:
         """Get user profile information."""
         if user_address in self.registered_users:
-            return self.registered_users[user_address]
+            return json.loads(self.registered_users[user_address])
         return {"is_registered": False}
 
     @gl.public.view
@@ -69,7 +69,7 @@ class MyogenDictionary:
         """Fetch a term directly from the cache if it has been validated."""
         term_lower = term.strip().lower()
         if term_lower in self.all_terms_cache:
-            return self.all_terms_cache[term_lower]
+            return json.loads(self.all_terms_cache[term_lower])
         return {}
 
     # ─────────────────────── Core Study Function ───────────────────────
@@ -88,7 +88,7 @@ class MyogenDictionary:
 
         # Check if result is already cached (avoid duplicate AI calls)
         if term_lower in self.all_terms_cache:
-            cached = self.all_terms_cache[term_lower]
+            cached = json.loads(self.all_terms_cache[term_lower])
             self._record_query(caller, term, cached["explanation"], cached["graphical_data"])
             return
 
@@ -161,12 +161,12 @@ Return ONLY the JSON object, no other text."""
         graphical_data = self._generate_graphical_data(explanation_data)
 
         # Cache the result
-        self.all_terms_cache[term_lower] = {
+        self.all_terms_cache[term_lower] = json.dumps({
             "explanation": explanation_data,
             "graphical_data": graphical_data,
             "validated_at": gl.message.timestamp if hasattr(gl.message, 'timestamp') else 0,
             "validator_consensus": True
-        }
+        })
 
         # Record query in user history
         self._record_query(caller, term, explanation_data, graphical_data)
@@ -174,9 +174,9 @@ Return ONLY the JSON object, no other text."""
 
         # Update user query count
         if caller in self.registered_users:
-            user_data = self.registered_users[caller]
+            user_data = json.loads(self.registered_users[caller])
             user_data["query_count"] = user_data.get("query_count", 0) + 1
-            self.registered_users[caller] = user_data
+            self.registered_users[caller] = json.dumps(user_data)
 
     def _generate_graphical_data(self, explanation_data: dict) -> dict:
         """Generate structured data for frontend visual animations."""
@@ -249,9 +249,10 @@ Return ONLY the JSON object, no other text."""
     def _record_query(self, caller: Address, term: str, explanation: dict, graphical_data: dict) -> None:
         """Record a user's query in their history."""
         if caller not in self.query_history:
-            self.query_history[caller] = []
+            history = []
+        else:
+            history = json.loads(self.query_history[caller])
 
-        history = self.query_history[caller]
         history.append({
             "term": term,
             "explanation": explanation,
@@ -261,7 +262,7 @@ Return ONLY the JSON object, no other text."""
         # Keep last 50 queries per user
         if len(history) > 50:
             history = history[-50:]
-        self.query_history[caller] = history
+        self.query_history[caller] = json.dumps(history)
 
     # ─────────────────────── View Functions ───────────────────────
 
@@ -270,14 +271,14 @@ Return ONLY the JSON object, no other text."""
         """Get cached explanation for a term (no AI call needed)."""
         term_lower = term.strip().lower()
         if term_lower in self.all_terms_cache:
-            return self.all_terms_cache[term_lower]
+            return json.loads(self.all_terms_cache[term_lower])
         return {"found": False, "term": term}
 
     @gl.public.view
     def get_user_history(self, user_address: Address) -> list:
         """Get study history for a specific user."""
         if user_address in self.query_history:
-            return self.query_history[user_address]
+            return json.loads(self.query_history[user_address])
         return []
 
     @gl.public.view
