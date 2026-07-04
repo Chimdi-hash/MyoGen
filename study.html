@@ -564,75 +564,7 @@
       flex-wrap: wrap;
     }
 
-    /* ─── Tx Signing Modal ─── */
-    .tx-modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(10px);
-      z-index: 2000;
-      display: flex; align-items: center; justify-content: center;
-      padding: 2rem;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
 
-    .tx-modal-overlay.show {
-      opacity: 1; pointer-events: auto;
-    }
-
-    .tx-modal {
-      background: rgba(10,10,20,0.98);
-      border: 1px solid rgba(255,107,44,0.3);
-      border-radius: var(--border-radius-xl);
-      padding: 3rem 2.5rem;
-      max-width: 480px;
-      width: 100%;
-      text-align: center;
-      animation: slide-in-up 0.4s ease both;
-    }
-
-    .tx-icon {
-      font-size: 3.5rem; margin-bottom: 1.25rem;
-      animation: float-bob 3s ease infinite;
-    }
-
-    .tx-title {
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--white);
-      margin-bottom: 0.75rem;
-    }
-
-    .tx-desc {
-      font-size: 0.875rem;
-      color: var(--mid-gray);
-      line-height: 1.65;
-      margin-bottom: 2rem;
-    }
-
-    .tx-detail {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--border-radius);
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      text-align: left;
-    }
-
-    .tx-row {
-      display: flex; justify-content: space-between;
-      padding: 0.4rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      font-size: 0.8rem;
-    }
-
-    .tx-row:last-child { border-bottom: none; }
-    .tx-row .k { color: var(--mid-gray); font-family: var(--font-mono); }
-    .tx-row .v { color: var(--orange-bright); font-family: var(--font-mono); font-size: 0.72rem; }
-
-    .tx-actions { display: flex; gap: 1rem; justify-content: center; }
 
     /* Responsive */
     @media (max-width: 1024px) {
@@ -695,49 +627,7 @@
   </ul>
 </nav>
 
-<!-- TX Signing Modal -->
-<div class="tx-modal-overlay" id="tx-modal" role="dialog" aria-modal="true" aria-labelledby="tx-modal-title">
-  <div class="tx-modal">
-    <div class="tx-icon">✍️</div>
-    <div class="tx-title" id="tx-modal-title">Sign Transaction</div>
-    <p class="tx-desc">
-      You're about to call MYOGEN's Intelligent Contract on GenLayer Studio.
-      Validators will analyze your term using AI and reach consensus.
-    </p>
 
-    <div class="tx-detail">
-      <div class="tx-row">
-        <span class="k">Function</span>
-        <span class="v">study_term(string)</span>
-      </div>
-      <div class="tx-row">
-        <span class="k">Term</span>
-        <span class="v" id="tx-term-display">—</span>
-      </div>
-      <div class="tx-row">
-        <span class="k">Network</span>
-        <span class="v">GenLayer Studio (61999)</span>
-      </div>
-      <div class="tx-row">
-        <span class="k">From</span>
-        <span class="v" id="tx-from-display">—</span>
-      </div>
-      <div class="tx-row">
-        <span class="k">Gas</span>
-        <span class="v">Estimated by network</span>
-      </div>
-    </div>
-
-    <div class="tx-actions">
-      <button class="btn-secondary" id="tx-cancel-btn" style="flex:1;" onclick="cancelTx()">
-        Cancel
-      </button>
-      <button class="btn-primary" id="tx-confirm-btn" style="flex:1;" onclick="confirmTx()">
-        ✍️ Sign &amp; Study
-      </button>
-    </div>
-  </div>
-</div>
 
 <!-- STUDY LAYOUT -->
 <div class="study-layout">
@@ -961,6 +851,7 @@
   </main>
 </div>
 
+<script src="genlayer_bundle.js"></script>
 <script src="app.js"></script>
 <script>
 /* ════════════════════════════════════════
@@ -1024,32 +915,10 @@ async function initiateStudy() {
     if (!connected) return;
   }
 
-  pendingTerm = term;
-
-  // Show tx modal
-  document.getElementById('tx-term-display').textContent = term.length > 30 ? term.slice(0,30)+'...' : term;
-  document.getElementById('tx-from-display').textContent = shortenAddress(window.myogenWallet.address || '0x...');
-  showTxModal();
+  await executeStudyLogic(term);
 }
 
-function showTxModal() {
-  document.getElementById('tx-modal').classList.add('show');
-}
-
-function hideTxModal() {
-  document.getElementById('tx-modal').classList.remove('show');
-}
-
-function cancelTx() {
-  hideTxModal();
-  pendingTerm = '';
-  showToast('Transaction cancelled.', 'info');
-}
-
-async function confirmTx() {
-  hideTxModal();
-
-  const term = pendingTerm;
+async function executeStudyLogic(term) {
   if (!term) return;
 
   isLoading = true;
@@ -1065,17 +934,12 @@ async function confirmTx() {
 
     showToast('Please sign the transaction in your wallet...', 'info');
     
-    const callData = JSON.stringify({ method: 'study_term', params: [term, webData] });
-    const hexData = '0x' + Array.from(new TextEncoder().encode(callData)).map(b => b.toString(16).padStart(2, '0')).join('');
-
-    const txHash = await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [{
-        from: window.myogenWallet.address,
-        to: CONTRACT_ADDRESS,
-        data: hexData
-      }]
-    });
+    // Instead of raw eth_sendTransaction, we use genlayer-js (loaded in genlayer_bundle.js)
+    // which automatically encodes the payload and routes it to the official execution proxy!
+    if (!window.callGenLayer) {
+      throw new Error("GenLayer SDK not loaded.");
+    }
+    const txHash = await window.callGenLayer(CONTRACT_ADDRESS, 'study_term', [term, webData]);
 
     showToast(`Transaction sent! Waiting for GenLayer consensus...`, 'success');
 
