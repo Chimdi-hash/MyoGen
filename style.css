@@ -26,13 +26,13 @@
   /* Glassmorphism */
   --glass-bg: rgba(0,0,0,0.04);
   --glass-border: rgba(0,0,0,0.1);
-  --glass-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  --glass-shadow: 0 8px 32px rgba(255,107,44,0.15);
   --glass-bg-strong: rgba(0,0,0,0.08);
 
   /* Gradients */
   --gradient-orange: linear-gradient(135deg, #FF6B2C, #FF9500, #FFD700);
   --gradient-dark: linear-gradient(180deg, #F0F0F5 0%, #FFFFFF 100%);
-  --gradient-hero: radial-gradient(ellipse at 50% 40%, rgba(255,107,44,0.1) 0%, rgba(255,255,255,0) 70%);
+  --gradient-hero: radial-gradient(ellipse at 50% 40%, rgba(255,107,44,0.3) 0%, rgba(255,255,255,0) 70%);
 
   /* Typography */
   --font-display: 'Orbitron', monospace;
@@ -315,7 +315,7 @@ body {
   -webkit-backdrop-filter: blur(30px);
   border: 1px solid rgba(0,0,0,0.15);
   border-radius: var(--border-radius-xl);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  box-shadow: 0 16px 48px rgba(255,107,44,0.3);
 }
 
 /* ── Background Effects ── */
@@ -1005,7 +1005,7 @@ body {
 
 .footer-copy {
   font-size: 0.75rem;
-  color: rgba(176,176,200,0.5);
+  color: var(--mid-gray);
 }
 
 .footer-credit {
@@ -1199,6 +1199,7 @@ body {
   transition: var(--transition);
   position: relative;
   overflow: hidden;
+  filter: drop-shadow(0 0 20px rgba(255,107,44,0.15));
 }
 
 .hex-card:hover {
