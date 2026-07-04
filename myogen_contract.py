@@ -22,16 +22,13 @@ class MyogenDictionary(gl.Contract):
     registered_users: TreeMap[Address, str]  # addr → JSON str of {timestamp, name, query_count}
     query_history: TreeMap[Address, str]     # addr → JSON str of [{term, explanation, timestamp}]
     all_terms_cache: TreeMap[str, str]       # term → JSON str of {explanation, graphical_data, validated_at}
-    total_queries: u256
-    total_users: u256
+    total_queries: int
+    total_users: int
 
     def __init__(self):
         """Initialize the MYOGEN contract storage."""
         self.total_queries = 0
         self.total_users = 0
-        self.registered_users = TreeMap()
-        self.query_history = TreeMap()
-        self.all_terms_cache = TreeMap()
 
     # ─────────────────────── Registration ───────────────────────
 
