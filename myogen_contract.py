@@ -1,4 +1,5 @@
-# v0.1.0 # { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
+# v0.2.17
+# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
 # MYOGEN Intelligent Contract — GenLayer Bradbury Testnet
 # Decentralized Muscle Physiology & Anatomy Dictionary
 # Validators powered by Optimistic Democracy & LLM consensus
@@ -56,11 +57,15 @@ class MyogenDictionary(gl.Contract):
         return user_address in self.registered_users
 
     @gl.public.view
-    def get_user_info(self, user_address: Address) -> dict:
-        """Get user profile information."""
+    def get_user_info(self, user_address: Address) -> str:
+        """Get public info about a user (if registered)."""
         if user_address in self.registered_users:
-            return json.loads(self.registered_users[user_address])
-        return {"is_registered": False}
+            return self.registered_users[user_address]
+        return json.dumps({
+            "is_registered": False,
+            "display_name": "Unknown",
+            "query_count": 0
+        })
 
     @gl.public.view
     def get_cached_term(self, term: str) -> dict:
