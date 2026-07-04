@@ -1609,7 +1609,8 @@ async function getExplanation(term) {
   let retries = 0;
   while (retries < 15) {
     await sleep(2000);
-    result = await callContractView('get_cached_term', [term]);
+    const resultStr = await callContractView('get_cached_term', [term]);
+    const result = typeof resultStr === 'string' ? JSON.parse(resultStr) : resultStr;
     if (result && result.explanation) {
       return result.explanation;
     }

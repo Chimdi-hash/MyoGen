@@ -545,7 +545,8 @@ async function loadTermsFromContract() {
   grid.innerHTML = '<div style="color: var(--black-core); text-align: center; grid-column: 1/-1; padding: 3rem;">Syncing with Bradbury Testnet...</div>';
 
   try {
-    const termsList = await callContractView('get_popular_terms');
+    const termsListStr = await callContractView('get_popular_terms');
+    const termsList = typeof termsListStr === 'string' ? JSON.parse(termsListStr) : termsListStr;
     if (!termsList || termsList.length === 0) {
       renderTerms();
       return;
@@ -553,7 +554,8 @@ async function loadTermsFromContract() {
 
     allTermsData = [];
     for (const term of termsList) {
-      const termData = await callContractView('get_cached_term', [term]);
+      const termDataStr = await callContractView('get_cached_term', [term]);
+      const termData = typeof termDataStr === 'string' ? JSON.parse(termDataStr) : termDataStr;
       if (termData && termData.explanation) {
         allTermsData.push(termData.explanation);
       }
@@ -671,7 +673,8 @@ document.addEventListener('keydown', e => {
 document.addEventListener('DOMContentLoaded', async () => {
   // Read real contract stats
   try {
-    const stats = await callContractView('get_stats');
+    const statsStr = await callContractView('get_stats');
+    const stats = typeof statsStr === 'string' ? JSON.parse(statsStr) : statsStr;
     if (stats) {
       document.getElementById('es-terms').textContent = stats.terms_cached || 0;
       animateCounter(document.getElementById('es-sessions'), stats.total_users || 0);

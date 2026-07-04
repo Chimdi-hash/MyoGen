@@ -1,5 +1,4 @@
-# v0.1.0
-# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
+# v0.1.0 # { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
 # MYOGEN Intelligent Contract — GenLayer Bradbury Testnet
 # Decentralized Muscle Physiology & Anatomy Dictionary
 # Validators powered by Optimistic Democracy & LLM consensus
@@ -25,20 +24,23 @@ class MyogenDictionary(gl.Contract):
     total_queries: u256
     total_users: u256
 
-    def __init__(self) -> None:
+    def __init__(self):
         """Initialize the MYOGEN contract storage."""
         self.total_queries = 0
         self.total_users = 0
+        self.registered_users = TreeMap()
+        self.query_history = TreeMap()
+        self.all_terms_cache = TreeMap()
 
     # ─────────────────────── Registration ───────────────────────
 
     @gl.public.write
-    def register_user(self, display_name: str) -> None:
+    def register_user(self, display_name: str):
         """
         Register a new user wallet address.
         Called when a user first connects their wallet.
         """
-        caller = gl.message.sender_address
+        caller = gl.message.sender
         if caller not in self.registered_users:
             self.registered_users[caller] = json.dumps({
                 "display_name": display_name if display_name else "Anonymous",
@@ -71,7 +73,7 @@ class MyogenDictionary(gl.Contract):
     # ─────────────────────── Core Study Function ───────────────────────
 
     @gl.public.write
-    def study_term(self, term: str, web_data: str) -> None:
+    def study_term(self, term: str, web_data: str):
         """
         Primary function: User submits a muscle physiology/anatomy term.
         Validators analyze the term using LLM and reach consensus via
@@ -79,7 +81,7 @@ class MyogenDictionary(gl.Contract):
 
         This is the function triggered when user clicks 'Study' and signs the tx.
         """
-        caller = gl.message.sender_address
+        caller = gl.message.sender
         term_lower = term.strip().lower()
 
         # Check if result is already cached (avoid duplicate AI calls)
@@ -251,7 +253,7 @@ Return ONLY the JSON object, no other text."""
         }
         return elements_map.get(viz_type, elements_map["fiber_diagram"])
 
-    def _record_query(self, caller: Address, term: str, explanation: dict, graphical_data: dict) -> None:
+    def _record_query(self, caller: Address, term: str, explanation: dict, graphical_data: dict):
         """Record a user's query in their history."""
         if caller not in self.query_history:
             history = []
@@ -272,39 +274,39 @@ Return ONLY the JSON object, no other text."""
     # ─────────────────────── View Functions ───────────────────────
 
     @gl.public.view
-    def get_term_explanation(self, term: str) -> dict:
+    def get_cached_term(self, term: str) -> str:
         """Get cached explanation for a term (no AI call needed)."""
         term_lower = term.strip().lower()
         if term_lower in self.all_terms_cache:
-            return json.loads(self.all_terms_cache[term_lower])
-        return {"found": False, "term": term}
+            return self.all_terms_cache[term_lower]
+        return json.dumps({"found": False, "term": term})
 
     @gl.public.view
-    def get_user_history(self, user_address: Address) -> list:
+    def get_user_history(self, user_address: Address) -> str:
         """Get study history for a specific user."""
         if user_address in self.query_history:
-            return json.loads(self.query_history[user_address])
-        return []
+            return self.query_history[user_address]
+        return "[]"
 
     @gl.public.view
-    def get_recent_queries(self, limit: u64) -> list:
+    def get_recent_queries(self, limit: int) -> str:
         """Get recently queried terms across all users (from cache)."""
         terms = list(self.all_terms_cache.keys())
-        return terms[-int(limit):] if limit else terms[-20:]
+        return json.dumps(terms[-int(limit):] if limit else terms[-20:])
 
     @gl.public.view
-    def get_stats(self) -> dict:
+    def get_stats(self) -> str:
         """Get global MYOGEN platform statistics."""
-        return {
+        return json.dumps({
             "total_queries": int(self.total_queries),
             "total_users": int(self.total_users),
-            "terms_cached": len(self.all_terms_cache),
+            "terms_cached": len(list(self.all_terms_cache.keys())),
             "platform": "MYOGEN",
             "network": "GenLayer Bradbury Testnet",
             "chain_id": 4221
-        }
+        })
 
     @gl.public.view
-    def get_popular_terms(self) -> list:
+    def get_popular_terms(self) -> str:
         """Get all cached terms (acts as a catalog of studied terms)."""
-        return list(self.all_terms_cache.keys())
+        return json.dumps(list(self.all_terms_cache.keys()))
