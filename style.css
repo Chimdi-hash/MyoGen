@@ -1069,8 +1069,11 @@ body {
     flex-direction: column;
     padding: 2rem;
     gap: 1.5rem;
-    transform: translateY(-100%);
-    transition: var(--transition);
+    transform: translateY(-20px);
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: all 0.4s ease;
     border-bottom: 1px solid var(--glass-border);
     height: auto;
     overflow-y: auto;
@@ -1078,6 +1081,26 @@ body {
 
   .nav-links.open {
     transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .hero-content {
+    padding: 0 1.5rem;
+    text-align: center; /* Better on mobile to center text */
+  }
+  
+  .hero-actions {
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-actions .btn-primary, .hero-actions .btn-secondary {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
   }
 
   .wallet-nav-item {
