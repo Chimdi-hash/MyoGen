@@ -1164,6 +1164,14 @@ body {
 }
 
 /* ── Hexagonal Honeycomb Grid ── */
+.hex-grid-scroll-wrapper {
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden; /* This prevents the mobile horizontal shift bug! */
+  display: flex;
+  justify-content: center;
+}
+
 .hex-grid {
   display: flex;
   flex-wrap: wrap;
