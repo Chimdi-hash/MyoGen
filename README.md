@@ -10,7 +10,7 @@
 Deploy to Vercel and access at your project URL.
 
 ## ✨ Features
-- 🔐 **Wallet-gated** — Connect MetaMask to GenLayer Bradbury Testnet (Chain ID 961)
+- 🔐 **Wallet-gated** — Connect MetaMask to GenLayer Bradbury Testnet (Chain ID 4221)
 - 🤖 **AI Validators** — 5 validators reach consensus via Optimistic Democracy
 - 🧬 **300+ Terms** — Full muscle physiology & anatomy coverage
 - 🎨 **7 Visualization Types** — Animated Canvas diagrams per term
@@ -59,7 +59,7 @@ npm run dev   # Starts local server at http://localhost:3000
 | Property | Value |
 |---|---|
 | Network Name | GenLayer Bradbury Testnet |
-| Chain ID | 961 |
+| Chain ID | 4221 |
 | RPC URL | https://rpc.bradbury.genlayer.com |
 | Currency | GEN |
 | Explorer | https://explorer.bradbury.genlayer.com |

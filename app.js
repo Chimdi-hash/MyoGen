@@ -5,8 +5,8 @@
 
 // ── GenLayer Bradbury Testnet Config ──
 const GENLAYER_CONFIG = {
-  chainId: '0x3C1',        // 961 in hex
-  chainIdDec: 961,
+  chainId: '0x107D',        // 4221 in hex
+  chainIdDec: 4221,
   chainName: 'GenLayer Bradbury Testnet',
   rpcUrls: ['https://rpc.bradbury.genlayer.com'],
   nativeCurrency: {

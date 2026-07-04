@@ -3,7 +3,7 @@
 # Validators powered by Optimistic Democracy & LLM consensus
 
 # NOTE: Deploy this contract to GenLayer Bradbury Testnet
-# Network: https://rpc.bradbury.genlayer.com | Chain ID: 961
+# Network: https://rpc.bradbury.genlayer.com | Chain ID: 4221
 
 from genlayer import *
 import json
@@ -280,7 +280,7 @@ Return ONLY the JSON object, no other text."""
             "terms_cached": len(self.all_terms_cache),
             "platform": "MYOGEN",
             "network": "GenLayer Bradbury Testnet",
-            "chain_id": 961
+            "chain_id": 4221
         }
 
     @gl.public.view
