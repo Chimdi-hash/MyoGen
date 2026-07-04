@@ -63,13 +63,7 @@ class MyogenDictionary(gl.Contract):
             "query_count": 0
         })
 
-    @gl.public.view
-    def get_cached_term(self, term: str) -> dict:
-        """Fetch a term directly from the cache if it has been validated."""
-        term_lower = term.strip().lower()
-        if term_lower in self.all_terms_cache:
-            return json.loads(self.all_terms_cache[term_lower])
-        return {}
+
 
     # ─────────────────────── Core Study Function ───────────────────────
 
