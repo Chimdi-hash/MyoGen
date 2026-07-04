@@ -577,7 +577,9 @@ body {
 }
 
 .hero-title .gradient-text {
-  display: block;
+  display: inline-block; /* Helps prevent clipping */
+  padding-right: 0.15em; /* Fixes clipped letters on WebKit */
+  padding-left: 0.05em;
   background: var(--gradient-orange);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1138,6 +1140,21 @@ body {
   .stats-bar { gap: 2rem; flex-direction: column; }
   .stat-divider { display: none; }
   
+  .footer {
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+  
+  .footer-links {
+    justify-content: center;
+  }
+  
+  .footer-credit {
+    position: static;
+    margin-top: 0.5rem;
+  }
+  
   .footer-inner {
     flex-direction: column;
     text-align: center;
@@ -1217,10 +1234,13 @@ body {
 /* Perfect Scaled 2-column Honeycomb on Mobile Phones */
 @media (max-width: 549px) {
   .hex-grid { 
-    max-width: 516px; /* Keep 2-column virtual width */
+    width: 516px !important; /* Force virtual width to prevent wrapping into 1 column */
+    max-width: 516px !important; 
     transform-origin: top center;
     transform: scale(0.65); /* Scale the honeycomb down perfectly */
-    margin-bottom: -120px; /* Adjust spacing after scaling */
+    margin-bottom: -150px; /* Adjust spacing after scaling */
+    margin-left: auto;
+    margin-right: auto;
   }
   .hex-card:nth-child(2n+2) {
     margin-top: 151px;
