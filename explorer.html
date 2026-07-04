@@ -678,7 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const uniqueTerms = new Set(history.map(h => h.term.toLowerCase())).size;
   
   document.getElementById('es-terms').textContent = uniqueTerms;
-  animateCounter(document.getElementById('es-sessions'), history.length, 1500);
+  animateCounter(document.getElementById('es-sessions'), history.length);
 
   // Pick up term from study page if redirected
   const savedTerm = sessionStorage.getItem('myogen_study_term');
