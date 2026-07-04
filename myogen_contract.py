@@ -27,8 +27,6 @@ class MyogenDictionary(gl.Contract):
 
     def __init__(self):
         """Initialize the MYOGEN contract storage."""
-        self.total_queries = u256(0)
-        self.total_users = u256(0)
         self.registered_users = TreeMap()
         self.query_history = TreeMap()
         self.all_terms_cache = TreeMap()
