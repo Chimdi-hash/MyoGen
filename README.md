@@ -1,6 +1,6 @@
 # 🧬 MYOGEN — Decentralized Muscle Physiology Dictionary
 
-> The world's first AI-validated, on-chain dictionary for muscle physiology and anatomy, built on **GenLayer Bradbury Testnet**.
+> The world's first AI-validated, on-chain dictionary for muscle physiology and anatomy, built on **GenLayer Studio**.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/myogen)
 
@@ -10,7 +10,7 @@
 Deploy to Vercel and access at your project URL.
 
 ## ✨ Features
-- 🔐 **Wallet-gated** — Connect MetaMask to GenLayer Bradbury Testnet (Chain ID 4221)
+- 🔐 **Wallet-gated** — Connect MetaMask to GenLayer Studio (Chain ID 61999)
 - 🤖 **AI Validators** — 5 validators reach consensus via Optimistic Democracy
 - 🧬 **300+ Terms** — Full muscle physiology & anatomy coverage
 - 🎨 **7 Visualization Types** — Animated Canvas diagrams per term
@@ -58,17 +58,17 @@ npm run dev   # Starts local server at http://localhost:3000
 ## 🔗 GenLayer Network Config
 | Property | Value |
 |---|---|
-| Network Name | GenLayer Bradbury Testnet |
-| Chain ID | 4221 |
-| RPC URL | https://rpc.bradbury.genlayer.com |
+| Network Name | GenLayer Studio |
+| Chain ID | 61999 |
+| RPC URL | https://studio.genlayer.com/api |
 | Currency | GEN |
-| Explorer | https://explorer.bradbury.genlayer.com |
+| Explorer | http://localhost:8080 |
 
 ## 🐍 Smart Contract Deployment
 The `myogen_contract.py` is a GenLayer Intelligent Contract. To deploy:
 ```bash
 pip install genlayer
-genlayer deploy myogen_contract.py --network bradbury
+genlayer deploy myogen_contract.py --network studio
 ```
 After deployment, update `CONTRACT_ADDRESS` in `app.js`.
 

@@ -1,7 +1,7 @@
 {
   "name": "myogen",
   "version": "1.0.0",
-  "description": "MYOGEN — Decentralized Muscle Physiology & Anatomy Dictionary on GenLayer Bradbury Testnet",
+  "description": "MYOGEN — Decentralized Muscle Physiology & Anatomy Dictionary on GenLayer Studio",
   "private": true,
   "keywords": ["genlayer", "web3", "muscle-physiology", "anatomy", "blockchain", "ai"],
   "homepage": ".",

@@ -1,11 +1,11 @@
 # v0.2.17
 # { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
-# MYOGEN Intelligent Contract — GenLayer Bradbury Testnet
+# MYOGEN Intelligent Contract — GenLayer Studio
 # Decentralized Muscle Physiology & Anatomy Dictionary
 # Validators powered by Optimistic Democracy & LLM consensus
 
-# NOTE: Deploy this contract to GenLayer Bradbury Testnet
-# Network: https://rpc.bradbury.genlayer.com | Chain ID: 4221
+# NOTE: Deploy this contract to GenLayer Studio
+# Network: https://studio.genlayer.com/api | Chain ID: 61999
 
 from genlayer import *
 import json
@@ -307,8 +307,8 @@ Return ONLY the JSON object, no other text."""
             "total_users": int(self.total_users),
             "terms_cached": len(list(self.all_terms_cache.keys())),
             "platform": "MYOGEN",
-            "network": "GenLayer Bradbury Testnet",
-            "chain_id": 4221
+            "network": "GenLayer Studio",
+            "chain_id": 61999
         })
 
     @gl.public.view

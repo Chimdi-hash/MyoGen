@@ -1,6 +1,6 @@
 /* ===================================================
    MYOGEN — Shared JavaScript Utilities
-   GenLayer Bradbury Testnet Integration
+   GenLayer Studio Integration
    =================================================== */
 
 // ── GenLayer Studio Config ──
@@ -83,7 +83,7 @@ async function connectWallet() {
       return false;
     }
 
-    // Switch to / add GenLayer Bradbury Testnet
+    // Switch to / add GenLayer Studio
     await switchToGenLayer();
 
     window.myogenWallet.address = accounts[0];
@@ -111,7 +111,7 @@ async function connectWallet() {
   }
 }
 
-// ── Switch to GenLayer Bradbury Testnet ──
+// ── Switch to GenLayer Studio ──
 async function switchToGenLayer() {
   try {
     await window.ethereum.request({
@@ -174,7 +174,7 @@ function handleAccountsChanged(accounts) {
 function handleChainChanged(chainId) {
   window.myogenWallet.chainId = chainId;
   if (chainId !== GENLAYER_CONFIG.chainId) {
-    showToast('Please switch back to GenLayer Bradbury Testnet.', 'warning');
+    showToast('Please switch back to GenLayer Studio.', 'warning');
   }
 }
 
