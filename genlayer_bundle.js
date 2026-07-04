@@ -38699,8 +38699,9 @@ ${prettyStateOverride(stateOverride)}`;
       init_chains();
       init_esm();
       window.callGenLayer = async function(contract, method, args, accountAddress) {
+        if (!accountAddress) throw new Error("Account address is missing");
         const client = createClient2({ chain: studionet, transport: custom(window.ethereum) });
-        return await client.writeContract({ address: contract, functionName: method, args, account: accountAddress });
+        return await client.writeContract({ address: contract, functionName: method, args, account: { address: accountAddress } });
       };
     }
   });
