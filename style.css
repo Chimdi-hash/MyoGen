@@ -1096,11 +1096,12 @@ body {
   .hero-actions {
     justify-content: center;
     flex-direction: column;
-    width: 100%;
+    align-items: center;
+    width: auto;
   }
 
   .hero-actions .btn-primary, .hero-actions .btn-secondary {
-    width: 100%;
+    width: auto;
     text-align: center;
     justify-content: center;
   }
