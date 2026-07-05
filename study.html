@@ -1401,8 +1401,8 @@ async function getExplanation(term) {
   while (retries < 30) {
     await sleep(2000);
     try {
-      const resultStr = await window.readGenLayer(CONTRACT_ADDRESS, 'get_cached_term', [term]);
-      const result = typeof resultStr === 'string' ? JSON.parse(resultStr) : resultStr;
+      const resultObj = await window.readGenLayer(CONTRACT_ADDRESS, 'get_term_explanation', [term]);
+      const result = typeof resultObj === 'string' ? JSON.parse(resultObj) : resultObj;
       if (result && result.explanation) {
         return result.explanation;
       }
