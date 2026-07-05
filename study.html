@@ -541,6 +541,14 @@
       display: flex;
       align-items: center;
       gap: 0.6rem;
+    }
+    .sync-blink {
+      animation: blink-text 1.5s infinite;
+    }
+    @keyframes blink-text {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
       padding: 0.75rem 1.25rem;
       border-radius: var(--border-radius);
       background: rgba(0,200,100,0.08);
@@ -726,32 +734,7 @@
       <div class="loading-status" id="loading-status-text">Submitting to GenLayer...</div>
       <div class="loading-sub" id="loading-sub-text">Waiting for validators to analyze your term</div>
 
-      <div class="validator-progress">
-        <div class="vp-node">
-          <div class="vp-orb" id="vp-1">🤖</div>
-          <div class="vp-label">V-Alpha</div>
-        </div>
-        <div class="vp-connector" id="vc-1"></div>
-        <div class="vp-node">
-          <div class="vp-orb" id="vp-2">🤖</div>
-          <div class="vp-label">V-Beta</div>
-        </div>
-        <div class="vp-connector" id="vc-2"></div>
-        <div class="vp-node">
-          <div class="vp-orb" id="vp-3">🤖</div>
-          <div class="vp-label">V-Gamma</div>
-        </div>
-        <div class="vp-connector" id="vc-3"></div>
-        <div class="vp-node">
-          <div class="vp-orb" id="vp-4">🤖</div>
-          <div class="vp-label">V-Delta</div>
-        </div>
-        <div class="vp-connector" id="vc-4"></div>
-        <div class="vp-node">
-          <div class="vp-orb" id="vp-final">✓</div>
-          <div class="vp-label">Consensus</div>
-        </div>
-      </div>
+
     </div>
 
     <!-- RESULT STATE -->
@@ -767,9 +750,9 @@
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.5rem;">
           <div class="result-category-badge" id="result-category">—</div>
-          <div class="consensus-badge">
+          <div class="consensus-badge" id="sync-badge">
             <div class="consensus-dot"></div>
-            <span>Validator Consensus Reached</span>
+            <span class="sync-text sync-blink">Synchronizing...</span>
           </div>
         </div>
       </div>
@@ -926,7 +909,6 @@ async function executeStudyLogic(term) {
 
   showState('loading');
   setStudyBtnLoading(true);
-  resetValidators();
 
   try {
     showToast(`Scraping web data for "${term}"...`, 'info');
@@ -941,7 +923,7 @@ async function executeStudyLogic(term) {
 
     showToast(`Transaction sent! Waiting for GenLayer consensus...`, 'success');
 
-    await animateValidators();
+
 
     const result = await getExplanation(term);
 
@@ -977,58 +959,6 @@ function showState(state) {
   document.getElementById('idle-state').style.display = state === 'idle' ? 'flex' : 'none';
   document.getElementById('loading-state').classList.toggle('show', state === 'loading');
   document.getElementById('result-state').classList.toggle('show', state === 'result');
-}
-
-// ── Validator animation ──
-function resetValidators() {
-  for (let i = 1; i <= 4; i++) {
-    const orb = document.getElementById(`vp-${i}`);
-    const con = document.getElementById(`vc-${i}`);
-    if (orb) { orb.className = 'vp-orb'; }
-    if (con) { con.className = 'vp-connector'; }
-  }
-  const final = document.getElementById('vp-final');
-  if (final) { final.className = 'vp-orb'; }
-}
-
-async function animateValidators() {
-  const steps = [
-    { status: 'Sending transaction to GenLayer...', sub: 'Broadcasting to the network' },
-    { status: 'Validator Alpha analyzing...', sub: 'LLM processing your query' },
-    { status: 'Validator Beta cross-checking...', sub: 'Independent AI verification' },
-    { status: 'Validator Gamma reviewing...', sub: 'Consensus comparison' },
-    { status: 'Validator Delta finalizing...', sub: 'Applying Optimistic Democracy' },
-    { status: 'Consensus reached! ✓', sub: 'Result validated on-chain' },
-  ];
-
-  for (let i = 0; i < steps.length; i++) {
-    document.getElementById('loading-status-text').textContent = steps[i].status;
-    document.getElementById('loading-sub-text').textContent = steps[i].sub;
-
-    if (i >= 1 && i <= 4) {
-      const orb = document.getElementById(`vp-${i}`);
-      if (orb) orb.classList.add('vp-active');
-    }
-
-    await sleep(800);
-
-    if (i >= 1 && i <= 4) {
-      const orb = document.getElementById(`vp-${i}`);
-      const con = document.getElementById(`vc-${i}`);
-      if (orb) { orb.classList.remove('vp-active'); orb.classList.add('vp-done'); orb.textContent = '✓'; }
-      if (con) con.classList.add('vp-lit');
-    }
-
-    if (i === 5) {
-      const final = document.getElementById('vp-final');
-      if (final) {
-        final.classList.add('vp-done');
-        final.style.background = 'rgba(0,200,100,0.2)';
-        final.style.borderColor = '#00C864';
-        final.style.boxShadow = '0 0 20px rgba(0,200,100,0.5)';
-      }
-    }
-  }
 }
 
 // ── Render result ──
@@ -1467,14 +1397,17 @@ async function scrapeWikipedia(term) {
 }
 
 async function getExplanation(term) {
-  let result = null;
   let retries = 0;
-  while (retries < 15) {
+  while (retries < 30) {
     await sleep(2000);
-    const resultStr = await callContractView('get_cached_term', [term]);
-    const result = typeof resultStr === 'string' ? JSON.parse(resultStr) : resultStr;
-    if (result && result.explanation) {
-      return result.explanation;
+    try {
+      const resultStr = await window.readGenLayer(CONTRACT_ADDRESS, 'get_cached_term', [term]);
+      const result = typeof resultStr === 'string' ? JSON.parse(resultStr) : resultStr;
+      if (result && result.explanation) {
+        return result.explanation;
+      }
+    } catch (e) {
+      console.warn("View call failed on retry", retries, e);
     }
     retries++;
   }

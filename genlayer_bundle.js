@@ -38703,6 +38703,10 @@ ${prettyStateOverride(stateOverride)}`;
         const client = createClient2({ chain: studionet, transport: custom(window.ethereum) });
         return await client.writeContract({ address: contract, functionName: method, args, account: { address: accountAddress } });
       };
+      window.readGenLayer = async function(contract, method, args) {
+        const client = createClient2({ chain: studionet, transport: window.ethereum ? custom(window.ethereum) : void 0 });
+        return await client.readContract({ address: contract, functionName: method, args });
+      };
     }
   });
   require_wrapper();
