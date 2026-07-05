@@ -92,7 +92,7 @@ class MyogenDictionary(gl.Contract):
             return
 
         def build_prompt() -> str:
-            return f"""You are MYOGEN, an expert AI system specializing in muscle physiology,
+            prompt_str = f"""You are MYOGEN, an expert AI system specializing in muscle physiology,
 anatomy, kinesiology, and sports science.
 
 A student wants to understand this term:
@@ -138,6 +138,7 @@ If the term is NOT related to muscle physiology, anatomy, kinesiology, or exerci
     "visualization_type": "fiber_diagram",
     "color_theme": "red-orange"
 }}"""
+            return gl.nondet.exec_prompt(prompt_str)
 
         explanation_result = gl.eq_principle.prompt_non_comparative(
             build_prompt,
