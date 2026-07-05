@@ -466,24 +466,33 @@ let selectedTermData = null;
 
 async function loadTermsFromContract() {
   const grid = document.getElementById('terms-grid');
-  grid.innerHTML = '<div style="color: var(--black-core); text-align: center; grid-column: 1/-1; padding: 3rem;">Syncing with GenLayer Studio...</div>';
+
+  if (!window.myogenWallet || !window.myogenWallet.address) {
+    grid.innerHTML = '<div style="color: var(--black-core); text-align: center; grid-column: 1/-1; padding: 3rem;">Please connect your wallet to view your studied terms.</div>';
+    return;
+  }
+
+  grid.innerHTML = '<div style="color: var(--black-core); text-align: center; grid-column: 1/-1; padding: 3rem;">Syncing your history with GenLayer Studio...</div>';
 
   try {
-    const termsListStr = await window.readGenLayer(CONTRACT_ADDRESS, 'get_popular_terms');
-    const termsList = typeof termsListStr === 'string' ? JSON.parse(termsListStr) : termsListStr;
-    if (!termsList || termsList.length === 0) {
+    const historyStr = await window.readGenLayer(CONTRACT_ADDRESS, 'get_user_history', [window.myogenWallet.address]);
+    const historyList = typeof historyStr === 'string' ? JSON.parse(historyStr) : historyStr;
+    
+    if (!historyList || historyList.length === 0) {
+      allTermsData = [];
       renderTerms();
       return;
     }
 
     allTermsData = [];
-    for (const term of termsList) {
-      const termDataStr = await window.readGenLayer(CONTRACT_ADDRESS, 'get_cached_term', [term]);
-      const termData = typeof termDataStr === 'string' ? JSON.parse(termDataStr) : termDataStr;
-      if (termData && termData.explanation) {
-        allTermsData.push(termData.explanation);
+    for (const item of historyList) {
+      if (item && item.explanation) {
+        allTermsData.push(item.explanation);
       }
     }
+    
+    // Sort so newest is first
+    allTermsData.reverse();
     renderTerms();
   } catch (err) {
     console.error("Failed to load terms from contract:", err);
@@ -593,7 +602,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeDetail();
 });
 
-// ═══ Init ═══
+  // ═══ Init ═══
 document.addEventListener('DOMContentLoaded', async () => {
   // Read real contract stats
   try {
@@ -607,8 +616,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error("Could not load stats", e);
   }
 
-  // Load terms from GenLayer Contract
-  await loadTermsFromContract();
+  // Override updateWalletUI to load terms when wallet connects
+  const origUpdate = window.updateWalletUI;
+  window.updateWalletUI = function() {
+    if (origUpdate) origUpdate();
+    if (window.myogenWallet && window.myogenWallet.address) {
+      loadTermsFromContract();
+    }
+  };
+
+  // Wait briefly for app.js to restore session before trying to load terms
+  setTimeout(() => {
+    loadTermsFromContract();
+  }, 1500);
 
   // Pick up term from study page if redirected
   const savedTerm = sessionStorage.getItem('myogen_study_term');
