@@ -1357,12 +1357,17 @@ let animFrame = null;
 function animateVisualization(ctx, canvas, vizType, colors, data) {
   if (animFrame) cancelAnimationFrame(animFrame);
   let t = 0;
+  
+  // Save the static drawing
+  const staticImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
   function loop() {
     t += 0.02;
 
+    // Restore the static drawing to clear previous animation frames
+    ctx.putImageData(staticImage, 0, 0);
+
     // Add a subtle scanning line effect over the static drawing
-    ctx.clearRect(0, canvas.height - 2, canvas.width, 2);
     const scanX = (t * 60) % canvas.width;
     ctx.fillStyle = colors.primary + '60';
     ctx.fillRect(scanX, 0, 2, canvas.height);
@@ -1394,7 +1399,7 @@ async function scrapeWikipedia(term) {
 
 async function getExplanation(term) {
   let retries = 0;
-  while (retries < 30) {
+  while (retries < 60) {
     await sleep(2000);
     try {
       const resultObj = await window.readGenLayer(CONTRACT_ADDRESS, 'get_cached_term', [term]);
