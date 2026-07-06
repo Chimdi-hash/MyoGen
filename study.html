@@ -988,8 +988,8 @@ function renderResult(data, term, txHash) {
     .map(m => `<span class="related-tag" style="color:var(--orange-bright);">${m}</span>`)
     .join('') || '<span style="color:var(--mid-gray);font-size:0.8rem;">General / Not specified</span>';
 
-  // Tx hash (Real)
-  document.getElementById('result-tx-hash').textContent = txHash ? (txHash.slice(0, 8) + '...' + txHash.slice(-6)) : 'Pending...';
+  // Real Tx hash
+  document.getElementById('result-tx-hash').textContent = txHash ? (txHash.slice(0, 18) + '...') : '0x...';
 
   // Draw visualization
   drawVisualization(data, term);
