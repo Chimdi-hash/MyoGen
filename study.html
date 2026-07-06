@@ -921,7 +921,7 @@ async function executeStudyLogic(term) {
 
     const result = await getExplanation(term);
 
-    renderResult(result, term);
+    renderResult(result, term, txHash);
     showState('result');
 
     addToSessionHistory(term);
@@ -956,7 +956,7 @@ function showState(state) {
 }
 
 // ── Render result ──
-function renderResult(data, term) {
+function renderResult(data, term, txHash) {
   document.getElementById('result-term').textContent = term.charAt(0).toUpperCase() + term.slice(1);
   document.getElementById('result-category').textContent = data.category || 'General';
   document.getElementById('result-definition').textContent = data.definition || 'Definition not available.';
@@ -988,9 +988,8 @@ function renderResult(data, term) {
     .map(m => `<span class="related-tag" style="color:var(--orange-bright);">${m}</span>`)
     .join('') || '<span style="color:var(--mid-gray);font-size:0.8rem;">General / Not specified</span>';
 
-  // Tx hash (simulated)
-  const fakeHash = '0x' + Array.from({length: 16}, () => Math.floor(Math.random()*16).toString(16)).join('') + '...';
-  document.getElementById('result-tx-hash').textContent = fakeHash;
+  // Tx hash (Real)
+  document.getElementById('result-tx-hash').textContent = txHash ? (txHash.slice(0, 8) + '...' + txHash.slice(-6)) : 'Pending...';
 
   // Draw visualization
   drawVisualization(data, term);
