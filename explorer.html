@@ -466,16 +466,10 @@ let selectedTermData = null;
 
 async function loadTermsFromContract() {
   const grid = document.getElementById('terms-grid');
-
-  if (!window.myogenWallet || !window.myogenWallet.address) {
-    grid.innerHTML = '<div style="color: var(--black-core); text-align: center; grid-column: 1/-1; padding: 3rem;">Please connect your wallet to view your studied terms.</div>';
-    return;
-  }
-
-  grid.innerHTML = '<div style="color: var(--black-core); text-align: center; grid-column: 1/-1; padding: 3rem;">Syncing your history with GenLayer Studio...</div>';
+  grid.innerHTML = '<div style="color: var(--black-core); text-align: center; grid-column: 1/-1; padding: 3rem;">Syncing global knowledge base from GenLayer Studio...</div>';
 
   try {
-    const historyStr = await window.readGenLayer(CONTRACT_ADDRESS, 'get_user_history', [window.myogenWallet.address]);
+    const historyStr = await window.readGenLayer(CONTRACT_ADDRESS, 'get_popular_terms');
     const historyList = typeof historyStr === 'string' ? JSON.parse(historyStr) : historyStr;
     
     if (!historyList || historyList.length === 0) {
@@ -485,9 +479,11 @@ async function loadTermsFromContract() {
     }
 
     allTermsData = [];
-    for (const item of historyList) {
-      if (item && item.explanation) {
-        allTermsData.push(item.explanation);
+    for (const term of historyList) {
+      const termDataStr = await window.readGenLayer(CONTRACT_ADDRESS, 'get_cached_term', [term]);
+      const termData = typeof termDataStr === 'string' ? JSON.parse(termDataStr) : termDataStr;
+      if (termData && termData.explanation) {
+        allTermsData.push(termData.explanation);
       }
     }
     
@@ -616,19 +612,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error("Could not load stats", e);
   }
 
-  // Override updateWalletUI to load terms when wallet connects
-  const origUpdate = window.updateWalletUI;
-  window.updateWalletUI = function() {
-    if (origUpdate) origUpdate();
-    if (window.myogenWallet && window.myogenWallet.address) {
-      loadTermsFromContract();
-    }
-  };
-
-  // Wait briefly for app.js to restore session before trying to load terms
-  setTimeout(() => {
-    loadTermsFromContract();
-  }, 1500);
+  // Load global terms directly
+  await loadTermsFromContract();
 
   // Pick up term from study page if redirected
   const savedTerm = sessionStorage.getItem('myogen_study_term');

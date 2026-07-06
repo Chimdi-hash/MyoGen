@@ -18,6 +18,7 @@ class MyogenDictionary(gl.Contract):
 
     total_queries: u256
     total_users: u256
+    popular_terms_list: str
 
     def __init__(self):
         """
@@ -29,6 +30,7 @@ class MyogenDictionary(gl.Contract):
         """
         self.total_queries = 0
         self.total_users = 0
+        self.popular_terms_list = "[]"
 
     # ─────────────────────── Helpers ───────────────────────
 
@@ -178,6 +180,11 @@ If the term is NOT related to muscle physiology, anatomy, kinesiology, or exerci
             "validated_at": self._safe_timestamp(),
             "validator_consensus": True
         })
+
+        current_popular = json.loads(self.popular_terms_list)
+        if term_clean not in current_popular:
+            current_popular.append(term_clean)
+            self.popular_terms_list = json.dumps(current_popular)
 
         self._record_query(
             caller,
@@ -337,3 +344,7 @@ If the term is NOT related to muscle physiology, anatomy, kinesiology, or exerci
             "network": "GenLayer Studio",
             "chain_id": 61999
         })
+
+    @gl.public.view
+    def get_popular_terms(self) -> str:
+        return self.popular_terms_list
