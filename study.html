@@ -900,6 +900,8 @@ async function executeStudyLogic(term) {
   currentTerm = term;
 
   showState('loading');
+  document.getElementById('loading-status-text').textContent = "Submitting to GenLayer...";
+  document.getElementById('loading-sub-text').textContent = "Waiting for validators to analyze your term";
   setStudyBtnLoading(true);
 
   try {
@@ -1396,6 +1398,14 @@ async function scrapeWikipedia(term) {
 async function getExplanation(term) {
   let retries = 0;
   while (retries < 60) {
+    if (retries === 5) {
+      document.getElementById('loading-status-text').textContent = "Validators are analyzing deeply...";
+      document.getElementById('loading-sub-text').textContent = "This might take a minute depending on network traffic.";
+    }
+    if (retries === 15) {
+      document.getElementById('loading-status-text').textContent = "Still analyzing...";
+      document.getElementById('loading-sub-text').textContent = "GenLayer is experiencing high traffic, but your request is processing in the background.";
+    }
     await sleep(2000);
     try {
       const resultObj = await window.readGenLayer(CONTRACT_ADDRESS, 'get_cached_term', [term]);

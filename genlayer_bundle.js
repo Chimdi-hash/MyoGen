@@ -38707,11 +38707,12 @@ ${prettyStateOverride(stateOverride)}`;
           receipt = await client.waitForTransactionReceipt({ hash: txHash, timeout: 300000 });
         } catch (err) {
           if (err && err.message && err.message.includes("Timed out")) {
-            throw new Error("GenLayer network is experiencing high traffic. Your AI request is still processing successfully in the background! Please wait 1-2 minutes and search the term again to view the result.");
+            console.warn("GenLayer transaction receipt polling timed out. Will fallback to UI polling.");
+          } else {
+            throw err;
           }
-          throw err;
         }
-        if (receipt.status === "reverted") {
+        if (receipt && receipt.status === "reverted") {
           console.error("GenLayer Reverted", receipt);
           throw new Error("Transaction reverted by GenLayer Simulator.");
         }
