@@ -19,7 +19,7 @@ const GENLAYER_CONFIG = {
 
 // ── Contract Address (set after deployment) ──
 // Replace with your deployed contract address after deploying myogen_contract.py
-const CONTRACT_ADDRESS = '0xFD79E1e422e71Ad181aA5e210Ec171f333C9Ed30';
+const CONTRACT_ADDRESS = '0x50F40dDFa4a213A7c4b79767EE82B5545241ad72';
 
 // ── Wallet State ──
 window.myogenWallet = {
