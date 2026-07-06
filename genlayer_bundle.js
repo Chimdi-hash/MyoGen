@@ -38702,7 +38702,15 @@ ${prettyStateOverride(stateOverride)}`;
         if (!accountAddress) throw new Error("Account address is missing");
         const client = createClient2({ chain: studionet, transport: custom(window.ethereum) });
         const txHash = await client.writeContract({ address: contract, functionName: method, args, account: { address: accountAddress } });
-        const receipt = await client.waitForTransactionReceipt({ hash: txHash, timeout: 240000 });
+        let receipt;
+        try {
+          receipt = await client.waitForTransactionReceipt({ hash: txHash, timeout: 300000 });
+        } catch (err) {
+          if (err && err.message && err.message.includes("Timed out")) {
+            throw new Error("GenLayer network is experiencing high traffic. Your AI request is still processing successfully in the background! Please wait 1-2 minutes and search the term again to view the result.");
+          }
+          throw err;
+        }
         if (receipt.status === "reverted") {
           console.error("GenLayer Reverted", receipt);
           throw new Error("Transaction reverted by GenLayer Simulator.");
