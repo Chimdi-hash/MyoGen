@@ -506,9 +506,9 @@ function renderTerms() {
   // Text filter
   if (currentFilterText) {
     filtered = filtered.filter(t =>
-      t.term.toLowerCase().includes(currentFilterText) ||
-      t.definition.toLowerCase().includes(currentFilterText) ||
-      t.category.toLowerCase().includes(currentFilterText)
+      (t.term || '').toLowerCase().includes(currentFilterText) ||
+      (t.definition || '').toLowerCase().includes(currentFilterText) ||
+      (t.category || '').toLowerCase().includes(currentFilterText)
     );
   }
 
@@ -529,12 +529,12 @@ function renderTerms() {
       style="animation: slide-in-up 0.5s ${i * 0.06}s ease both; opacity:0; animation-fill-mode: forwards;"
       tabindex="0" role="button" aria-label="View ${t.term}">
       <div class="term-card-header">
-        <div class="term-name">${t.term}</div>
-        <div class="term-category">${t.category}</div>
+        <div class="term-name">${t.term || 'Unknown'}</div>
+        <div class="term-category">${t.category || 'General'}</div>
       </div>
-      <p class="term-definition">${t.definition}</p>
+      <p class="term-definition">${t.definition || 'Definition not available.'}</p>
       <div class="term-meta">
-        <span class="term-facts-count">▸ ${t.key_facts.length} key facts</span>
+        <span class="term-facts-count">▸ ${t.key_facts?.length || 0} key facts</span>
         <span class="term-study-link">Study Again →</span>
       </div>
     </div>

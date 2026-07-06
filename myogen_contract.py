@@ -154,8 +154,20 @@ If the term is NOT related to muscle physiology, anatomy, kinesiology, or exerci
         )
 
         try:
-            explanation_data = json.loads(explanation_result)
+            cleaned = explanation_result.strip()
+            if cleaned.startswith("```json"):
+                cleaned = cleaned[7:]
+            elif cleaned.startswith("```"):
+                cleaned = cleaned[3:]
+            if cleaned.endswith("```"):
+                cleaned = cleaned[:-3]
+            explanation_data = json.loads(cleaned.strip())
+            if not isinstance(explanation_data, dict):
+                explanation_data = {}
         except Exception:
+            explanation_data = {}
+
+        if "definition" not in explanation_data or not explanation_data["definition"]:
             explanation_data = {
                 "term": term_clean,
                 "definition": f"Analysis of '{term_clean}' in the context of muscle physiology.",
