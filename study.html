@@ -993,11 +993,11 @@ function renderResult(data, term) {
   document.getElementById('result-tx-hash').textContent = fakeHash;
 
   // Draw visualization
-  drawVisualization(data);
+  drawVisualization(data, term);
 }
 
 // ── Canvas Visualization ──
-function drawVisualization(data) {
+async function drawVisualization(data, term) {
   const canvas = document.getElementById('viz-canvas');
   const card = canvas.parentElement;
   canvas.width = card.offsetWidth || 400;
@@ -1006,6 +1006,48 @@ function drawVisualization(data) {
   const ctx = canvas.getContext('2d');
   const vizType = data.visualization_type || 'fiber_diagram';
   const colors = data.colors || { primary: '#FF6B2C', secondary: '#FF9500', glow: '#FFD700' };
+
+  if (term) {
+    try {
+      const response = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term)}`);
+      if (response.ok) {
+        const wikiData = await response.json();
+        if (wikiData.thumbnail && wikiData.thumbnail.source) {
+          const img = new Image();
+          img.crossOrigin = "Anonymous";
+          img.src = wikiData.thumbnail.source;
+          img.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const scale = Math.min((canvas.width - 40) / img.width, (canvas.height - 40) / img.height);
+            const w = img.width * scale;
+            const h = img.height * scale;
+            const x = (canvas.width - w) / 2;
+            const y = (canvas.height - h) / 2;
+            
+            // Draw a subtle background glow
+            ctx.shadowColor = colors.glow;
+            ctx.shadowBlur = 20;
+            ctx.drawImage(img, x, y, w, h);
+            ctx.shadowBlur = 0; // reset
+            
+            // Frame
+            ctx.strokeStyle = colors.primary + '80';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x - 2, y - 2, w + 4, h + 4);
+
+            // Label
+            ctx.fillStyle = colors.glow;
+            ctx.font = "bold 10px 'Orbitron', monospace";
+            ctx.textAlign = 'center';
+            ctx.fillText(`WIKIPEDIA: ${term.toUpperCase()}`, canvas.width / 2, canvas.height - 8);
+          };
+          return;
+        }
+      }
+    } catch(e) {
+      console.warn("Could not load specific image", e);
+    }
+  }
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
