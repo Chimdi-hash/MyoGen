@@ -395,7 +395,7 @@
     </div>
     <div class="glass-card explorer-stat">
       <div class="n" id="es-sessions">0</div>
-      <div class="l">Study Sessions</div>
+      <div class="l">Unique Users</div>
     </div>
     <div class="glass-card explorer-stat">
       <div class="n">5</div>
@@ -609,7 +609,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const statsStr = await window.readGenLayer(CONTRACT_ADDRESS, 'get_stats');
     const stats = typeof statsStr === 'string' ? JSON.parse(statsStr) : statsStr;
     if (stats) {
-      document.getElementById('es-terms').textContent = stats.terms_cached || 0;
+      document.getElementById('es-terms').textContent = stats.total_queries || 0;
       animateCounter(document.getElementById('es-sessions'), stats.total_users || 0);
     }
   } catch(e) {

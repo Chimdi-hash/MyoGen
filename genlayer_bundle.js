@@ -38702,7 +38702,7 @@ ${prettyStateOverride(stateOverride)}`;
         if (!accountAddress) throw new Error("Account address is missing");
         const client = createClient2({ chain: studionet, transport: custom(window.ethereum) });
         const txHash = await client.writeContract({ address: contract, functionName: method, args, account: { address: accountAddress } });
-        const receipt = await client.waitForTransactionReceipt({ hash: txHash });
+        const receipt = await client.waitForTransactionReceipt({ hash: txHash, timeout: 240000 });
         if (receipt.status === "reverted") {
           console.error("GenLayer Reverted", receipt);
           throw new Error("Transaction reverted by GenLayer Simulator.");
