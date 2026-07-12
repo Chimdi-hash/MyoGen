@@ -38706,20 +38706,6 @@ ${prettyStateOverride(stateOverride)}`;
           txArgs.value = BigInt(value);
         }
         const txHash = await client.writeContract(txArgs);
-        let receipt;
-        try {
-          receipt = await client.waitForTransactionReceipt({ hash: txHash, timeout: 3e5 });
-        } catch (err) {
-          if (err && err.message && err.message.includes("Timed out")) {
-            console.warn("GenLayer transaction receipt polling timed out. Will fallback to UI polling.");
-          } else {
-            throw err;
-          }
-        }
-        if (receipt && receipt.status === "reverted") {
-          console.error("GenLayer Reverted", receipt);
-          throw new Error("Transaction reverted by GenLayer Simulator.");
-        }
         return txHash;
       };
       window.readGenLayer = async function(contract, method, args) {
@@ -38734,6 +38720,11 @@ ${prettyStateOverride(stateOverride)}`;
         const client = createClient2({ chain: studionet, transport: window.ethereum ? custom(window.ethereum) : void 0 });
         const balance = await client.getBalance({ address });
         return (Number(balance) / 1e18).toFixed(2);
+      };
+      window.getTxReceipt = async function(txHash) {
+        const resp = await fetch("https://studio.genlayer.com/api", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", method: "eth_getTransactionReceipt", params: [txHash], id: 1 }) });
+        const data = await resp.json();
+        return data.result;
       };
     }
   });
