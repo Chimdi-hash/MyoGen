@@ -147,7 +147,7 @@ Return ONLY valid JSON using this exact structure:
 
         if is_accurate:
             # Reward: User gets stake back + 1 GEN reward
-            current_balance = self.user_balances.get(caller, 0)
+            current_balance = self.user_balances[caller] if caller in self.user_balances else 0
             self.user_balances[caller] = current_balance + (required_stake * 2)
 
             if "term" not in explanation_data:
@@ -164,7 +164,7 @@ Return ONLY valid JSON using this exact structure:
                 "graphical_data": graphical_data,
                 "validated_at": self._safe_timestamp(),
                 "validator_consensus": True,
-                "proposer": caller
+                "proposer": str(caller)
             })
 
             current_popular = json.loads(self.popular_terms_list)
@@ -183,7 +183,7 @@ Return ONLY valid JSON using this exact structure:
         Allows users to withdraw their earned rewards and returned stakes.
         """
         caller = gl.message.sender_account
-        amount = self.user_balances.get(caller, 0)
+        amount = self.user_balances[caller] if caller in self.user_balances else 0
         if amount <= 0:
             raise Exception("No rewards to withdraw.")
         
