@@ -30,7 +30,7 @@ class MyogenDictionary(gl.Contract):
 
     @gl.public.write
     def register_user(self, display_name: str):
-        caller = gl.message.sender_account
+        caller = gl.message.sender_address
         if caller not in self.registered_users:
             self.registered_users[caller] = json.dumps({
                 "display_name": display_name if display_name else "Anonymous",
@@ -57,7 +57,7 @@ class MyogenDictionary(gl.Contract):
 
     @gl.public.write
     def propose_term(self, term: str, proposed_definition: str, evidence_url: str):
-        caller = gl.message.sender_account
+        caller = gl.message.sender_address
 
         term_clean = term.strip()
         term_lower = term_clean.lower()
