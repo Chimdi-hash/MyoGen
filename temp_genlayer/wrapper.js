@@ -35,7 +35,7 @@ window.getNativeBalance = async function(address) {
 };
 
 // ── Poll tx status via eth_getTransactionByHash (GenLayer-specific) ──
-// Returns: { isFinalized, isSuccess, isError }
+// Returns: { isFinalized, isSuccess, isError, resultName }
 window.getGenLayerTxStatus = async function(txHash) {
   const resp = await fetch(GENLAYER_RPC, {
     method: 'POST',
@@ -51,22 +51,31 @@ window.getGenLayerTxStatus = async function(txHash) {
   if (!data.result) return { isFinalized: false, isSuccess: false, isError: false };
 
   const tx = data.result;
-  // GenLayer marks finalization via current_status_changes
-  const statusChanges = tx.current_status_changes || [];
-  const isFinalized = statusChanges.includes('FINALIZED');
 
-  // Check execution result from consensus_data
+  // Use multiple signals — GenLayer sets current_monitoring.FINALIZED timestamp when done
+  const statusChanges = tx.current_status_changes || [];
+  const monitoring = tx.current_monitoring || {};
+  const resultName = tx.result_name || '';
+
+  const isFinalized =
+    statusChanges.includes('FINALIZED') ||
+    'FINALIZED' in monitoring ||          // timestamp present once finalized
+    resultName !== '';                     // result_name only set after finalization
+
+  // Check GenVM execution result from validators
   let executionResult = 'PENDING';
   try {
     const validators = tx.consensus_data?.validators || [];
     if (validators.length > 0) {
-      executionResult = validators[0]?.execution_result || 'PENDING';
+      executionResult = validators[0]?.execution_result ||
+                        validators[0]?.genvm_result?.execution_result || 'PENDING';
     }
   } catch(e) {}
 
   return {
     isFinalized,
-    isSuccess: isFinalized && executionResult === 'SUCCESS',
-    isError: isFinalized && executionResult === 'ERROR'
+    isSuccess: isFinalized && executionResult !== 'ERROR',
+    isError:   isFinalized && executionResult === 'ERROR',
+    resultName
   };
 };

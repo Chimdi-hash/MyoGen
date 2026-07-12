@@ -22,13 +22,10 @@ class MyogenDictionary(gl.Contract):
     total_users: u256
     popular_terms_list: str
 
-    ONE_GEN: u256
-
     def __init__(self):
         self.total_queries = 0
         self.total_users = 0
         self.popular_terms_list = "[]"
-        self.ONE_GEN = 1000000000000000000  # 1 GEN in wei
 
     # ─────────────────────── Registration ───────────────────────
 
@@ -63,8 +60,9 @@ class MyogenDictionary(gl.Contract):
     def propose_term(self, term: str, proposed_definition: str, evidence_url: str):
         caller = gl.message.sender_address
         stake = gl.message.value       # Amount of GEN sent (in wei)
+        ONE_GEN = 1000000000000000000  # 1 GEN in wei (plain Python constant)
 
-        if stake < self.ONE_GEN:
+        if stake < ONE_GEN:
             raise Exception("Must stake at least 1 GEN to propose a term.")
 
         term_clean = term.strip()
@@ -102,7 +100,7 @@ Return ONLY a valid JSON object (no markdown, no extra text):
         explanation_result = gl.eq_principle.prompt_non_comparative(
             build_prompt,
             task="Verify the proposed muscle physiology term against the evidence URL and return valid JSON only.",
-            criteria="The response must be valid JSON with the exact keys requested. is_accurate must be true only if the definition is confirmed by the evidence URL."
+            criteria="The leader's response is a valid JSON object (starts with '{' and ends with '}') containing at minimum the keys 'is_accurate' and 'reasoning'."
         )
 
         # Parse AI response safely
@@ -145,6 +143,7 @@ Return ONLY a valid JSON object (no markdown, no extra text):
 
         if is_accurate:
             # ── REWARD: return stake + 1 GEN reward (2x total) ──
+            ONE_GEN = 1000000000000000000
             existing_str = self.pending_rewards[caller_str] if caller_str in self.pending_rewards else "0"
             try:
                 existing = int(existing_str)
