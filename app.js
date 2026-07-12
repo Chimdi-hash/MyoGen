@@ -19,7 +19,7 @@ const GENLAYER_CONFIG = {
 
 // ── Contract Address (set after deployment) ──
 // The deployed GenLayer Contract Address for MyoGen
-const CONTRACT_ADDRESS = '0xa077A08683621971A5691E7eA1de6b33eB39cf96';
+const CONTRACT_ADDRESS = '0xE6A6F952a7e580B4B6C8E5d6E6adC1390A3579bF';
 
 // ── Wallet State ──
 window.myogenWallet = {
