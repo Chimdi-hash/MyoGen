@@ -643,7 +643,7 @@
   <aside class="study-sidebar">
     <!-- Input -->
     <div>
-      <p class="sidebar-section-label">// Enter Term</p>
+      <p class="sidebar-section-label">// Propose Term</p>
       <div class="search-box">
         <input
           type="text"
@@ -659,13 +659,33 @@
       </div>
     </div>
 
+    <div>
+      <p class="sidebar-section-label">// Proposed Definition</p>
+      <textarea
+        id="proposed-def-input"
+        class="search-input"
+        style="min-height: 80px; resize: vertical; margin-bottom: 0;"
+        placeholder="Enter your proposed definition for validators to verify..."
+      ></textarea>
+    </div>
+
+    <div>
+      <p class="sidebar-section-label">// Source Evidence URL</p>
+      <input
+        type="url"
+        id="evidence-url-input"
+        class="search-input"
+        placeholder="https://en.wikipedia.org/wiki/..."
+      />
+    </div>
+
     <button
       class="btn-primary btn-study"
       id="study-btn"
       onclick="initiateStudy()"
-      aria-label="Study this term"
+      aria-label="Propose this term"
     >
-      🧬 Study This Term
+      🧬 Propose Term (Stake 1 GEN)
     </button>
 
     <!-- Quick Terms -->
@@ -719,8 +739,9 @@
       <div class="idle-orb">🔬</div>
       <div class="idle-title">What would you like to study?</div>
       <p class="idle-desc">
-        Type any muscle physiology or anatomy term in the panel on the left, then click <strong>Study This Term</strong>.
-        AI validators on GenLayer will analyze and explain it for you in real time.
+        Type any muscle physiology or anatomy term in the panel on the left, provide a proposed definition and an evidence URL, then click <strong>Propose Term</strong>.
+        AI validators on GenLayer will analyze your evidence and if accurate, your term will be permanently added to the dictionary and you will be rewarded.
+        If inaccurate, your 1 GEN stake will be slashed!
       </p>
       <div class="hero-badge" style="margin:0;">⬡ Connect wallet to sign transactions</div>
     </div>
@@ -874,10 +895,14 @@ function clearInput() {
 async function initiateStudy() {
   const input = document.getElementById('term-input');
   const term = input.value.trim();
+  const proposedDef = document.getElementById('proposed-def-input').value.trim();
+  const evidenceUrl = document.getElementById('evidence-url-input').value.trim();
 
-  if (!term) {
-    showToast('Please enter a muscle physiology term to study.', 'warning');
-    input.focus();
+  if (!term || !proposedDef || !evidenceUrl) {
+    showToast('Please provide a term, a proposed definition, and a valid evidence URL.', 'warning');
+    if (!term) input.focus();
+    else if (!proposedDef) document.getElementById('proposed-def-input').focus();
+    else document.getElementById('evidence-url-input').focus();
     return;
   }
 
@@ -890,10 +915,10 @@ async function initiateStudy() {
     if (!connected) return;
   }
 
-  await executeStudyLogic(term);
+  await executeStudyLogic(term, proposedDef, evidenceUrl);
 }
 
-async function executeStudyLogic(term) {
+async function executeStudyLogic(term, proposedDef, evidenceUrl) {
   if (!term) return;
 
   isLoading = true;
@@ -901,19 +926,23 @@ async function executeStudyLogic(term) {
 
   showState('loading');
   document.getElementById('loading-status-text').textContent = "Submitting to GenLayer...";
-  document.getElementById('loading-sub-text').textContent = "Waiting for validators to analyze your term";
+  document.getElementById('loading-sub-text').textContent = "Waiting for validators to analyze your evidence. (1 GEN Staked)";
   setStudyBtnLoading(true);
 
   try {
-    showToast(`Scraping web data for "${term}"...`, 'info');
-    const webData = await scrapeWikipedia(term);
-
-    showToast('Please sign the transaction in your wallet...', 'info');
+    showToast('Please sign the transaction in your wallet to stake 1 GEN...', 'info');
     
     if (!window.callGenLayer) {
       throw new Error("GenLayer SDK not loaded.");
     }
-    const txHash = await window.callGenLayer(CONTRACT_ADDRESS, 'study_term', [term, webData], window.myogenWallet.address);
+    // Call propose_term: term, definition, evidence_url, and attach 10^18 wei (1 GEN)
+    const txHash = await window.callGenLayer(
+        CONTRACT_ADDRESS, 
+        'propose_term', 
+        [term, proposedDef, evidenceUrl], 
+        window.myogenWallet.address,
+        "1000000000000000000"
+    );
 
     showToast(`Transaction sent! Waiting for GenLayer consensus...`, 'success');
 

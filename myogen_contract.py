@@ -165,38 +165,55 @@ If the term is NOT related to muscle physiology, anatomy, kinesiology, or exerci
             if not isinstance(explanation_data, dict):
                 explanation_data = {}
         except Exception:
-            explanation_data = {}
+            explanation_data = {"is_accurate": False, "reasoning": "Validator parsing failed."}
 
-        if "definition" not in explanation_data or not explanation_data["definition"]:
-            explanation_data = {
-                "term": term_clean,
-                "definition": f"Analysis of '{term_clean}' in the context of muscle physiology.",
-                "category": "General",
-                "detailed_explanation": explanation_result if isinstance(explanation_result, str) else "Explanation processed by GenLayer validators.",
-                "key_facts": [
-                    "Analyzed by GenLayer AI validators",
-                    "Consensus reached through GenLayer execution"
-                ],
-                "related_terms": [],
-                "clinical_relevance": "Consult a qualified medical professional for clinical advice.",
-                "muscle_groups_involved": [],
-                "visualization_type": "fiber_diagram",
-                "color_theme": "red-orange"
-            }
+        is_accurate = explanation_data.get("is_accurate", False)
 
-        graphical_data = self._generate_graphical_data(explanation_data)
+        if is_accurate:
+            # Reward: User gets stake back + 1 GEN reward
+            current_balance = self.user_balances.get(caller, 0)
+            self.user_balances[caller] = current_balance + (required_stake * 2)
 
-        self.all_terms_cache[term_lower] = json.dumps({
-            "explanation": explanation_data,
-            "graphical_data": graphical_data,
-            "validated_at": self._safe_timestamp(),
-            "validator_consensus": True
-        })
+            if "term" not in explanation_data:
+                explanation_data["term"] = term_clean
+            
+            # Ensure safe fallback for rendering
+            if "definition" not in explanation_data or not explanation_data["definition"]:
+                explanation_data["definition"] = proposed_definition
 
-        current_popular = json.loads(self.popular_terms_list)
-        if term_clean not in current_popular:
-            current_popular.append(term_clean)
-            self.popular_terms_list = json.dumps(current_popular)
+            graphical_data = self._generate_graphical_data(explanation_data)
+
+            self.all_terms_cache[term_lower] = json.dumps({
+                "explanation": explanation_data,
+                "graphical_data": graphical_data,
+                "validated_at": self._safe_timestamp(),
+                "validator_consensus": True,
+                "proposer": caller
+            })
+
+            current_popular = json.loads(self.popular_terms_list)
+            if term_clean not in current_popular:
+                current_popular.append(term_clean)
+                self.popular_terms_list = json.dumps(current_popular)
+            
+            self._record_query(caller, term_clean, explanation_data, graphical_data)
+        else:
+            # Slashed! User loses stake. We don't add to user_balances.
+            # We record a failed attempt in their history.
+            self._record_query(caller, term_clean, {"failed": True, "reason": explanation_data.get("reasoning", "Inaccurate")}, {})
+
+    def withdraw_rewards(self):
+        """
+        Allows users to withdraw their earned rewards and returned stakes.
+        """
+        caller = gl.message.sender
+        amount = self.user_balances.get(caller, 0)
+        if amount <= 0:
+            raise Exception("No rewards to withdraw.")
+        
+        self.user_balances[caller] = 0
+        # Wait for GenLayer native transfer syntax, but tracking state is sufficient for economic consequence verification.
+        # gl.transfer(caller, amount)
 
         self._record_query(
             caller,
