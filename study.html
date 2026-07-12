@@ -626,6 +626,7 @@
           ⬡ Connect Wallet
         </button>
         <div id="wallet-info-bar" class="wallet-info" style="display:none;">
+          <button id="claim-reward-btn" onclick="claimRewards()" style="display:none; margin-right: 15px; font-family: var(--font-mono); font-size: 0.75rem; background: rgba(0, 255, 128, 0.1); border: 1px solid rgba(0, 255, 128, 0.3); color: #00ff80; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all 0.2s; white-space: nowrap;">🎁 Claim: 0 GEN</button>
           <span id="wallet-balance-display" class="wallet-balance" style="margin-right: 10px; font-family: var(--font-mono); color: var(--gold); font-size: 0.85rem; padding-right: 10px; border-right: 1px solid var(--glass-border);"></span>
           <span id="wallet-address-display" class="wallet-address"></span>
           <button id="disconnect-btn" class="btn-disconnect" aria-label="Disconnect">Disconnect</button>
@@ -1028,16 +1029,56 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
   }
 }
 
-// ── Refresh live GEN balance ──
+// ── Refresh live GEN balance and pending rewards ──
 async function refreshBalance() {
   try {
     if (window.getNativeBalance && window.myogenWallet?.address) {
       const bal = await window.getNativeBalance(window.myogenWallet.address);
       const balEl = document.getElementById('wallet-balance-display');
       if (balEl) balEl.textContent = `${bal} GEN`;
+
+      // Fetch pending rewards
+      const pendingStr = await window.readGenLayer(CONTRACT_ADDRESS, 'get_pending_reward', [window.myogenWallet.address]);
+      const pendingWei = typeof pendingStr === 'string' ? pendingStr : '0';
+      const pendingGen = (Number(pendingWei) / 1e18).toFixed(4);
+      const claimBtn = document.getElementById('claim-reward-btn');
+      
+      if (claimBtn) {
+        if (Number(pendingGen) > 0) {
+          claimBtn.style.display = 'inline-block';
+          claimBtn.textContent = `🎁 Claim: ${pendingGen} GEN`;
+        } else {
+          claimBtn.style.display = 'none';
+        }
+      }
     }
-  } catch(e) { console.warn('Balance refresh failed:', e); }
+  } catch(e) { console.warn('Balance/Reward refresh failed:', e); }
 }
+
+async function claimRewards() {
+  const claimBtn = document.getElementById('claim-reward-btn');
+  if (!claimBtn || claimBtn.disabled) return;
+
+  try {
+    claimBtn.disabled = true;
+    claimBtn.textContent = 'Claiming...';
+    
+    if (!window.callGenLayer) throw new Error("GenLayer SDK not loaded.");
+    const txHash = await window.callGenLayer(CONTRACT_ADDRESS, 'claim_reward', [], window.myogenWallet.address);
+    showToast(`Claiming rewards. Tx: ${txHash.slice(0, 10)}... waiting for finalization.`, 'info', 6000);
+    
+    await waitForGenLayerFinalized(txHash);
+    showToast('✅ Rewards successfully claimed and transferred to your wallet!', 'success', 8000);
+    
+  } catch (err) {
+    showToast('Error claiming rewards: ' + err.message, 'error', 8000);
+    console.error('Claim error:', err);
+  } finally {
+    claimBtn.disabled = false;
+    await refreshBalance();
+  }
+}
+
 
 function setStudyBtnLoading(loading) {
   const btn = document.getElementById('study-btn');
