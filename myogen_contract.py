@@ -12,6 +12,7 @@ class MyogenDictionary(gl.Contract):
     """
 
     # ─────────────────────── Storage ───────────────────────
+    # Only use TreeMap[str, str] and TreeMap[Address, str] — safest types in GenLayer
     registered_users: TreeMap[Address, str]
     query_history: TreeMap[Address, str]
     all_terms_cache: TreeMap[str, str]
@@ -21,40 +22,21 @@ class MyogenDictionary(gl.Contract):
     popular_terms_list: str
 
     def __init__(self):
-        """
-        Do NOT initialize TreeMap fields here.
-
-        In GenLayer, annotated TreeMap storage fields are created by the
-        storage system. Assigning TreeMap(), even typed TreeMap[str, str](),
-        causes the storage type assertion error.
-        """
         self.total_queries = 0
         self.total_users = 0
         self.popular_terms_list = "[]"
-
-    # ─────────────────────── Helpers ───────────────────────
-
-    def _safe_timestamp(self) -> int:
-        """
-        Keep timestamp deterministic and safe.
-        Avoid gl.message.timestamp because it may not exist in this runtime.
-        """
-        return 0
 
     # ─────────────────────── Registration ───────────────────────
 
     @gl.public.write
     def register_user(self, display_name: str):
         caller = gl.message.sender_account
-
         if caller not in self.registered_users:
             self.registered_users[caller] = json.dumps({
                 "display_name": display_name if display_name else "Anonymous",
-                "registered_at": self._safe_timestamp(),
                 "query_count": 0,
                 "is_registered": True
             })
-
             self.total_users += 1
 
     @gl.public.view
@@ -65,23 +47,17 @@ class MyogenDictionary(gl.Contract):
     def get_user_info(self, user_address: Address) -> str:
         if user_address in self.registered_users:
             return self.registered_users[user_address]
-
         return json.dumps({
             "is_registered": False,
             "display_name": "Unknown",
             "query_count": 0
         })
 
-    # ─────────────────────── Core Study Function ───────────────────────
-
-    user_balances: TreeMap[Address, u256]
+    # ─────────────────────── Core Function ───────────────────────
 
     @gl.public.write
     def propose_term(self, term: str, proposed_definition: str, evidence_url: str):
         caller = gl.message.sender_account
-        # NOTE: gl.message.value does NOT exist in this GenLayer runtime.
-        # The 1 GEN stake is enforced at the SDK/frontend level.
-        # Removing that check to prevent GenVM AttributeError crash.
 
         term_clean = term.strip()
         term_lower = term_clean.lower()
@@ -90,218 +66,141 @@ class MyogenDictionary(gl.Contract):
             raise Exception("Term cannot be empty.")
 
         if term_lower in self.all_terms_cache:
-            raise Exception(f"Term '{term_clean}' already exists in the dictionary.")
+            raise Exception(f"Term '{term_clean}' already exists.")
 
         def build_prompt() -> str:
-            prompt_str = f"""You are MYOGEN, an expert AI system specializing in muscle physiology.
-A student wants to propose this term: "{term_clean}"
+            return gl.nondet.exec_prompt(
+                f"""You are MYOGEN, an expert AI system for muscle physiology.
+A student proposes this term: "{term_clean}"
 Proposed definition: "{proposed_definition}"
-Source Evidence URL: "{evidence_url}"
+Evidence URL: "{evidence_url}"
 
-Please fetch the source evidence URL, read its contents, and determine if the proposed definition is accurate.
-Return ONLY valid JSON using this exact structure:
+Fetch the evidence URL and verify if the proposed definition is accurate.
+Return ONLY a valid JSON object with this exact structure (no markdown):
 {{
-    "is_accurate": true or false,
-    "reasoning": "Explain exactly why the definition is accurate or inaccurate based on the evidence.",
+    "is_accurate": true,
+    "reasoning": "Why it is accurate based on the evidence.",
     "term": "{term_clean}",
-    "definition": "A clear 2-3 sentence definition suitable for medical students (refine the proposed one if needed)",
-    "category": "one of: Muscle Fiber Types | Muscle Mechanics | Anatomy & Physiology | Biochemistry | Neural Control | Pathology | Exercise Physiology",
-    "detailed_explanation": "A thorough 4-6 sentence explanation covering the biological mechanism, function, and clinical relevance",
+    "definition": "A clear 2-3 sentence definition for medical students.",
+    "category": "Anatomy & Physiology",
+    "detailed_explanation": "4-6 sentence explanation of mechanism and clinical relevance.",
     "key_facts": ["fact 1", "fact 2", "fact 3"],
     "related_terms": ["term 1", "term 2"],
-    "clinical_relevance": "1-2 sentences",
-    "muscle_groups_involved": ["muscle1", "muscle2"],
-    "visualization_type": "fiber_diagram",
-    "color_theme": "red-orange"
-}}
-"""
-            return gl.nondet.exec_prompt(prompt_str)
+    "clinical_relevance": "1-2 sentences on clinical importance.",
+    "muscle_groups_involved": ["muscle 1"]
+}}"""
+            )
 
         explanation_result = gl.eq_principle.prompt_non_comparative(
             build_prompt,
-            task="Analyze the medical term against the evidence and return only the requested JSON object.",
-            criteria="""
-            The response must be valid JSON.
-            The response must match the exact requested structure.
-            The explanation must be medically accurate and verified against the provided URL.
-            """
+            task="Verify the medical term and return JSON only.",
+            criteria="The response must be valid JSON matching the requested structure."
         )
 
+        # Parse AI response safely
         try:
             cleaned = explanation_result.strip()
-            if cleaned.startswith("```json"):
-                cleaned = cleaned[7:]
-            elif cleaned.startswith("```"):
-                cleaned = cleaned[3:]
-            if cleaned.endswith("```"):
-                cleaned = cleaned[:-3]
-            explanation_data = json.loads(cleaned.strip())
+            # Strip markdown code fences if present
+            if "```" in cleaned:
+                parts = cleaned.split("```")
+                for part in parts:
+                    part = part.strip()
+                    if part.startswith("json"):
+                        part = part[4:].strip()
+                    if part.startswith("{"):
+                        cleaned = part
+                        break
+            explanation_data = json.loads(cleaned)
             if not isinstance(explanation_data, dict):
                 explanation_data = {}
         except Exception:
-            explanation_data = {"is_accurate": False, "reasoning": "Validator parsing failed."}
+            explanation_data = {}
 
-        is_accurate = explanation_data.get("is_accurate", False)
+        is_accurate = bool(explanation_data.get("is_accurate", False))
+
+        # Build a flat, safe summary to store (no deeply nested lists)
+        key_facts = explanation_data.get("key_facts", [])
+        related_terms = explanation_data.get("related_terms", [])
+        muscles = explanation_data.get("muscle_groups_involved", [])
+
+        safe_explanation = {
+            "term": explanation_data.get("term", term_clean),
+            "definition": explanation_data.get("definition", proposed_definition),
+            "category": explanation_data.get("category", "General"),
+            "detailed_explanation": explanation_data.get("detailed_explanation", ""),
+            "clinical_relevance": explanation_data.get("clinical_relevance", ""),
+            "reasoning": explanation_data.get("reasoning", ""),
+            "key_facts": key_facts if isinstance(key_facts, list) else [],
+            "related_terms": related_terms if isinstance(related_terms, list) else [],
+            "muscle_groups_involved": muscles if isinstance(muscles, list) else [],
+            "visualization_type": "fiber_diagram",
+            "color_theme": "red-orange"
+        }
 
         if is_accurate:
-            if "term" not in explanation_data:
-                explanation_data["term"] = term_clean
-
-            if "definition" not in explanation_data or not explanation_data["definition"]:
-                explanation_data["definition"] = proposed_definition
-
-            graphical_data = self._generate_graphical_data(explanation_data)
-
+            # Store term in global cache
             self.all_terms_cache[term_lower] = json.dumps({
-                "explanation": explanation_data,
-                "graphical_data": graphical_data,
-                "validated_at": self._safe_timestamp(),
+                "explanation": safe_explanation,
                 "validator_consensus": True,
                 "proposer": str(caller)
             })
 
-            current_popular = json.loads(self.popular_terms_list)
+            # Update popular terms list
+            try:
+                current_popular = json.loads(self.popular_terms_list)
+                if not isinstance(current_popular, list):
+                    current_popular = []
+            except Exception:
+                current_popular = []
+
             if term_clean not in current_popular:
                 current_popular.append(term_clean)
                 self.popular_terms_list = json.dumps(current_popular)
 
-            self._record_query(caller, term_clean, explanation_data, graphical_data, True)
+            # Record in user history (accepted=true)
+            self._record_query(caller, term_lower, term_clean,
+                               safe_explanation.get("definition", ""),
+                               safe_explanation.get("reasoning", ""),
+                               True)
         else:
-            self._record_query(caller, term_clean, {"failed": True, "reason": explanation_data.get("reasoning", "Inaccurate")}, {}, False)
-
-    def withdraw_rewards(self):
-        """
-        Allows users to withdraw their earned rewards and returned stakes.
-        """
-        caller = gl.message.sender_account
-        amount = self.user_balances[caller] if caller in self.user_balances else 0
-        if amount <= 0:
-            raise Exception("No rewards to withdraw.")
-        
-        self.user_balances[caller] = 0
-        # Wait for GenLayer native transfer syntax, but tracking state is sufficient for economic consequence verification.
-        # gl.transfer(caller, amount)
-
-        self.total_queries += 1
-
-        if caller in self.registered_users:
-            user_data = json.loads(self.registered_users[caller])
-            user_data["query_count"] = user_data.get("query_count", 0) + 1
-            self.registered_users[caller] = json.dumps(user_data)
-
-    # ─────────────────────── Visualization Data ───────────────────────
-
-    def _generate_graphical_data(self, explanation_data: dict) -> dict:
-        viz_type = explanation_data.get("visualization_type", "fiber_diagram")
-        color_theme = explanation_data.get("color_theme", "red-orange")
-        category = explanation_data.get("category", "General")
-
-        color_map = {
-            "red-orange": {
-                "primary": "#FF6B2C",
-                "secondary": "#FF9500",
-                "glow": "#FFD700"
-            },
-            "blue-cyan": {
-                "primary": "#00BFFF",
-                "secondary": "#0080FF",
-                "glow": "#00FFFF"
-            },
-            "green-teal": {
-                "primary": "#00FF88",
-                "secondary": "#00BFA5",
-                "glow": "#39FF14"
-            },
-            "purple-violet": {
-                "primary": "#9B59B6",
-                "secondary": "#6C3483",
-                "glow": "#FF00FF"
-            },
-            "gold-amber": {
-                "primary": "#FFD700",
-                "secondary": "#FF8C00",
-                "glow": "#FFF176"
-            }
-        }
-
-        colors = color_map.get(color_theme, color_map["red-orange"])
-
-        return {
-            "visualization_type": viz_type,
-            "colors": colors,
-            "category": category,
-            "animation_speed": "normal",
-            "complexity": "high" if len(explanation_data.get("key_facts", [])) >= 4 else "medium",
-            "elements": self._get_visualization_elements(viz_type),
-            "label": explanation_data.get("term", "")
-        }
-
-    def _get_visualization_elements(self, viz_type: str) -> list:
-        elements_map = {
-            "fiber_diagram": [
-                {"type": "muscle_fiber", "count": 6, "animated": True},
-                {"type": "sarcomere_bands", "count": 8, "animated": True},
-                {"type": "z_disc", "count": 4, "animated": False}
-            ],
-            "contraction_cycle": [
-                {"type": "actin_filament", "count": 2, "animated": True},
-                {"type": "myosin_head", "count": 4, "animated": True},
-                {"type": "atp_molecule", "count": 3, "animated": True}
-            ],
-            "cross_section": [
-                {"type": "epimysium", "count": 1, "animated": False},
-                {"type": "fascicle", "count": 5, "animated": True},
-                {"type": "endomysium", "count": 8, "animated": False}
-            ],
-            "neural_pathway": [
-                {"type": "motor_neuron", "count": 1, "animated": True},
-                {"type": "axon_branch", "count": 4, "animated": True},
-                {"type": "neuromuscular_junction", "count": 4, "animated": True}
-            ],
-            "biochemical_cycle": [
-                {"type": "molecule", "count": 6, "animated": True},
-                {"type": "enzyme", "count": 3, "animated": True},
-                {"type": "energy_arrow", "count": 4, "animated": True}
-            ],
-            "joint_mechanics": [
-                {"type": "bone", "count": 2, "animated": False},
-                {"type": "muscle_belly", "count": 2, "animated": True},
-                {"type": "tendon", "count": 2, "animated": True}
-            ],
-            "cellular_diagram": [
-                {"type": "cell_membrane", "count": 1, "animated": False},
-                {"type": "organelle", "count": 5, "animated": True},
-                {"type": "protein_complex", "count": 3, "animated": True}
-            ]
-        }
-
-        return elements_map.get(viz_type, elements_map["fiber_diagram"])
-
-    # ─────────────────────── Query History ───────────────────────
+            reasoning = explanation_data.get("reasoning", "Inaccurate definition.")
+            # Record in user history (accepted=false)
+            self._record_query(caller, term_lower, term_clean,
+                               proposed_definition,
+                               reasoning,
+                               False)
 
     def _record_query(
         self,
         caller: Address,
-        term: str,
-        explanation: dict,
-        graphical_data: dict,
-        accepted: bool = False
+        term_lower: str,
+        term_display: str,
+        definition: str,
+        reasoning: str,
+        accepted: bool
     ):
-        if caller in self.query_history:
-            history = json.loads(self.query_history[caller])
-        else:
+        """Store only flat string fields — no nested lists to avoid storage issues."""
+        try:
+            if caller in self.query_history:
+                history = json.loads(self.query_history[caller])
+                if not isinstance(history, list):
+                    history = []
+            else:
+                history = []
+        except Exception:
             history = []
 
         history.append({
-            "term": term,
-            "accepted": accepted,
-            "explanation": explanation,
-            "graphical_data": graphical_data,
-            "queried_at": self._safe_timestamp()
+            "term": term_display,
+            "term_lower": term_lower,
+            "definition": definition,
+            "reasoning": reasoning,
+            "accepted": accepted
         })
 
-        if len(history) > 50:
-            history = history[-50:]
+        # Keep only last 20 entries
+        if len(history) > 20:
+            history = history[-20:]
 
         self.query_history[caller] = json.dumps(history)
 
@@ -310,51 +209,43 @@ Return ONLY valid JSON using this exact structure:
     @gl.public.view
     def get_cached_term(self, term: str) -> str:
         term_lower = term.strip().lower()
-
         if term_lower in self.all_terms_cache:
             return self.all_terms_cache[term_lower]
-
-        return json.dumps({
-            "found": False,
-            "term": term
-        })
+        return json.dumps({"found": False, "term": term})
 
     @gl.public.view
     def get_user_history(self, user_address: Address) -> str:
         if user_address in self.query_history:
             return self.query_history[user_address]
-
         return "[]"
 
     @gl.public.view
     def get_proposal_status(self, user_address: Address, term: str) -> str:
-        term_clean = term.strip().title()
         term_lower = term.strip().lower()
         if user_address in self.query_history:
-            history = json.loads(self.query_history[user_address])
-            for entry in reversed(history):
-                entry_term = entry.get("term", "").strip().lower()
-                if entry_term == term_lower or entry_term == term_clean.lower():
-                    accepted = entry.get("accepted", False)
-                    explanation = entry.get("explanation", {})
-                    if accepted:
-                        reasoning = explanation.get("reasoning", "Definition verified by AI consensus.")
-                        return json.dumps({
-                            "status": "ACCEPTED",
-                            "reasoning": reasoning,
-                            "reward": 2000000000000000000
-                        })
-                    else:
-                        reasoning = explanation.get("reason", explanation.get("reasoning", "Inaccurate definition."))
-                        return json.dumps({
-                            "status": "REJECTED",
-                            "reasoning": reasoning,
-                            "reward": 0
-                        })
+            try:
+                history = json.loads(self.query_history[user_address])
+                if isinstance(history, list):
+                    for entry in reversed(history):
+                        if entry.get("term_lower", "") == term_lower:
+                            if entry.get("accepted", False):
+                                return json.dumps({
+                                    "status": "ACCEPTED",
+                                    "reasoning": entry.get("reasoning", "Definition verified."),
+                                    "reward": 2
+                                })
+                            else:
+                                return json.dumps({
+                                    "status": "REJECTED",
+                                    "reasoning": entry.get("reasoning", "Inaccurate definition."),
+                                    "reward": 0
+                                })
+            except Exception:
+                pass
 
         return json.dumps({
             "status": "PENDING",
-            "reasoning": "Waiting for validators...",
+            "reasoning": "Not yet processed.",
             "reward": 0
         })
 
@@ -364,8 +255,7 @@ Return ONLY valid JSON using this exact structure:
             "total_queries": int(self.total_queries),
             "total_users": int(self.total_users),
             "platform": "MYOGEN",
-            "network": "GenLayer Studio",
-            "chain_id": 61999
+            "network": "GenLayer Studio"
         })
 
     @gl.public.view
