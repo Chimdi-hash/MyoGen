@@ -79,11 +79,9 @@ class MyogenDictionary(gl.Contract):
     @gl.public.write
     def propose_term(self, term: str, proposed_definition: str, evidence_url: str):
         caller = gl.message.sender_account
-        value = gl.message.value
-        required_stake = 1000000000000000000 # 1 GEN
-        
-        if value < required_stake:
-            raise Exception("Must stake at least 1 GEN to propose a term.")
+        # NOTE: gl.message.value does NOT exist in this GenLayer runtime.
+        # The 1 GEN stake is enforced at the SDK/frontend level.
+        # Removing that check to prevent GenVM AttributeError crash.
 
         term_clean = term.strip()
         term_lower = term_clean.lower()
@@ -146,14 +144,9 @@ Return ONLY valid JSON using this exact structure:
         is_accurate = explanation_data.get("is_accurate", False)
 
         if is_accurate:
-            # Reward: User gets stake back + 1 GEN reward
-            current_balance = self.user_balances[caller] if caller in self.user_balances else 0
-            self.user_balances[caller] = current_balance + (required_stake * 2)
-
             if "term" not in explanation_data:
                 explanation_data["term"] = term_clean
-            
-            # Ensure safe fallback for rendering
+
             if "definition" not in explanation_data or not explanation_data["definition"]:
                 explanation_data["definition"] = proposed_definition
 
@@ -171,12 +164,10 @@ Return ONLY valid JSON using this exact structure:
             if term_clean not in current_popular:
                 current_popular.append(term_clean)
                 self.popular_terms_list = json.dumps(current_popular)
-            
-            self._record_query(caller, term_clean, explanation_data, graphical_data)
+
+            self._record_query(caller, term_clean, explanation_data, graphical_data, True)
         else:
-            # Slashed! User loses stake. We don't add to user_balances.
-            # We record a failed attempt in their history.
-            self._record_query(caller, term_clean, {"failed": True, "reason": explanation_data.get("reasoning", "Inaccurate")}, {})
+            self._record_query(caller, term_clean, {"failed": True, "reason": explanation_data.get("reasoning", "Inaccurate")}, {}, False)
 
     def withdraw_rewards(self):
         """
@@ -293,7 +284,8 @@ Return ONLY valid JSON using this exact structure:
         caller: Address,
         term: str,
         explanation: dict,
-        graphical_data: dict
+        graphical_data: dict,
+        accepted: bool = False
     ):
         if caller in self.query_history:
             history = json.loads(self.query_history[caller])
@@ -302,6 +294,7 @@ Return ONLY valid JSON using this exact structure:
 
         history.append({
             "term": term,
+            "accepted": accepted,
             "explanation": explanation,
             "graphical_data": graphical_data,
             "queried_at": self._safe_timestamp()
@@ -336,23 +329,27 @@ Return ONLY valid JSON using this exact structure:
     @gl.public.view
     def get_proposal_status(self, user_address: Address, term: str) -> str:
         term_clean = term.strip().title()
+        term_lower = term.strip().lower()
         if user_address in self.query_history:
             history = json.loads(self.query_history[user_address])
-            # Find the most recent entry for this term
             for entry in reversed(history):
-                if entry.get("term") == term_clean:
+                entry_term = entry.get("term", "").strip().lower()
+                if entry_term == term_lower or entry_term == term_clean.lower():
+                    accepted = entry.get("accepted", False)
                     explanation = entry.get("explanation", {})
-                    if explanation.get("failed"):
-                        return json.dumps({
-                            "status": "REJECTED",
-                            "reasoning": explanation.get("reason", "Inaccurate"),
-                            "reward": 0
-                        })
-                    else:
+                    if accepted:
+                        reasoning = explanation.get("reasoning", "Definition verified by AI consensus.")
                         return json.dumps({
                             "status": "ACCEPTED",
-                            "reasoning": "Definition verified by AI consensus.",
-                            "reward": 2000000000000000000 # 2 GEN
+                            "reasoning": reasoning,
+                            "reward": 2000000000000000000
+                        })
+                    else:
+                        reasoning = explanation.get("reason", explanation.get("reasoning", "Inaccurate definition."))
+                        return json.dumps({
+                            "status": "REJECTED",
+                            "reasoning": reasoning,
+                            "reward": 0
                         })
 
         return json.dumps({
