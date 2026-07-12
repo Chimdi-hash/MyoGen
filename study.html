@@ -937,24 +937,13 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
       throw new Error("GenLayer SDK not loaded.");
     }
 
-    // Call propose_term — returns txHash immediately after MetaMask signs
+    // Call propose_term — no value sent (contract is standard write, not payable)
     const txHash = await window.callGenLayer(
         CONTRACT_ADDRESS,
         'propose_term',
         [term, proposedDef, evidenceUrl],
-        window.myogenWallet.address,
-        "1000000000000000000"
+        window.myogenWallet.address
     );
-
-    // ── OPTIMISTIC BALANCE DEDUCTION ──
-    // The 1 GEN is now locked. Immediately show it gone in the UI.
-    const balEl = document.getElementById('wallet-balance-display');
-    if (balEl && balEl.textContent) {
-      const current = parseFloat(balEl.textContent);
-      if (!isNaN(current)) {
-        balEl.textContent = `${Math.max(0, current - 1).toFixed(2)} GEN`;
-      }
-    }
 
     showToast(`✔ Signed! Tx: ${txHash.slice(0,10)}... — AI validators are now analyzing...`, 'info', 6000);
     document.getElementById('loading-status-text').textContent = "Validators are analyzing...";
