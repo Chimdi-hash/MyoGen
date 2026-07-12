@@ -45,7 +45,7 @@ class MyogenDictionary(gl.Contract):
 
     @gl.public.write
     def register_user(self, display_name: str):
-        caller = gl.message.sender_address
+        caller = gl.message.sender_account
 
         if caller not in self.registered_users:
             self.registered_users[caller] = json.dumps({
@@ -74,82 +74,58 @@ class MyogenDictionary(gl.Contract):
 
     # ─────────────────────── Core Study Function ───────────────────────
 
+    user_balances: TreeMap[Address, int]
+
     @gl.public.write
-    def study_term(self, term: str, web_data: str):
-        caller = gl.message.sender_address
+    def propose_term(self, term: str, proposed_definition: str, evidence_url: str):
+        caller = gl.message.sender_account
+        value = gl.message.value
+        required_stake = 1000000000000000000 # 1 GEN
+        
+        if value < required_stake:
+            raise Exception("Must stake at least 1 GEN to propose a term.")
+
         term_clean = term.strip()
         term_lower = term_clean.lower()
 
         if term_lower == "":
-            return
+            raise Exception("Term cannot be empty.")
 
         if term_lower in self.all_terms_cache:
-            cached = json.loads(self.all_terms_cache[term_lower])
-            self._record_query(
-                caller,
-                term_clean,
-                cached["explanation"],
-                cached["graphical_data"]
-            )
-            return
+            raise Exception(f"Term '{term_clean}' already exists in the dictionary.")
 
         def build_prompt() -> str:
-            prompt_str = f"""You are MYOGEN, an expert AI system specializing in muscle physiology,
-anatomy, kinesiology, and sports science.
+            prompt_str = f"""You are MYOGEN, an expert AI system specializing in muscle physiology.
+A student wants to propose this term: "{term_clean}"
+Proposed definition: "{proposed_definition}"
+Source Evidence URL: "{evidence_url}"
 
-A student wants to understand this term:
-
-"{term_clean}"
-
-Here is frontend-provided context:
-
-{web_data}
-
+Please fetch the source evidence URL, read its contents, and determine if the proposed definition is accurate.
 Return ONLY valid JSON using this exact structure:
-
 {{
+    "is_accurate": true or false,
+    "reasoning": "Explain exactly why the definition is accurate or inaccurate based on the evidence.",
     "term": "{term_clean}",
-    "definition": "A clear 2-3 sentence definition suitable for medical students",
+    "definition": "A clear 2-3 sentence definition suitable for medical students (refine the proposed one if needed)",
     "category": "one of: Muscle Fiber Types | Muscle Mechanics | Anatomy & Physiology | Biochemistry | Neural Control | Pathology | Exercise Physiology",
     "detailed_explanation": "A thorough 4-6 sentence explanation covering the biological mechanism, function, and clinical relevance",
-    "key_facts": [
-        "Key fact 1",
-        "Key fact 2",
-        "Key fact 3",
-        "Key fact 4",
-        "Key fact 5"
-    ],
-    "related_terms": ["related_term_1", "related_term_2", "related_term_3"],
-    "clinical_relevance": "1-2 sentences about clinical or athletic relevance",
+    "key_facts": ["fact 1", "fact 2", "fact 3"],
+    "related_terms": ["term 1", "term 2"],
+    "clinical_relevance": "1-2 sentences",
     "muscle_groups_involved": ["muscle1", "muscle2"],
-    "visualization_type": "one of: fiber_diagram | contraction_cycle | cross_section | neural_pathway | biochemical_cycle | joint_mechanics | cellular_diagram",
-    "color_theme": "one of: red-orange | blue-cyan | green-teal | purple-violet | gold-amber"
-}}
-
-If the term is NOT related to muscle physiology, anatomy, kinesiology, or exercise science, return exactly this JSON:
-
-{{
-    "term": "{term_clean}",
-    "definition": "this is not a muscle term",
-    "category": "Out of Scope",
-    "detailed_explanation": "MYOGEN specializes exclusively in muscle physiology, anatomy, kinesiology, and related sports science. Please enter a relevant anatomical or physiological term.",
-    "key_facts": [],
-    "related_terms": ["actin", "myosin", "sarcomere", "motor neuron", "muscle fiber"],
-    "clinical_relevance": "N/A",
-    "muscle_groups_involved": [],
     "visualization_type": "fiber_diagram",
     "color_theme": "red-orange"
-}}"""
+}}
+"""
             return gl.nondet.exec_prompt(prompt_str)
 
         explanation_result = gl.eq_principle.prompt_non_comparative(
             build_prompt,
-            task="Analyze the medical term and return only the requested JSON object.",
+            task="Analyze the medical term against the evidence and return only the requested JSON object.",
             criteria="""
             The response must be valid JSON.
             The response must match the exact requested structure.
-            The explanation must be medically accurate.
-            If the term is outside muscle physiology, anatomy, kinesiology, or exercise science, classify it as Out of Scope.
+            The explanation must be medically accurate and verified against the provided URL.
             """
         )
 
@@ -206,7 +182,7 @@ If the term is NOT related to muscle physiology, anatomy, kinesiology, or exerci
         """
         Allows users to withdraw their earned rewards and returned stakes.
         """
-        caller = gl.message.sender
+        caller = gl.message.sender_account
         amount = self.user_balances.get(caller, 0)
         if amount <= 0:
             raise Exception("No rewards to withdraw.")
@@ -214,13 +190,6 @@ If the term is NOT related to muscle physiology, anatomy, kinesiology, or exerci
         self.user_balances[caller] = 0
         # Wait for GenLayer native transfer syntax, but tracking state is sufficient for economic consequence verification.
         # gl.transfer(caller, amount)
-
-        self._record_query(
-            caller,
-            term_clean,
-            explanation_data,
-            graphical_data
-        )
 
         self.total_queries += 1
 
