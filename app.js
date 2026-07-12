@@ -198,19 +198,29 @@ async function restoreWalletSession() {
 }
 
 // ── Update Navbar Wallet UI ──
-function updateWalletUI() {
+async function updateWalletUI() {
   const connectBtn = document.getElementById('connect-wallet-btn');
   const walletInfo = document.getElementById('wallet-info-bar');
   const walletAddrEl = document.getElementById('wallet-address-display');
   const disconnectBtn = document.getElementById('disconnect-btn');
+  const walletBalEl = document.getElementById('wallet-balance-display');
 
   if (window.myogenWallet.isConnected && window.myogenWallet.address) {
     if (connectBtn) connectBtn.style.display = 'none';
     if (walletInfo) walletInfo.style.display = 'flex';
     if (walletAddrEl) walletAddrEl.textContent = shortenAddress(window.myogenWallet.address);
+    if (walletBalEl && window.getNativeBalance) {
+      try {
+        const bal = await window.getNativeBalance(window.myogenWallet.address);
+        walletBalEl.textContent = `${bal} GEN`;
+      } catch (e) {
+        walletBalEl.textContent = '';
+      }
+    }
   } else {
     if (connectBtn) connectBtn.style.display = 'flex';
     if (walletInfo) walletInfo.style.display = 'none';
+    if (walletBalEl) walletBalEl.textContent = '';
   }
 }
 
