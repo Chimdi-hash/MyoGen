@@ -948,14 +948,22 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
 
 
 
-    const result = await getExplanation(term);
+    const statusObj = await pollProposalStatus(term, window.myogenWallet.address);
 
-    renderResult(result, term, txHash);
+    if (statusObj.status === "REJECTED") {
+        throw new Error(`Proposal Rejected! 1 GEN Stake Slashed. AI Remark: "${statusObj.reasoning}"`);
+    }
+
+    // If ACCEPTED
+    const resultObj = await window.readGenLayer(CONTRACT_ADDRESS, 'get_cached_term', [term]);
+    const cachedData = typeof resultObj === 'string' ? JSON.parse(resultObj) : resultObj;
+    
+    renderResult(cachedData.explanation, term, txHash);
     showState('result');
 
     addToSessionHistory(term);
 
-    showToast(`✅ "${term}" explained by GenLayer validators!`, 'success');
+    showToast(`✅ Proposal Accepted! 1 GEN Reward Paid. AI Remark: "${statusObj.reasoning}"`, 'success');
   } catch (err) {
     showState('idle');
     showToast('Error: ' + err.message, 'error');
@@ -1465,7 +1473,7 @@ async function scrapeWikipedia(term) {
   return "";
 }
 
-async function getExplanation(term) {
+async function pollProposalStatus(term, userAddress) {
   let retries = 0;
   while (retries < 300) {
     if (retries === 5) {
@@ -1486,10 +1494,10 @@ async function getExplanation(term) {
     }
     await sleep(2000);
     try {
-      const resultObj = await window.readGenLayer(CONTRACT_ADDRESS, 'get_cached_term', [term]);
+      const resultObj = await window.readGenLayer(CONTRACT_ADDRESS, 'get_proposal_status', [userAddress, term]);
       const result = typeof resultObj === 'string' ? JSON.parse(resultObj) : resultObj;
-      if (result && result.explanation) {
-        return result.explanation;
+      if (result && result.status !== "PENDING") {
+        return result;
       }
     } catch (e) {
       console.warn("View call failed on retry", retries, e);

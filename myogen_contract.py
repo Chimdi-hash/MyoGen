@@ -365,6 +365,34 @@ If the term is NOT related to muscle physiology, anatomy, kinesiology, or exerci
         return "[]"
 
     @gl.public.view
+    def get_proposal_status(self, user_address: Address, term: str) -> str:
+        term_clean = term.strip().title()
+        if user_address in self.query_history:
+            history = json.loads(self.query_history[user_address])
+            # Find the most recent entry for this term
+            for entry in reversed(history):
+                if entry.get("term") == term_clean:
+                    explanation = entry.get("explanation", {})
+                    if explanation.get("failed"):
+                        return json.dumps({
+                            "status": "REJECTED",
+                            "reasoning": explanation.get("reason", "Inaccurate"),
+                            "reward": 0
+                        })
+                    else:
+                        return json.dumps({
+                            "status": "ACCEPTED",
+                            "reasoning": "Definition verified by AI consensus.",
+                            "reward": 2000000000000000000 # 2 GEN
+                        })
+
+        return json.dumps({
+            "status": "PENDING",
+            "reasoning": "Waiting for validators...",
+            "reward": 0
+        })
+
+    @gl.public.view
     def get_stats(self) -> str:
         return json.dumps({
             "total_queries": int(self.total_queries),
