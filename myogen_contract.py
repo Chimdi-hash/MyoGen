@@ -74,7 +74,7 @@ class MyogenDictionary(gl.Contract):
 
     # ─────────────────────── Core Study Function ───────────────────────
 
-    user_balances: TreeMap[Address, int]
+    user_balances: TreeMap[Address, u256]
 
     @gl.public.write
     def propose_term(self, term: str, proposed_definition: str, evidence_url: str):
