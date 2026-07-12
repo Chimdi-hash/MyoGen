@@ -38698,10 +38698,16 @@ ${prettyStateOverride(stateOverride)}`;
       init_dist();
       init_chains();
       init_esm();
+      var GENLAYER_RPC = "https://studio.genlayer.com/api";
       window.callGenLayer = async function(contract, method, args, accountAddress, value) {
         if (!accountAddress) throw new Error("Account address is missing");
         const client = createClient2({ chain: studionet, transport: custom(window.ethereum) });
-        const txArgs = { address: contract, functionName: method, args, account: { address: accountAddress } };
+        const txArgs = {
+          address: contract,
+          functionName: method,
+          args,
+          account: { address: accountAddress }
+        };
         if (value) {
           txArgs.value = BigInt(value);
         }
@@ -38719,12 +38725,37 @@ ${prettyStateOverride(stateOverride)}`;
       window.getNativeBalance = async function(address) {
         const client = createClient2({ chain: studionet, transport: window.ethereum ? custom(window.ethereum) : void 0 });
         const balance = await client.getBalance({ address });
-        return (Number(balance) / 1e18).toFixed(2);
+        return (Number(balance) / 1e18).toFixed(4);
       };
-      window.getTxReceipt = async function(txHash) {
-        const resp = await fetch("https://studio.genlayer.com/api", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", method: "eth_getTransactionReceipt", params: [txHash], id: 1 }) });
+      window.getGenLayerTxStatus = async function(txHash) {
+        const resp = await fetch(GENLAYER_RPC, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            jsonrpc: "2.0",
+            method: "eth_getTransactionByHash",
+            params: [txHash],
+            id: 1
+          })
+        });
         const data = await resp.json();
-        return data.result;
+        if (!data.result) return { isFinalized: false, isSuccess: false, isError: false };
+        const tx = data.result;
+        const statusChanges = tx.current_status_changes || [];
+        const isFinalized = statusChanges.includes("FINALIZED");
+        let executionResult = "PENDING";
+        try {
+          const validators = tx.consensus_data?.validators || [];
+          if (validators.length > 0) {
+            executionResult = validators[0]?.execution_result || "PENDING";
+          }
+        } catch (e) {
+        }
+        return {
+          isFinalized,
+          isSuccess: isFinalized && executionResult === "SUCCESS",
+          isError: isFinalized && executionResult === "ERROR"
+        };
       };
     }
   });

@@ -7,24 +7,28 @@ import json
 
 class MyogenDictionary(gl.Contract):
     """
-    MYOGEN: A decentralized AI-powered dictionary for muscle physiology
-    and anatomy terminology.
+    MYOGEN: A decentralized AI-powered dictionary for muscle physiology.
+    Uses real GEN staking: 1 GEN staked per proposal.
+    Accurate proposals earn 2x stake back. Inaccurate proposals are slashed.
     """
 
     # ─────────────────────── Storage ───────────────────────
-    # Only use TreeMap[str, str] and TreeMap[Address, str] — safest types in GenLayer
     registered_users: TreeMap[Address, str]
     query_history: TreeMap[Address, str]
     all_terms_cache: TreeMap[str, str]
+    pending_rewards: TreeMap[str, str]   # str(address) -> str(amount_wei)
 
     total_queries: u256
     total_users: u256
     popular_terms_list: str
 
+    ONE_GEN: u256
+
     def __init__(self):
         self.total_queries = 0
         self.total_users = 0
         self.popular_terms_list = "[]"
+        self.ONE_GEN = 1000000000000000000  # 1 GEN in wei
 
     # ─────────────────────── Registration ───────────────────────
 
@@ -53,11 +57,15 @@ class MyogenDictionary(gl.Contract):
             "query_count": 0
         })
 
-    # ─────────────────────── Core Function ───────────────────────
+    # ─────────────────────── Core Staking Function ───────────────────────
 
-    @gl.public.write
+    @gl.public.write.payable
     def propose_term(self, term: str, proposed_definition: str, evidence_url: str):
         caller = gl.message.sender_address
+        stake = gl.message.value       # Amount of GEN sent (in wei)
+
+        if stake < self.ONE_GEN:
+            raise Exception("Must stake at least 1 GEN to propose a term.")
 
         term_clean = term.strip()
         term_lower = term_clean.lower()
@@ -66,26 +74,26 @@ class MyogenDictionary(gl.Contract):
             raise Exception("Term cannot be empty.")
 
         if term_lower in self.all_terms_cache:
-            raise Exception(f"Term '{term_clean}' already exists.")
+            raise Exception(f"Term '{term_clean}' already exists in the dictionary.")
 
         def build_prompt() -> str:
             return gl.nondet.exec_prompt(
-                f"""You are MYOGEN, an expert AI system for muscle physiology.
+                f"""You are MYOGEN, an expert AI system for muscle physiology and anatomy.
 A student proposes this term: "{term_clean}"
 Proposed definition: "{proposed_definition}"
 Evidence URL: "{evidence_url}"
 
 Fetch the evidence URL and verify if the proposed definition is accurate.
-Return ONLY a valid JSON object with this exact structure (no markdown):
+Return ONLY a valid JSON object (no markdown, no extra text):
 {{
     "is_accurate": true,
-    "reasoning": "Why it is accurate based on the evidence.",
+    "reasoning": "Clear explanation of why this is accurate based on the evidence.",
     "term": "{term_clean}",
-    "definition": "A clear 2-3 sentence definition for medical students.",
+    "definition": "A refined 2-3 sentence definition for medical students.",
     "category": "Anatomy & Physiology",
-    "detailed_explanation": "4-6 sentence explanation of mechanism and clinical relevance.",
+    "detailed_explanation": "4-6 sentences on the biological mechanism and clinical relevance.",
     "key_facts": ["fact 1", "fact 2", "fact 3"],
-    "related_terms": ["term 1", "term 2"],
+    "related_terms": ["related term 1", "related term 2"],
     "clinical_relevance": "1-2 sentences on clinical importance.",
     "muscle_groups_involved": ["muscle 1"]
 }}"""
@@ -93,23 +101,19 @@ Return ONLY a valid JSON object with this exact structure (no markdown):
 
         explanation_result = gl.eq_principle.prompt_non_comparative(
             build_prompt,
-            task="Verify the medical term and return JSON only.",
-            criteria="The response must be valid JSON matching the requested structure."
+            task="Verify the proposed muscle physiology term against the evidence URL and return valid JSON only.",
+            criteria="The response must be valid JSON with the exact keys requested. is_accurate must be true only if the definition is confirmed by the evidence URL."
         )
 
         # Parse AI response safely
         try:
             cleaned = explanation_result.strip()
-            # Strip markdown code fences if present
+            # Strip any markdown code fences
             if "```" in cleaned:
-                parts = cleaned.split("```")
-                for part in parts:
-                    part = part.strip()
-                    if part.startswith("json"):
-                        part = part[4:].strip()
-                    if part.startswith("{"):
-                        cleaned = part
-                        break
+                start = cleaned.find("{")
+                end = cleaned.rfind("}") + 1
+                if start >= 0 and end > start:
+                    cleaned = cleaned[start:end]
             explanation_data = json.loads(cleaned)
             if not isinstance(explanation_data, dict):
                 explanation_data = {}
@@ -118,7 +122,7 @@ Return ONLY a valid JSON object with this exact structure (no markdown):
 
         is_accurate = bool(explanation_data.get("is_accurate", False))
 
-        # Build a flat, safe summary to store (no deeply nested lists)
+        # Build safe flat summary to store
         key_facts = explanation_data.get("key_facts", [])
         related_terms = explanation_data.get("related_terms", [])
         muscles = explanation_data.get("muscle_groups_involved", [])
@@ -137,12 +141,23 @@ Return ONLY a valid JSON object with this exact structure (no markdown):
             "color_theme": "red-orange"
         }
 
+        caller_str = str(caller)
+
         if is_accurate:
-            # Store term in global cache
+            # ── REWARD: return stake + 1 GEN reward (2x total) ──
+            existing_str = self.pending_rewards[caller_str] if caller_str in self.pending_rewards else "0"
+            try:
+                existing = int(existing_str)
+            except Exception:
+                existing = 0
+            reward = int(stake) * 2
+            self.pending_rewards[caller_str] = str(existing + reward)
+
+            # Store in global terms cache
             self.all_terms_cache[term_lower] = json.dumps({
                 "explanation": safe_explanation,
                 "validator_consensus": True,
-                "proposer": str(caller)
+                "proposer": caller_str
             })
 
             # Update popular terms list
@@ -152,23 +167,49 @@ Return ONLY a valid JSON object with this exact structure (no markdown):
                     current_popular = []
             except Exception:
                 current_popular = []
-
             if term_clean not in current_popular:
                 current_popular.append(term_clean)
                 self.popular_terms_list = json.dumps(current_popular)
 
-            # Record in user history (accepted=true)
             self._record_query(caller, term_lower, term_clean,
                                safe_explanation.get("definition", ""),
                                safe_explanation.get("reasoning", ""),
                                True)
         else:
-            reasoning = explanation_data.get("reasoning", "Inaccurate definition.")
-            # Record in user history (accepted=false)
+            # ── SLASH: stake is forfeited ──
+            reasoning = explanation_data.get("reasoning", "Definition did not match evidence.")
             self._record_query(caller, term_lower, term_clean,
-                               proposed_definition,
-                               reasoning,
-                               False)
+                               proposed_definition, reasoning, False)
+
+        self.total_queries += 1
+
+    # ─────────────────────── Claim Rewards ───────────────────────
+
+    @gl.public.write
+    def claim_reward(self):
+        """Claim pending rewards earned from successful proposals."""
+        caller = gl.message.sender_address
+        caller_str = str(caller)
+        if caller_str not in self.pending_rewards:
+            raise Exception("No pending rewards to claim.")
+        amount_str = self.pending_rewards[caller_str]
+        try:
+            amount = int(amount_str)
+        except Exception:
+            amount = 0
+        if amount <= 0:
+            raise Exception("No rewards available.")
+        self.pending_rewards[caller_str] = "0"
+        gl.transfer(caller, amount)
+
+    @gl.public.view
+    def get_pending_reward(self, user_address: Address) -> str:
+        addr_str = str(user_address)
+        if addr_str in self.pending_rewards:
+            return self.pending_rewards[addr_str]
+        return "0"
+
+    # ─────────────────────── Internal Helpers ───────────────────────
 
     def _record_query(
         self,
@@ -179,7 +220,6 @@ Return ONLY a valid JSON object with this exact structure (no markdown):
         reasoning: str,
         accepted: bool
     ):
-        """Store only flat string fields — no nested lists to avoid storage issues."""
         try:
             if caller in self.query_history:
                 history = json.loads(self.query_history[caller])
@@ -198,7 +238,6 @@ Return ONLY a valid JSON object with this exact structure (no markdown):
             "accepted": accepted
         })
 
-        # Keep only last 20 entries
         if len(history) > 20:
             history = history[-20:]
 

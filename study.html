@@ -933,86 +933,93 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
   try {
     showToast('Please sign the transaction in your wallet to stake 1 GEN...', 'info');
 
-    if (!window.callGenLayer) {
-      throw new Error("GenLayer SDK not loaded.");
-    }
+    if (!window.callGenLayer) throw new Error("GenLayer SDK not loaded.");
 
-    // Call propose_term — no value sent (contract is standard write, not payable)
+    // Send 1 GEN with the payable propose_term function
     const txHash = await window.callGenLayer(
         CONTRACT_ADDRESS,
         'propose_term',
         [term, proposedDef, evidenceUrl],
-        window.myogenWallet.address
+        window.myogenWallet.address,
+        "1000000000000000000"  // 1 GEN in wei
     );
 
-    showToast(`✔ Signed! Tx: ${txHash.slice(0,10)}... — AI validators are now analyzing...`, 'info', 6000);
-    document.getElementById('loading-status-text').textContent = "Validators are analyzing...";
-    document.getElementById('loading-sub-text').textContent = "AI consensus is running. This typically takes 30–90 seconds.";
-
-    // ── POLL TX RECEIPT DIRECTLY (fast, accurate) ──
-    const receipt = await waitForTxFinalized(txHash);
-
-    // Check if GenVM execution itself errored
-    if (receipt && receipt.status === '0x0') {
-      throw new Error("Transaction reverted on-chain. The contract raised an error.");
+    // ── IMMEDIATE optimistic balance deduction ──
+    const balEl = document.getElementById('wallet-balance-display');
+    if (balEl) {
+      const cur = parseFloat(balEl.textContent);
+      if (!isNaN(cur)) balEl.textContent = `${Math.max(0, cur - 1).toFixed(4)} GEN`;
     }
 
-    // ── READ RESULT ONCE ──
-    // Give the node 1s to propagate the new state
-    await sleep(1000);
-    const statusObj = await getProposalStatusOnce(term, window.myogenWallet.address);
+    showToast(`✔ Signed! Tx: ${txHash.slice(0,10)}... — Waiting for AI validator consensus...`, 'info', 8000);
+    document.getElementById('loading-status-text').textContent = "Validators are analyzing...";
+    document.getElementById('loading-sub-text').textContent = "AI consensus is running. Typically 30–90 seconds.";
+
+    // ── Wait for FINALIZED status via GenLayer-specific polling ──
+    const txStatus = await waitForGenLayerFinalized(txHash);
+
+    if (txStatus.isError) {
+      throw new Error(`Contract execution failed. Check GenLayer Explorer for tx: ${txHash}`);
+    }
+
+    // Give state 2s to propagate then read result
+    await sleep(2000);
+
+    // Try reading proposal status with retries
+    const statusObj = await readProposalStatusWithRetry(term, window.myogenWallet.address, 6);
 
     if (!statusObj || statusObj.status === 'PENDING') {
-      // fallback: read cached term directly
+      // Last resort: check if term was added to the cache
       try {
-        const resultObj = await window.readGenLayer(CONTRACT_ADDRESS, 'get_cached_term', [term]);
-        const cachedData = typeof resultObj === 'string' ? JSON.parse(resultObj) : resultObj;
+        const cached = await window.readGenLayer(CONTRACT_ADDRESS, 'get_cached_term', [term]);
+        const cachedData = typeof cached === 'string' ? JSON.parse(cached) : cached;
         if (cachedData && cachedData.explanation) {
           renderResult(cachedData.explanation, term, txHash);
           showState('result');
           addToSessionHistory(term);
-          showToast('✅ Term accepted and added to the dictionary!', 'success', 6000);
+          showToast('✅ Term accepted and verified by AI validators!', 'success', 8000);
           await refreshBalance();
           return;
         }
-      } catch(e) { console.warn('Fallback read failed', e); }
-      throw new Error("Could not determine result. Check GenLayer Explorer for tx: " + txHash);
+      } catch(e) { console.warn('Fallback cache read failed:', e); }
+      throw new Error('Could not read result. The transaction may still be processing — check GenLayer Explorer.');
     }
 
-    if (statusObj.status === "REJECTED") {
-      throw new Error(`❌ Proposal Rejected — 1 GEN Slashed. AI Remark: "${statusObj.reasoning}"`);
+    if (statusObj.status === 'REJECTED') {
+      showToast(`❌ Rejected — 1 GEN slashed. Reason: "${statusObj.reasoning}"`, 'error', 10000);
+      showState('idle');
+      await refreshBalance();
+      return;
     }
 
-    // ACCEPTED — render the term
+    // ACCEPTED — read and render the term
     const resultObj = await window.readGenLayer(CONTRACT_ADDRESS, 'get_cached_term', [term]);
     const cachedData = typeof resultObj === 'string' ? JSON.parse(resultObj) : resultObj;
-
     renderResult(cachedData.explanation, term, txHash);
     showState('result');
     addToSessionHistory(term);
-    showToast(`✅ Accepted & Rewarded! AI: "${statusObj.reasoning}"`, 'success', 8000);
+    showToast(`✅ Accepted! Reward earned. AI: "${statusObj.reasoning}"`, 'success', 10000);
 
   } catch (err) {
     showState('idle');
-    showToast('Error: ' + err.message, 'error', 8000);
+    showToast('Error: ' + err.message, 'error', 10000);
     console.error('Study error:', err);
   } finally {
     isLoading = false;
     setStudyBtnLoading(false);
-    // Always refresh real balance at end
     await refreshBalance();
   }
 }
 
-// ── Refresh live balance from chain ──
+// ── Refresh live GEN balance ──
 async function refreshBalance() {
   try {
-    if (window.getNativeBalance && window.myogenWallet && window.myogenWallet.address) {
+    if (window.getNativeBalance && window.myogenWallet?.address) {
       const bal = await window.getNativeBalance(window.myogenWallet.address);
       const balEl = document.getElementById('wallet-balance-display');
       if (balEl) balEl.textContent = `${bal} GEN`;
     }
-  } catch(e) { console.warn('Balance refresh failed', e); }
+  } catch(e) { console.warn('Balance refresh failed:', e); }
 }
 
 function setStudyBtnLoading(loading) {
@@ -1514,55 +1521,48 @@ async function scrapeWikipedia(term) {
   return "";
 }
 
-// ── Poll tx receipt via RPC until FINALIZED ──
-async function waitForTxFinalized(txHash) {
-  const MAX_WAIT_MS = 180000; // 3 minutes max
-  const POLL_INTERVAL = 3000; // check every 3 seconds
+// ── Poll GenLayer for FINALIZED status (not eth receipt) ──
+async function waitForGenLayerFinalized(txHash) {
+  const MAX_WAIT_MS = 180000; // 3 min
+  const POLL_MS = 4000;
   const start = Date.now();
   let attempt = 0;
 
-  const statusTexts = [
-    [0,  "AI validators are analyzing your evidence...",    "This typically takes 30–90 seconds."],
-    [10, "Validators reaching consensus...",                "Almost there — AI is cross-checking evidence."],
-    [25, "Finalizing on-chain state...",                   "Consensus reached, writing to blockchain."],
-    [40, "Taking a little longer than usual...",           "GenLayer network may be busy. Hang tight!"],
+  const messages = [
+    [0,  'AI validators are analyzing your evidence...',  'This typically takes 30–90 seconds.'],
+    [8,  'Validators reaching consensus...',              'AI is cross-checking your evidence URL.'],
+    [18, 'Finalizing on-chain state...',                  'Almost done — writing result to blockchain.'],
+    [30, 'Taking a bit longer than usual...',             'GenLayer network may be busy. Hang tight!'],
   ];
 
   while (Date.now() - start < MAX_WAIT_MS) {
     attempt++;
-
-    for (const [at, title, sub] of statusTexts) {
+    for (const [at, title, sub] of messages) {
       if (attempt === at + 1) {
         document.getElementById('loading-status-text').textContent = title;
         document.getElementById('loading-sub-text').textContent = sub;
       }
     }
-
-    await sleep(POLL_INTERVAL);
-
+    await sleep(POLL_MS);
     try {
-      const receipt = await window.getTxReceipt(txHash);
-      // GenLayer marks finalized txs with a blockHash present
-      if (receipt && receipt.blockHash) {
-        console.log('Tx finalized:', receipt);
-        return receipt;
-      }
-    } catch(e) {
-      console.warn('Receipt poll error:', e);
-    }
+      const status = await window.getGenLayerTxStatus(txHash);
+      if (status.isFinalized) return status;
+    } catch(e) { console.warn('Tx poll error:', e); }
   }
-  throw new Error('Timed out waiting for transaction to finalize after 3 minutes.');
+  throw new Error('Timed out after 3 minutes waiting for GenLayer consensus.');
 }
 
-// ── Read proposal status exactly once (no loop) ──
-async function getProposalStatusOnce(term, userAddress) {
-  try {
-    const resultObj = await window.readGenLayer(CONTRACT_ADDRESS, 'get_proposal_status', [userAddress, term]);
-    return typeof resultObj === 'string' ? JSON.parse(resultObj) : resultObj;
-  } catch(e) {
-    console.warn('getProposalStatusOnce failed:', e);
-    return null;
+// ── Read proposal status with retries ──
+async function readProposalStatusWithRetry(term, userAddress, maxRetries) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const resultObj = await window.readGenLayer(CONTRACT_ADDRESS, 'get_proposal_status', [userAddress, term]);
+      const result = typeof resultObj === 'string' ? JSON.parse(resultObj) : resultObj;
+      if (result && result.status !== 'PENDING') return result;
+    } catch(e) { console.warn(`Status read attempt ${i+1} failed:`, e); }
+    if (i < maxRetries - 1) await sleep(3000);
   }
+  return null;
 }
 
 // ── Session history ──
