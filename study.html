@@ -962,6 +962,12 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
       throw new Error(`Contract execution failed. Check GenLayer Explorer for tx: ${txHash}`);
     }
 
+    // On timeout, try reading result anyway (may have finalized without us noticing)
+    if (txStatus.timedOut) {
+      document.getElementById('loading-status-text').textContent = 'Checking final result...';
+      document.getElementById('loading-sub-text').textContent = 'Consensus took longer than expected — reading on-chain state.';
+    }
+
     // Give state 2s to propagate then read result
     await sleep(2000);
 
@@ -982,6 +988,17 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
           return;
         }
       } catch(e) { console.warn('Fallback cache read failed:', e); }
+
+      // Still pending — show helpful message with tx link instead of error
+      if (txStatus && txStatus.timedOut) {
+        showToast(
+          `⏳ Consensus is taking longer than usual. Your 1 GEN is staked. Check result at: explorer-studio.genlayer.com/tx/${txHash.slice(0,10)}...`,
+          'info', 15000
+        );
+        showState('idle');
+        await refreshBalance();
+        return;
+      }
       throw new Error('Could not read result. The transaction may still be processing — check GenLayer Explorer.');
     }
 
@@ -1521,18 +1538,20 @@ async function scrapeWikipedia(term) {
   return "";
 }
 
-// ── Poll GenLayer for FINALIZED status (not eth receipt) ──
+// ── Poll GenLayer for FINALIZED status ──
 async function waitForGenLayerFinalized(txHash) {
-  const MAX_WAIT_MS = 180000; // 3 min
-  const POLL_MS = 4000;
+  const MAX_WAIT_MS = 600000; // 10 min — Leader Rotation can take a while
+  const POLL_MS = 5000;
   const start = Date.now();
   let attempt = 0;
 
   const messages = [
-    [0,  'AI validators are analyzing your evidence...',  'This typically takes 30–90 seconds.'],
-    [8,  'Validators reaching consensus...',              'AI is cross-checking your evidence URL.'],
-    [18, 'Finalizing on-chain state...',                  'Almost done — writing result to blockchain.'],
-    [30, 'Taking a bit longer than usual...',             'GenLayer network may be busy. Hang tight!'],
+    [0,  'AI validators are analyzing your evidence...',    'This typically takes 1–3 minutes.'],
+    [6,  'Validators reaching consensus...',                'AI is cross-checking your evidence URL.'],
+    [18, 'Leader rotation in progress...',                  'Validators are agreeing on the result. Almost there.'],
+    [36, 'Finalizing on-chain state...',                    'Writing result to the blockchain…'],
+    [60, 'Still processing — hang tight...',              'GenLayer consensus can take up to 10 minutes on busy networks.'],
+    [90, 'Nearly there...',                                 'Validators are in final agreement stage.'],
   ];
 
   while (Date.now() - start < MAX_WAIT_MS) {
@@ -1549,7 +1568,8 @@ async function waitForGenLayerFinalized(txHash) {
       if (status.isFinalized) return status;
     } catch(e) { console.warn('Tx poll error:', e); }
   }
-  throw new Error('Timed out after 3 minutes waiting for GenLayer consensus.');
+  // Timed out — return a soft timeout instead of throwing
+  return { isFinalized: false, isSuccess: false, isError: false, timedOut: true };
 }
 
 // ── Read proposal status with retries ──
