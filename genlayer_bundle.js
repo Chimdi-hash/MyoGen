@@ -21,10 +21,10 @@
       __defProp(target, name, { get: all[name], enumerable: true });
   };
 
-  // node_modules/genlayer-js/dist/chunk-MLKGABMK.js
+  // temp_genlayer/node_modules/genlayer-js/dist/chunk-MLKGABMK.js
   var __defProp2, __export2;
   var init_chunk_MLKGABMK = __esm({
-    "node_modules/genlayer-js/dist/chunk-MLKGABMK.js"() {
+    "temp_genlayer/node_modules/genlayer-js/dist/chunk-MLKGABMK.js"() {
       __defProp2 = Object.defineProperty;
       __export2 = (target, all) => {
         for (var name in all)
@@ -33,18 +33,18 @@
     }
   });
 
-  // node_modules/abitype/dist/esm/version.js
+  // temp_genlayer/node_modules/abitype/dist/esm/version.js
   var version;
   var init_version = __esm({
-    "node_modules/abitype/dist/esm/version.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/version.js"() {
       version = "1.2.3";
     }
   });
 
-  // node_modules/abitype/dist/esm/errors.js
+  // temp_genlayer/node_modules/abitype/dist/esm/errors.js
   var BaseError;
   var init_errors = __esm({
-    "node_modules/abitype/dist/esm/errors.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/errors.js"() {
       init_version();
       BaseError = class _BaseError extends Error {
         constructor(shortMessage, args = {}) {
@@ -100,21 +100,21 @@
     }
   });
 
-  // node_modules/abitype/dist/esm/regex.js
+  // temp_genlayer/node_modules/abitype/dist/esm/regex.js
   function execTyped(regex, string) {
     const match = regex.exec(string);
     return match?.groups;
   }
   var bytesRegex, integerRegex, isTupleRegex;
   var init_regex = __esm({
-    "node_modules/abitype/dist/esm/regex.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/regex.js"() {
       bytesRegex = /^bytes([1-9]|1[0-9]|2[0-9]|3[0-2])?$/;
       integerRegex = /^u?int(8|16|24|32|40|48|56|64|72|80|88|96|104|112|120|128|136|144|152|160|168|176|184|192|200|208|216|224|232|240|248|256)?$/;
       isTupleRegex = /^\(.+?\).*?$/;
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/formatAbiParameter.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/formatAbiParameter.js
   function formatAbiParameter(abiParameter) {
     let type = abiParameter.type;
     if (tupleRegex.test(abiParameter.type) && "components" in abiParameter) {
@@ -141,13 +141,13 @@
   }
   var tupleRegex;
   var init_formatAbiParameter = __esm({
-    "node_modules/abitype/dist/esm/human-readable/formatAbiParameter.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/formatAbiParameter.js"() {
       init_regex();
       tupleRegex = /^tuple(?<array>(\[(\d*)\])*)$/;
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/formatAbiParameters.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/formatAbiParameters.js
   function formatAbiParameters(abiParameters) {
     let params = "";
     const length = abiParameters.length;
@@ -160,12 +160,12 @@
     return params;
   }
   var init_formatAbiParameters = __esm({
-    "node_modules/abitype/dist/esm/human-readable/formatAbiParameters.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/formatAbiParameters.js"() {
       init_formatAbiParameter();
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/formatAbiItem.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/formatAbiItem.js
   function formatAbiItem(abiItem) {
     if (abiItem.type === "function")
       return `function ${abiItem.name}(${formatAbiParameters(abiItem.inputs)})${abiItem.stateMutability && abiItem.stateMutability !== "nonpayable" ? ` ${abiItem.stateMutability}` : ""}${abiItem.outputs?.length ? ` returns (${formatAbiParameters(abiItem.outputs)})` : ""}`;
@@ -180,12 +180,12 @@
     return "receive() external payable";
   }
   var init_formatAbiItem = __esm({
-    "node_modules/abitype/dist/esm/human-readable/formatAbiItem.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/formatAbiItem.js"() {
       init_formatAbiParameters();
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/runtime/signatures.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/runtime/signatures.js
   function isErrorSignature(signature) {
     return errorSignatureRegex.test(signature);
   }
@@ -227,7 +227,7 @@
   }
   var errorSignatureRegex, eventSignatureRegex, functionSignatureRegex, structSignatureRegex, constructorSignatureRegex, fallbackSignatureRegex, receiveSignatureRegex, modifiers, eventModifiers, functionModifiers;
   var init_signatures = __esm({
-    "node_modules/abitype/dist/esm/human-readable/runtime/signatures.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/runtime/signatures.js"() {
       init_regex();
       errorSignatureRegex = /^error (?<name>[a-zA-Z$_][a-zA-Z0-9$_]*)\((?<parameters>.*?)\)$/;
       eventSignatureRegex = /^event (?<name>[a-zA-Z$_][a-zA-Z0-9$_]*)\((?<parameters>.*?)\)$/;
@@ -251,10 +251,10 @@
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/errors/abiItem.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/errors/abiItem.js
   var InvalidAbiItemError, UnknownTypeError, UnknownSolidityTypeError;
   var init_abiItem = __esm({
-    "node_modules/abitype/dist/esm/human-readable/errors/abiItem.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/errors/abiItem.js"() {
       init_errors();
       InvalidAbiItemError = class extends BaseError {
         constructor({ signature }) {
@@ -301,10 +301,10 @@
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/errors/abiParameter.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/errors/abiParameter.js
   var InvalidAbiParametersError, InvalidParameterError, SolidityProtectedKeywordError, InvalidModifierError, InvalidFunctionModifierError, InvalidAbiTypeParameterError;
   var init_abiParameter = __esm({
-    "node_modules/abitype/dist/esm/human-readable/errors/abiParameter.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/errors/abiParameter.js"() {
       init_errors();
       InvalidAbiParametersError = class extends BaseError {
         constructor({ params }) {
@@ -399,10 +399,10 @@
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/errors/signature.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/errors/signature.js
   var InvalidSignatureError, UnknownSignatureError, InvalidStructSignatureError;
   var init_signature = __esm({
-    "node_modules/abitype/dist/esm/human-readable/errors/signature.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/errors/signature.js"() {
       init_errors();
       InvalidSignatureError = class extends BaseError {
         constructor({ signature, type }) {
@@ -447,10 +447,10 @@
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/errors/struct.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/errors/struct.js
   var CircularReferenceError;
   var init_struct = __esm({
-    "node_modules/abitype/dist/esm/human-readable/errors/struct.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/errors/struct.js"() {
       init_errors();
       CircularReferenceError = class extends BaseError {
         constructor({ type }) {
@@ -468,10 +468,10 @@
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/errors/splitParameters.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/errors/splitParameters.js
   var InvalidParenthesisError;
   var init_splitParameters = __esm({
-    "node_modules/abitype/dist/esm/human-readable/errors/splitParameters.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/errors/splitParameters.js"() {
       init_errors();
       InvalidParenthesisError = class extends BaseError {
         constructor({ current, depth }) {
@@ -492,7 +492,7 @@
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/runtime/cache.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/runtime/cache.js
   function getParameterCacheKey(param, type, structs) {
     let structKey = "";
     if (structs)
@@ -511,7 +511,7 @@
   }
   var parameterCache;
   var init_cache = __esm({
-    "node_modules/abitype/dist/esm/human-readable/runtime/cache.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/runtime/cache.js"() {
       parameterCache = /* @__PURE__ */ new Map([
         // Unnamed
         ["address", { type: "address" }],
@@ -569,7 +569,7 @@
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/runtime/utils.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/runtime/utils.js
   function parseSignature(signature, structs = {}) {
     if (isFunctionSignature(signature))
       return parseFunctionSignature(signature, structs);
@@ -765,7 +765,7 @@
   }
   var abiParameterWithoutTupleRegex, abiParameterWithTupleRegex, dynamicIntegerRegex, protectedKeywordsRegex;
   var init_utils = __esm({
-    "node_modules/abitype/dist/esm/human-readable/runtime/utils.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/runtime/utils.js"() {
       init_regex();
       init_abiItem();
       init_abiParameter();
@@ -780,7 +780,7 @@
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/runtime/structs.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/runtime/structs.js
   function parseStructs(signatures) {
     const shallowStructs = {};
     const signaturesLength = signatures.length;
@@ -850,7 +850,7 @@
   }
   var typeWithoutTupleRegex;
   var init_structs = __esm({
-    "node_modules/abitype/dist/esm/human-readable/runtime/structs.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/runtime/structs.js"() {
       init_regex();
       init_abiItem();
       init_abiParameter();
@@ -862,7 +862,7 @@
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/parseAbi.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/parseAbi.js
   function parseAbi(signatures) {
     const structs = parseStructs(signatures);
     const abi2 = [];
@@ -876,14 +876,14 @@
     return abi2;
   }
   var init_parseAbi = __esm({
-    "node_modules/abitype/dist/esm/human-readable/parseAbi.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/parseAbi.js"() {
       init_signatures();
       init_structs();
       init_utils();
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/parseAbiItem.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/parseAbiItem.js
   function parseAbiItem(signature) {
     let abiItem;
     if (typeof signature === "string")
@@ -904,7 +904,7 @@
     return abiItem;
   }
   var init_parseAbiItem = __esm({
-    "node_modules/abitype/dist/esm/human-readable/parseAbiItem.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/parseAbiItem.js"() {
       init_abiItem();
       init_signatures();
       init_structs();
@@ -912,7 +912,7 @@
     }
   });
 
-  // node_modules/abitype/dist/esm/human-readable/parseAbiParameters.js
+  // temp_genlayer/node_modules/abitype/dist/esm/human-readable/parseAbiParameters.js
   function parseAbiParameters(params) {
     const abiParameters = [];
     if (typeof params === "string") {
@@ -940,7 +940,7 @@
     return abiParameters;
   }
   var init_parseAbiParameters = __esm({
-    "node_modules/abitype/dist/esm/human-readable/parseAbiParameters.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/human-readable/parseAbiParameters.js"() {
       init_abiParameter();
       init_signatures();
       init_structs();
@@ -949,9 +949,9 @@
     }
   });
 
-  // node_modules/abitype/dist/esm/exports/index.js
+  // temp_genlayer/node_modules/abitype/dist/esm/exports/index.js
   var init_exports = __esm({
-    "node_modules/abitype/dist/esm/exports/index.js"() {
+    "temp_genlayer/node_modules/abitype/dist/esm/exports/index.js"() {
       init_formatAbiItem();
       init_formatAbiParameters();
       init_parseAbi();
@@ -960,7 +960,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/getAction.js
+  // temp_genlayer/node_modules/viem/_esm/utils/getAction.js
   function getAction(client, actionFn, name) {
     const action_implicit = client[actionFn.name];
     if (typeof action_implicit === "function")
@@ -971,11 +971,11 @@
     return (params) => actionFn(client, params);
   }
   var init_getAction = __esm({
-    "node_modules/viem/_esm/utils/getAction.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/getAction.js"() {
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/formatAbiItem.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/formatAbiItem.js
   function formatAbiItem2(abiItem, { includeName = false } = {}) {
     if (abiItem.type !== "function" && abiItem.type !== "event" && abiItem.type !== "error")
       throw new InvalidDefinitionTypeError(abiItem.type);
@@ -993,12 +993,12 @@
     return param.type + (includeName && param.name ? ` ${param.name}` : "");
   }
   var init_formatAbiItem2 = __esm({
-    "node_modules/viem/_esm/utils/abi/formatAbiItem.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/formatAbiItem.js"() {
       init_abi();
     }
   });
 
-  // node_modules/viem/_esm/utils/data/isHex.js
+  // temp_genlayer/node_modules/viem/_esm/utils/data/isHex.js
   function isHex(value, { strict = true } = {}) {
     if (!value)
       return false;
@@ -1007,31 +1007,31 @@
     return strict ? /^0x[0-9a-fA-F]*$/.test(value) : value.startsWith("0x");
   }
   var init_isHex = __esm({
-    "node_modules/viem/_esm/utils/data/isHex.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/data/isHex.js"() {
     }
   });
 
-  // node_modules/viem/_esm/utils/data/size.js
+  // temp_genlayer/node_modules/viem/_esm/utils/data/size.js
   function size(value) {
     if (isHex(value, { strict: false }))
       return Math.ceil((value.length - 2) / 2);
     return value.length;
   }
   var init_size = __esm({
-    "node_modules/viem/_esm/utils/data/size.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/data/size.js"() {
       init_isHex();
     }
   });
 
-  // node_modules/viem/_esm/errors/version.js
+  // temp_genlayer/node_modules/viem/_esm/errors/version.js
   var version2;
   var init_version2 = __esm({
-    "node_modules/viem/_esm/errors/version.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/version.js"() {
       version2 = "2.54.3";
     }
   });
 
-  // node_modules/viem/_esm/errors/base.js
+  // temp_genlayer/node_modules/viem/_esm/errors/base.js
   function walk(err, fn) {
     if (fn?.(err))
       return err;
@@ -1041,7 +1041,7 @@
   }
   var errorConfig, BaseError2;
   var init_base = __esm({
-    "node_modules/viem/_esm/errors/base.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/base.js"() {
       init_version2();
       errorConfig = {
         getDocsUrl: ({ docsBaseUrl, docsPath: docsPath8 = "", docsSlug }) => docsPath8 ? `${docsBaseUrl ?? "https://viem.sh"}${docsPath8}${docsSlug ? `#${docsSlug}` : ""}` : void 0,
@@ -1121,10 +1121,10 @@
     }
   });
 
-  // node_modules/viem/_esm/errors/abi.js
+  // temp_genlayer/node_modules/viem/_esm/errors/abi.js
   var AbiConstructorNotFoundError, AbiConstructorParamsNotFoundError, AbiDecodingDataSizeTooSmallError, AbiDecodingZeroDataError, AbiEncodingArrayLengthMismatchError, AbiEncodingBytesSizeMismatchError, AbiEncodingLengthMismatchError, AbiErrorInputsNotFoundError, AbiErrorNotFoundError, AbiErrorSignatureNotFoundError, AbiEventSignatureEmptyTopicsError, AbiEventSignatureNotFoundError, AbiEventNotFoundError, AbiFunctionNotFoundError, AbiFunctionOutputsNotFoundError, AbiFunctionSignatureNotFoundError, AbiItemAmbiguityError, BytesSizeMismatchError, DecodeLogDataMismatch, DecodeLogTopicsMismatch, InvalidAbiEncodingTypeError, InvalidAbiDecodingTypeError, InvalidArrayError, InvalidDefinitionTypeError;
   var init_abi = __esm({
-    "node_modules/viem/_esm/errors/abi.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/abi.js"() {
       init_formatAbiItem2();
       init_size();
       init_base();
@@ -1432,10 +1432,10 @@
     }
   });
 
-  // node_modules/viem/_esm/errors/log.js
+  // temp_genlayer/node_modules/viem/_esm/errors/log.js
   var FilterTypeNotSupportedError;
   var init_log = __esm({
-    "node_modules/viem/_esm/errors/log.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/log.js"() {
       init_base();
       FilterTypeNotSupportedError = class extends BaseError2 {
         constructor(type) {
@@ -1447,10 +1447,10 @@
     }
   });
 
-  // node_modules/viem/_esm/errors/data.js
+  // temp_genlayer/node_modules/viem/_esm/errors/data.js
   var SliceOffsetOutOfBoundsError, SizeExceedsPaddingSizeError, InvalidBytesLengthError;
   var init_data = __esm({
-    "node_modules/viem/_esm/errors/data.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/data.js"() {
       init_base();
       SliceOffsetOutOfBoundsError = class extends BaseError2 {
         constructor({ offset, position, size: size5 }) {
@@ -1470,7 +1470,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/data/pad.js
+  // temp_genlayer/node_modules/viem/_esm/utils/data/pad.js
   function pad(hexOrBytes, { dir, size: size5 = 32 } = {}) {
     if (typeof hexOrBytes === "string")
       return padHex(hexOrBytes, { dir, size: size5 });
@@ -1505,15 +1505,15 @@
     return paddedBytes;
   }
   var init_pad = __esm({
-    "node_modules/viem/_esm/utils/data/pad.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/data/pad.js"() {
       init_data();
     }
   });
 
-  // node_modules/viem/_esm/errors/encoding.js
+  // temp_genlayer/node_modules/viem/_esm/errors/encoding.js
   var IntegerOutOfRangeError, InvalidBytesBooleanError, InvalidHexBooleanError, InvalidHexValueError, RlpDepthLimitExceededError, RlpListBoundaryExceededError, RlpTrailingBytesError, SizeOverflowError;
   var init_encoding = __esm({
-    "node_modules/viem/_esm/errors/encoding.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/encoding.js"() {
       init_base();
       IntegerOutOfRangeError = class extends BaseError2 {
         constructor({ max, min, signed, size: size5, value }) {
@@ -1562,7 +1562,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/data/trim.js
+  // temp_genlayer/node_modules/viem/_esm/utils/data/trim.js
   function trim(hexOrBytes, { dir = "left" } = {}) {
     let data = typeof hexOrBytes === "string" ? hexOrBytes.replace("0x", "") : hexOrBytes;
     let sliceLength = 0;
@@ -1581,11 +1581,11 @@
     return data;
   }
   var init_trim = __esm({
-    "node_modules/viem/_esm/utils/data/trim.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/data/trim.js"() {
     }
   });
 
-  // node_modules/viem/_esm/utils/encoding/fromHex.js
+  // temp_genlayer/node_modules/viem/_esm/utils/encoding/fromHex.js
   function assertSize(hexOrBytes, { size: size5 }) {
     if (size(hexOrBytes) > size5)
       throw new SizeOverflowError({
@@ -1653,7 +1653,7 @@
     return new TextDecoder().decode(bytes);
   }
   var init_fromHex = __esm({
-    "node_modules/viem/_esm/utils/encoding/fromHex.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/encoding/fromHex.js"() {
       init_encoding();
       init_size();
       init_trim();
@@ -1661,7 +1661,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/encoding/toHex.js
+  // temp_genlayer/node_modules/viem/_esm/utils/encoding/toHex.js
   function toHex(value, opts = {}) {
     if (typeof value === "number" || typeof value === "bigint")
       return numberToHex(value, opts);
@@ -1726,7 +1726,7 @@
   }
   var hexes, encoder;
   var init_toHex = __esm({
-    "node_modules/viem/_esm/utils/encoding/toHex.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/encoding/toHex.js"() {
       init_encoding();
       init_pad();
       init_fromHex();
@@ -1735,7 +1735,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/encoding/toBytes.js
+  // temp_genlayer/node_modules/viem/_esm/utils/encoding/toBytes.js
   function toBytes(value, opts = {}) {
     if (typeof value === "number" || typeof value === "bigint")
       return numberToBytes(value, opts);
@@ -1798,7 +1798,7 @@
   }
   var encoder2, charCodeMap;
   var init_toBytes = __esm({
-    "node_modules/viem/_esm/utils/encoding/toBytes.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/encoding/toBytes.js"() {
       init_base();
       init_isHex();
       init_pad();
@@ -1816,7 +1816,7 @@
     }
   });
 
-  // node_modules/@noble/hashes/esm/_u64.js
+  // temp_genlayer/node_modules/@noble/hashes/esm/_u64.js
   function fromBig(n, le = false) {
     if (le)
       return { h: Number(n & U32_MASK64), l: Number(n >> _32n & U32_MASK64) };
@@ -1834,7 +1834,7 @@
   }
   var U32_MASK64, _32n, rotlSH, rotlSL, rotlBH, rotlBL;
   var init_u64 = __esm({
-    "node_modules/@noble/hashes/esm/_u64.js"() {
+    "temp_genlayer/node_modules/@noble/hashes/esm/_u64.js"() {
       U32_MASK64 = /* @__PURE__ */ BigInt(2 ** 32 - 1);
       _32n = /* @__PURE__ */ BigInt(32);
       rotlSH = (h, l, s) => h << s | l >>> 32 - s;
@@ -1844,15 +1844,15 @@
     }
   });
 
-  // node_modules/@noble/hashes/esm/crypto.js
+  // temp_genlayer/node_modules/@noble/hashes/esm/crypto.js
   var crypto2;
   var init_crypto = __esm({
-    "node_modules/@noble/hashes/esm/crypto.js"() {
+    "temp_genlayer/node_modules/@noble/hashes/esm/crypto.js"() {
       crypto2 = typeof globalThis === "object" && "crypto" in globalThis ? globalThis.crypto : void 0;
     }
   });
 
-  // node_modules/@noble/hashes/esm/utils.js
+  // temp_genlayer/node_modules/@noble/hashes/esm/utils.js
   function isBytes(a) {
     return a instanceof Uint8Array || ArrayBuffer.isView(a) && a.constructor.name === "Uint8Array";
   }
@@ -1953,7 +1953,7 @@
   }
   var isLE, swap32IfBE, Hash;
   var init_utils2 = __esm({
-    "node_modules/@noble/hashes/esm/utils.js"() {
+    "temp_genlayer/node_modules/@noble/hashes/esm/utils.js"() {
       init_crypto();
       isLE = /* @__PURE__ */ (() => new Uint8Array(new Uint32Array([287454020]).buffer)[0] === 68)();
       swap32IfBE = isLE ? (u) => u : byteSwap32;
@@ -1962,7 +1962,7 @@
     }
   });
 
-  // node_modules/@noble/hashes/esm/sha3.js
+  // temp_genlayer/node_modules/@noble/hashes/esm/sha3.js
   function keccakP(s, rounds = 24) {
     const B = new Uint32Array(5 * 2);
     for (let round = 24 - rounds; round < 24; round++) {
@@ -2005,7 +2005,7 @@
   }
   var _0n, _1n, _2n, _7n, _256n, _0x71n, SHA3_PI, SHA3_ROTL, _SHA3_IOTA, IOTAS, SHA3_IOTA_H, SHA3_IOTA_L, rotlH, rotlL, Keccak, gen, keccak_256;
   var init_sha3 = __esm({
-    "node_modules/@noble/hashes/esm/sha3.js"() {
+    "temp_genlayer/node_modules/@noble/hashes/esm/sha3.js"() {
       init_u64();
       init_utils2();
       _0n = BigInt(0);
@@ -2150,7 +2150,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/hash/keccak256.js
+  // temp_genlayer/node_modules/viem/_esm/utils/hash/keccak256.js
   function keccak256(value, to_) {
     const to = to_ || "hex";
     const bytes = keccak_256(isHex(value, { strict: false }) ? toBytes(value) : value);
@@ -2159,7 +2159,7 @@
     return toHex(bytes);
   }
   var init_keccak256 = __esm({
-    "node_modules/viem/_esm/utils/hash/keccak256.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/hash/keccak256.js"() {
       init_sha3();
       init_isHex();
       init_toBytes();
@@ -2167,20 +2167,20 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/hash/hashSignature.js
+  // temp_genlayer/node_modules/viem/_esm/utils/hash/hashSignature.js
   function hashSignature(sig) {
     return hash(sig);
   }
   var hash;
   var init_hashSignature = __esm({
-    "node_modules/viem/_esm/utils/hash/hashSignature.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/hash/hashSignature.js"() {
       init_toBytes();
       init_keccak256();
       hash = (value) => keccak256(toBytes(value));
     }
   });
 
-  // node_modules/viem/_esm/utils/hash/normalizeSignature.js
+  // temp_genlayer/node_modules/viem/_esm/utils/hash/normalizeSignature.js
   function normalizeSignature(signature) {
     let active = true;
     let current = "";
@@ -2224,15 +2224,15 @@
     return result;
   }
   var init_normalizeSignature = __esm({
-    "node_modules/viem/_esm/utils/hash/normalizeSignature.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/hash/normalizeSignature.js"() {
       init_base();
     }
   });
 
-  // node_modules/viem/_esm/utils/hash/toSignature.js
+  // temp_genlayer/node_modules/viem/_esm/utils/hash/toSignature.js
   var toSignature;
   var init_toSignature = __esm({
-    "node_modules/viem/_esm/utils/hash/toSignature.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/hash/toSignature.js"() {
       init_exports();
       init_normalizeSignature();
       toSignature = (def) => {
@@ -2246,30 +2246,30 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/hash/toSignatureHash.js
+  // temp_genlayer/node_modules/viem/_esm/utils/hash/toSignatureHash.js
   function toSignatureHash(fn) {
     return hashSignature(toSignature(fn));
   }
   var init_toSignatureHash = __esm({
-    "node_modules/viem/_esm/utils/hash/toSignatureHash.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/hash/toSignatureHash.js"() {
       init_hashSignature();
       init_toSignature();
     }
   });
 
-  // node_modules/viem/_esm/utils/hash/toEventSelector.js
+  // temp_genlayer/node_modules/viem/_esm/utils/hash/toEventSelector.js
   var toEventSelector;
   var init_toEventSelector = __esm({
-    "node_modules/viem/_esm/utils/hash/toEventSelector.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/hash/toEventSelector.js"() {
       init_toSignatureHash();
       toEventSelector = toSignatureHash;
     }
   });
 
-  // node_modules/viem/_esm/errors/address.js
+  // temp_genlayer/node_modules/viem/_esm/errors/address.js
   var InvalidAddressError;
   var init_address = __esm({
-    "node_modules/viem/_esm/errors/address.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/address.js"() {
       init_base();
       InvalidAddressError = class extends BaseError2 {
         constructor({ address }) {
@@ -2285,10 +2285,10 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/lru.js
+  // temp_genlayer/node_modules/viem/_esm/utils/lru.js
   var LruMap;
   var init_lru = __esm({
-    "node_modules/viem/_esm/utils/lru.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/lru.js"() {
       LruMap = class extends Map {
         constructor(size5) {
           super();
@@ -2323,7 +2323,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/address/getAddress.js
+  // temp_genlayer/node_modules/viem/_esm/utils/address/getAddress.js
   function checksumAddress(address_, chainId) {
     if (checksumAddressCache.has(`${address_}.${chainId}`))
       return checksumAddressCache.get(`${address_}.${chainId}`);
@@ -2349,7 +2349,7 @@
   }
   var checksumAddressCache;
   var init_getAddress = __esm({
-    "node_modules/viem/_esm/utils/address/getAddress.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/address/getAddress.js"() {
       init_address();
       init_toBytes();
       init_keccak256();
@@ -2359,7 +2359,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/address/isAddress.js
+  // temp_genlayer/node_modules/viem/_esm/utils/address/isAddress.js
   function isAddress(address, options) {
     const { strict = true } = options ?? {};
     const cacheKey2 = `${address}.${strict}`;
@@ -2379,7 +2379,7 @@
   }
   var addressRegex, isAddressCache;
   var init_isAddress = __esm({
-    "node_modules/viem/_esm/utils/address/isAddress.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/address/isAddress.js"() {
       init_lru();
       init_getAddress();
       addressRegex = /^0x[a-fA-F0-9]{40}$/;
@@ -2387,7 +2387,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/data/concat.js
+  // temp_genlayer/node_modules/viem/_esm/utils/data/concat.js
   function concat(values) {
     if (typeof values[0] === "string")
       return concatHex(values);
@@ -2410,11 +2410,11 @@
     return `0x${values.reduce((acc, x) => acc + x.replace("0x", ""), "")}`;
   }
   var init_concat = __esm({
-    "node_modules/viem/_esm/utils/data/concat.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/data/concat.js"() {
     }
   });
 
-  // node_modules/viem/_esm/utils/data/slice.js
+  // temp_genlayer/node_modules/viem/_esm/utils/data/slice.js
   function slice(value, start, end, { strict } = {}) {
     if (isHex(value, { strict: false }))
       return sliceHex(value, start, end, {
@@ -2456,23 +2456,23 @@
     return value;
   }
   var init_slice = __esm({
-    "node_modules/viem/_esm/utils/data/slice.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/data/slice.js"() {
       init_data();
       init_isHex();
       init_size();
     }
   });
 
-  // node_modules/viem/_esm/utils/regex.js
+  // temp_genlayer/node_modules/viem/_esm/utils/regex.js
   var bytesRegex2, integerRegex2;
   var init_regex2 = __esm({
-    "node_modules/viem/_esm/utils/regex.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/regex.js"() {
       bytesRegex2 = /^bytes([1-9]|1[0-9]|2[0-9]|3[0-2])?$/;
       integerRegex2 = /^(u?int)(8|16|24|32|40|48|56|64|72|80|88|96|104|112|120|128|136|144|152|160|168|176|184|192|200|208|216|224|232|240|248|256)?$/;
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/encodeAbiParameters.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/encodeAbiParameters.js
   function encodeAbiParameters(params, values) {
     if (params.length !== values.length)
       throw new AbiEncodingLengthMismatchError({
@@ -2701,7 +2701,7 @@
     return false;
   }
   var init_encodeAbiParameters = __esm({
-    "node_modules/viem/_esm/utils/abi/encodeAbiParameters.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/encodeAbiParameters.js"() {
       init_abi();
       init_address();
       init_base();
@@ -2716,17 +2716,17 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/hash/toFunctionSelector.js
+  // temp_genlayer/node_modules/viem/_esm/utils/hash/toFunctionSelector.js
   var toFunctionSelector;
   var init_toFunctionSelector = __esm({
-    "node_modules/viem/_esm/utils/hash/toFunctionSelector.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/hash/toFunctionSelector.js"() {
       init_slice();
       init_toSignatureHash();
       toFunctionSelector = (fn) => slice(toSignatureHash(fn), 0, 4);
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/getAbiItem.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/getAbiItem.js
   function getAbiItem(parameters) {
     const { abi: abi2, args = [], name } = parameters;
     const isSelector = isHex(name, { strict: false });
@@ -2838,7 +2838,7 @@
     return;
   }
   var init_getAbiItem = __esm({
-    "node_modules/viem/_esm/utils/abi/getAbiItem.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/getAbiItem.js"() {
       init_abi();
       init_isHex();
       init_isAddress();
@@ -2847,7 +2847,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/encodeEventTopics.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/encodeEventTopics.js
   function encodeEventTopics(parameters) {
     const { abi: abi2, eventName, args } = parameters;
     let abiItem = abi2[0];
@@ -2886,7 +2886,7 @@
   }
   var docsPath;
   var init_encodeEventTopics = __esm({
-    "node_modules/viem/_esm/utils/abi/encodeEventTopics.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/encodeEventTopics.js"() {
       init_abi();
       init_log();
       init_toBytes();
@@ -2899,7 +2899,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/filters/createFilterRequestScope.js
+  // temp_genlayer/node_modules/viem/_esm/utils/filters/createFilterRequestScope.js
   function createFilterRequestScope(client, { method }) {
     const requestMap = {};
     if (client.transport.type === "fallback")
@@ -2910,11 +2910,11 @@
     return ((id) => requestMap[id] || client.request);
   }
   var init_createFilterRequestScope = __esm({
-    "node_modules/viem/_esm/utils/filters/createFilterRequestScope.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/filters/createFilterRequestScope.js"() {
     }
   });
 
-  // node_modules/viem/_esm/actions/public/createContractEventFilter.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/createContractEventFilter.js
   async function createContractEventFilter(client, parameters) {
     const { address, abi: abi2, args, eventName, fromBlock, strict, toBlock } = parameters;
     const getRequest = createFilterRequestScope(client, {
@@ -2947,25 +2947,25 @@
     };
   }
   var init_createContractEventFilter = __esm({
-    "node_modules/viem/_esm/actions/public/createContractEventFilter.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/createContractEventFilter.js"() {
       init_encodeEventTopics();
       init_toHex();
       init_createFilterRequestScope();
     }
   });
 
-  // node_modules/viem/_esm/accounts/utils/parseAccount.js
+  // temp_genlayer/node_modules/viem/_esm/accounts/utils/parseAccount.js
   function parseAccount(account) {
     if (typeof account === "string")
       return { address: account, type: "json-rpc" };
     return account;
   }
   var init_parseAccount = __esm({
-    "node_modules/viem/_esm/accounts/utils/parseAccount.js"() {
+    "temp_genlayer/node_modules/viem/_esm/accounts/utils/parseAccount.js"() {
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/prepareEncodeFunctionData.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/prepareEncodeFunctionData.js
   function prepareEncodeFunctionData(parameters) {
     const { abi: abi2, args, functionName } = parameters;
     let abiItem = abi2[0];
@@ -2988,7 +2988,7 @@
   }
   var docsPath2;
   var init_prepareEncodeFunctionData = __esm({
-    "node_modules/viem/_esm/utils/abi/prepareEncodeFunctionData.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/prepareEncodeFunctionData.js"() {
       init_abi();
       init_toFunctionSelector();
       init_formatAbiItem2();
@@ -2997,7 +2997,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/encodeFunctionData.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/encodeFunctionData.js
   function encodeFunctionData(parameters) {
     const { args } = parameters;
     const { abi: abi2, functionName } = (() => {
@@ -3011,17 +3011,17 @@
     return concatHex([signature, data ?? "0x"]);
   }
   var init_encodeFunctionData = __esm({
-    "node_modules/viem/_esm/utils/abi/encodeFunctionData.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/encodeFunctionData.js"() {
       init_concat();
       init_encodeAbiParameters();
       init_prepareEncodeFunctionData();
     }
   });
 
-  // node_modules/viem/_esm/constants/solidity.js
+  // temp_genlayer/node_modules/viem/_esm/constants/solidity.js
   var panicReasons, solidityError, solidityPanic;
   var init_solidity = __esm({
-    "node_modules/viem/_esm/constants/solidity.js"() {
+    "temp_genlayer/node_modules/viem/_esm/constants/solidity.js"() {
       panicReasons = {
         1: "An `assert` condition failed.",
         17: "Arithmetic operation resulted in underflow or overflow.",
@@ -3056,10 +3056,10 @@
     }
   });
 
-  // node_modules/viem/_esm/errors/cursor.js
+  // temp_genlayer/node_modules/viem/_esm/errors/cursor.js
   var NegativeOffsetError, PositionOutOfBoundsError, RecursiveReadLimitExceededError;
   var init_cursor = __esm({
-    "node_modules/viem/_esm/errors/cursor.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/cursor.js"() {
       init_base();
       NegativeOffsetError = class extends BaseError2 {
         constructor({ offset }) {
@@ -3081,7 +3081,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/cursor.js
+  // temp_genlayer/node_modules/viem/_esm/utils/cursor.js
   function createCursor(bytes, { recursiveReadLimit = 8192 } = {}) {
     const cursor = Object.create(staticCursor);
     cursor.bytes = bytes;
@@ -3092,7 +3092,7 @@
   }
   var staticCursor;
   var init_cursor2 = __esm({
-    "node_modules/viem/_esm/utils/cursor.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/cursor.js"() {
       init_cursor();
       staticCursor = {
         bytes: new Uint8Array(),
@@ -3256,7 +3256,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/encoding/fromBytes.js
+  // temp_genlayer/node_modules/viem/_esm/utils/encoding/fromBytes.js
   function bytesToBigInt(bytes, opts = {}) {
     if (typeof opts.size !== "undefined")
       assertSize(bytes, { size: opts.size });
@@ -3288,7 +3288,7 @@
     return new TextDecoder().decode(bytes);
   }
   var init_fromBytes = __esm({
-    "node_modules/viem/_esm/utils/encoding/fromBytes.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/encoding/fromBytes.js"() {
       init_encoding();
       init_trim();
       init_fromHex();
@@ -3296,7 +3296,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/decodeAbiParameters.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/decodeAbiParameters.js
   function decodeAbiParameters(params, data) {
     const bytes = typeof data === "string" ? hexToBytes(data) : data;
     const cursor = createCursor(bytes);
@@ -3491,7 +3491,7 @@
   }
   var sizeOfLength, sizeOfOffset;
   var init_decodeAbiParameters = __esm({
-    "node_modules/viem/_esm/utils/abi/decodeAbiParameters.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/decodeAbiParameters.js"() {
       init_abi();
       init_getAddress();
       init_cursor2();
@@ -3507,7 +3507,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/decodeErrorResult.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/decodeErrorResult.js
   function decodeErrorResult(parameters) {
     const { abi: abi2, data, cause } = parameters;
     const signature = slice(data, 0, 4);
@@ -3527,7 +3527,7 @@
     };
   }
   var init_decodeErrorResult = __esm({
-    "node_modules/viem/_esm/utils/abi/decodeErrorResult.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/decodeErrorResult.js"() {
       init_solidity();
       init_abi();
       init_slice();
@@ -3537,10 +3537,10 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/stringify.js
+  // temp_genlayer/node_modules/viem/_esm/utils/stringify.js
   var stringify;
   var init_stringify = __esm({
-    "node_modules/viem/_esm/utils/stringify.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/stringify.js"() {
       stringify = (value, replacer, space) => JSON.stringify(value, (key, value_) => {
         const value2 = typeof value_ === "bigint" ? value_.toString() : value_;
         return typeof replacer === "function" ? replacer(key, value2) : value2;
@@ -3548,7 +3548,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/formatAbiItemWithArgs.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/formatAbiItemWithArgs.js
   function formatAbiItemWithArgs({ abiItem, args, includeFunctionName = true, includeName = false }) {
     if (!("name" in abiItem))
       return;
@@ -3559,15 +3559,15 @@
     return `${includeFunctionName ? abiItem.name : ""}(${abiItem.inputs.map((input, i) => `${includeName && input.name ? `${input.name}: ` : ""}${typeof args[i] === "object" ? stringify(args[i]) : args[i]}`).join(", ")})`;
   }
   var init_formatAbiItemWithArgs = __esm({
-    "node_modules/viem/_esm/utils/abi/formatAbiItemWithArgs.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/formatAbiItemWithArgs.js"() {
       init_stringify();
     }
   });
 
-  // node_modules/viem/_esm/constants/unit.js
+  // temp_genlayer/node_modules/viem/_esm/constants/unit.js
   var etherUnits, gweiUnits;
   var init_unit = __esm({
-    "node_modules/viem/_esm/constants/unit.js"() {
+    "temp_genlayer/node_modules/viem/_esm/constants/unit.js"() {
       etherUnits = {
         gwei: 9,
         wei: 18
@@ -3579,7 +3579,7 @@
     }
   });
 
-  // node_modules/viem/_esm/utils/unit/formatUnits.js
+  // temp_genlayer/node_modules/viem/_esm/utils/unit/formatUnits.js
   function formatUnits(value, decimals) {
     let display = value.toString();
     const negative = display.startsWith("-");
@@ -3594,33 +3594,33 @@
     return `${negative ? "-" : ""}${integer || "0"}${fraction ? `.${fraction}` : ""}`;
   }
   var init_formatUnits = __esm({
-    "node_modules/viem/_esm/utils/unit/formatUnits.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/unit/formatUnits.js"() {
     }
   });
 
-  // node_modules/viem/_esm/utils/unit/formatEther.js
+  // temp_genlayer/node_modules/viem/_esm/utils/unit/formatEther.js
   function formatEther(wei, unit = "wei") {
     return formatUnits(wei, etherUnits[unit]);
   }
   var init_formatEther = __esm({
-    "node_modules/viem/_esm/utils/unit/formatEther.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/unit/formatEther.js"() {
       init_unit();
       init_formatUnits();
     }
   });
 
-  // node_modules/viem/_esm/utils/unit/formatGwei.js
+  // temp_genlayer/node_modules/viem/_esm/utils/unit/formatGwei.js
   function formatGwei(wei, unit = "wei") {
     return formatUnits(wei, gweiUnits[unit]);
   }
   var init_formatGwei = __esm({
-    "node_modules/viem/_esm/utils/unit/formatGwei.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/unit/formatGwei.js"() {
       init_unit();
       init_formatUnits();
     }
   });
 
-  // node_modules/viem/_esm/errors/stateOverride.js
+  // temp_genlayer/node_modules/viem/_esm/errors/stateOverride.js
   function prettyStateMapping(stateMapping) {
     return stateMapping.reduce((pretty, { slot, value }) => {
       return `${pretty}        ${slot}: ${value}
@@ -3653,7 +3653,7 @@
   }
   var AccountStateConflictError, StateAssignmentConflictError;
   var init_stateOverride = __esm({
-    "node_modules/viem/_esm/errors/stateOverride.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/stateOverride.js"() {
       init_base();
       AccountStateConflictError = class extends BaseError2 {
         constructor({ address }) {
@@ -3672,7 +3672,7 @@
     }
   });
 
-  // node_modules/viem/_esm/errors/transaction.js
+  // temp_genlayer/node_modules/viem/_esm/errors/transaction.js
   function prettyPrint(args) {
     const entries = Object.entries(args).map(([key, value]) => {
       if (value === void 0 || value === false)
@@ -3684,7 +3684,7 @@
   }
   var InvalidSerializableTransactionError, TransactionExecutionError, TransactionNotFoundError, TransactionReceiptNotFoundError, TransactionReceiptRevertedError, WaitForTransactionReceiptTimeoutError;
   var init_transaction = __esm({
-    "node_modules/viem/_esm/errors/transaction.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/transaction.js"() {
       init_formatEther();
       init_formatGwei();
       init_base();
@@ -3794,7 +3794,7 @@
     }
   });
 
-  // node_modules/viem/_esm/errors/utils.js
+  // temp_genlayer/node_modules/viem/_esm/errors/utils.js
   function getAbortError(signal) {
     if (signal?.reason)
       return signal.reason;
@@ -3809,7 +3809,7 @@
   }
   var getContractAddress, getUrl;
   var init_utils3 = __esm({
-    "node_modules/viem/_esm/errors/utils.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/utils.js"() {
       getContractAddress = (address) => address;
       getUrl = (url) => {
         try {
@@ -3826,10 +3826,10 @@
     }
   });
 
-  // node_modules/viem/_esm/errors/contract.js
+  // temp_genlayer/node_modules/viem/_esm/errors/contract.js
   var CallExecutionError, ContractFunctionExecutionError, ContractFunctionRevertedError, ContractFunctionZeroDataError, CounterfactualDeploymentFailedError, RawContractError;
   var init_contract = __esm({
-    "node_modules/viem/_esm/errors/contract.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/contract.js"() {
       init_parseAccount();
       init_solidity();
       init_decodeErrorResult();
@@ -4083,10 +4083,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/errors/request.js
+  // temp_genlayer/node_modules/viem/_esm/errors/request.js
   var HttpRequestError, RpcRequestError;
   var init_request = __esm({
-    "node_modules/viem/_esm/errors/request.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/request.js"() {
       init_stringify();
       init_base();
       init_utils3();
@@ -4166,10 +4166,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/errors/rpc.js
+  // temp_genlayer/node_modules/viem/_esm/errors/rpc.js
   var unknownErrorCode, RpcError, ProviderRpcError, ParseRpcError, InvalidRequestRpcError, MethodNotFoundRpcError, InvalidParamsRpcError, InternalRpcError, InvalidInputRpcError, ResourceNotFoundRpcError, ResourceUnavailableRpcError, TransactionRejectedRpcError, MethodNotSupportedRpcError, LimitExceededRpcError, JsonRpcVersionUnsupportedError, UserRejectedRequestError, UnauthorizedProviderError, UnsupportedProviderMethodError, ProviderDisconnectedError, ChainDisconnectedError, SwitchChainError, UnsupportedNonOptionalCapabilityError, UnsupportedChainIdError, DuplicateIdError, UnknownBundleIdError, BundleTooLargeError, AtomicReadyWalletRejectedUpgradeError, AtomicityNotSupportedError, WalletConnectSessionSettlementError, UnknownRpcError;
   var init_rpc = __esm({
-    "node_modules/viem/_esm/errors/rpc.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/rpc.js"() {
       init_base();
       init_request();
       unknownErrorCode = -1;
@@ -4616,7 +4616,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/errors/getContractError.js
+  // temp_genlayer/node_modules/viem/_esm/utils/errors/getContractError.js
   function getContractError(err, { abi: abi2, address, args, docsPath: docsPath8, functionName, sender }) {
     const error = err instanceof RawContractError ? err : err instanceof BaseError2 ? err.walk((err2) => "data" in err2) || err.walk() : {};
     const { code, data, details, message, shortMessage } = error;
@@ -4645,7 +4645,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var EXECUTION_REVERTED_ERROR_CODE;
   var init_getContractError = __esm({
-    "node_modules/viem/_esm/utils/errors/getContractError.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/errors/getContractError.js"() {
       init_abi();
       init_base();
       init_contract();
@@ -4655,19 +4655,19 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/accounts/utils/publicKeyToAddress.js
+  // temp_genlayer/node_modules/viem/_esm/accounts/utils/publicKeyToAddress.js
   function publicKeyToAddress(publicKey) {
     const address = keccak256(`0x${publicKey.substring(4)}`).substring(26);
     return checksumAddress(`0x${address}`);
   }
   var init_publicKeyToAddress = __esm({
-    "node_modules/viem/_esm/accounts/utils/publicKeyToAddress.js"() {
+    "temp_genlayer/node_modules/viem/_esm/accounts/utils/publicKeyToAddress.js"() {
       init_getAddress();
       init_keccak256();
     }
   });
 
-  // node_modules/@noble/hashes/esm/_md.js
+  // temp_genlayer/node_modules/@noble/hashes/esm/_md.js
   function setBigUint64(view, byteOffset, value, isLE2) {
     if (typeof view.setBigUint64 === "function")
       return view.setBigUint64(byteOffset, value, isLE2);
@@ -4688,7 +4688,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var HashMD, SHA256_IV;
   var init_md = __esm({
-    "node_modules/@noble/hashes/esm/_md.js"() {
+    "temp_genlayer/node_modules/@noble/hashes/esm/_md.js"() {
       init_utils2();
       HashMD = class extends Hash {
         constructor(blockLen, outputLen, padOffset, isLE2) {
@@ -4793,10 +4793,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/@noble/hashes/esm/sha2.js
+  // temp_genlayer/node_modules/@noble/hashes/esm/sha2.js
   var SHA256_K, SHA256_W, SHA256, sha256;
   var init_sha2 = __esm({
-    "node_modules/@noble/hashes/esm/sha2.js"() {
+    "temp_genlayer/node_modules/@noble/hashes/esm/sha2.js"() {
       init_md();
       init_utils2();
       SHA256_K = /* @__PURE__ */ Uint32Array.from([
@@ -4940,10 +4940,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/@noble/hashes/esm/hmac.js
+  // temp_genlayer/node_modules/@noble/hashes/esm/hmac.js
   var HMAC, hmac;
   var init_hmac = __esm({
-    "node_modules/@noble/hashes/esm/hmac.js"() {
+    "temp_genlayer/node_modules/@noble/hashes/esm/hmac.js"() {
       init_utils2();
       HMAC = class extends Hash {
         constructor(hash3, _key) {
@@ -5014,7 +5014,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/@noble/curves/esm/abstract/utils.js
+  // temp_genlayer/node_modules/@noble/curves/esm/abstract/utils.js
   function isBytes2(a) {
     return a instanceof Uint8Array || ArrayBuffer.isView(a) && a.constructor.name === "Uint8Array";
   }
@@ -5218,7 +5218,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var _0n2, _1n2, hasHexBuiltin, hexes2, asciis, isPosBig, bitMask, u8n, u8fr, validatorFns;
   var init_utils4 = __esm({
-    "node_modules/@noble/curves/esm/abstract/utils.js"() {
+    "temp_genlayer/node_modules/@noble/curves/esm/abstract/utils.js"() {
       _0n2 = /* @__PURE__ */ BigInt(0);
       _1n2 = /* @__PURE__ */ BigInt(1);
       hasHexBuiltin = // @ts-ignore
@@ -5243,7 +5243,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/@noble/curves/esm/abstract/modular.js
+  // temp_genlayer/node_modules/@noble/curves/esm/abstract/modular.js
   function mod(a, b) {
     const result = a % b;
     return result >= _0n3 ? result : b + result;
@@ -5492,7 +5492,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var _0n3, _1n3, _2n2, _3n, _4n, _5n, _8n, FIELD_FIELDS;
   var init_modular = __esm({
-    "node_modules/@noble/curves/esm/abstract/modular.js"() {
+    "temp_genlayer/node_modules/@noble/curves/esm/abstract/modular.js"() {
       init_utils2();
       init_utils4();
       _0n3 = BigInt(0);
@@ -5524,7 +5524,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/@noble/curves/esm/abstract/curve.js
+  // temp_genlayer/node_modules/@noble/curves/esm/abstract/curve.js
   function constTimeNegate(condition, item) {
     const neg = item.negate();
     return condition ? neg : item;
@@ -5755,7 +5755,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var _0n4, _1n4, pointPrecomputes, pointWindowSizes;
   var init_curve = __esm({
-    "node_modules/@noble/curves/esm/abstract/curve.js"() {
+    "temp_genlayer/node_modules/@noble/curves/esm/abstract/curve.js"() {
       init_modular();
       init_utils4();
       _0n4 = BigInt(0);
@@ -5765,7 +5765,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/@noble/curves/esm/abstract/weierstrass.js
+  // temp_genlayer/node_modules/@noble/curves/esm/abstract/weierstrass.js
   function validateSigVerOpts(opts) {
     if (opts.lowS !== void 0)
       abool("lowS", opts.lowS);
@@ -6642,7 +6642,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var DERErr, DER, _0n5, _1n5, _2n3, _3n2, _4n2;
   var init_weierstrass = __esm({
-    "node_modules/@noble/curves/esm/abstract/weierstrass.js"() {
+    "temp_genlayer/node_modules/@noble/curves/esm/abstract/weierstrass.js"() {
       init_curve();
       init_modular();
       init_utils4();
@@ -6759,7 +6759,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/@noble/curves/esm/_shortw_utils.js
+  // temp_genlayer/node_modules/@noble/curves/esm/_shortw_utils.js
   function getHash(hash3) {
     return {
       hash: hash3,
@@ -6772,14 +6772,14 @@ ${prettyStateOverride(stateOverride)}`;
     return { ...create2(defHash), create: create2 };
   }
   var init_shortw_utils = __esm({
-    "node_modules/@noble/curves/esm/_shortw_utils.js"() {
+    "temp_genlayer/node_modules/@noble/curves/esm/_shortw_utils.js"() {
       init_hmac();
       init_utils2();
       init_weierstrass();
     }
   });
 
-  // node_modules/@noble/curves/esm/abstract/hash-to-curve.js
+  // temp_genlayer/node_modules/@noble/curves/esm/abstract/hash-to-curve.js
   function i2osp(value, length) {
     anum(value);
     anum(length);
@@ -6927,14 +6927,14 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var os2ip;
   var init_hash_to_curve = __esm({
-    "node_modules/@noble/curves/esm/abstract/hash-to-curve.js"() {
+    "temp_genlayer/node_modules/@noble/curves/esm/abstract/hash-to-curve.js"() {
       init_modular();
       init_utils4();
       os2ip = bytesToNumberBE;
     }
   });
 
-  // node_modules/@noble/curves/esm/secp256k1.js
+  // temp_genlayer/node_modules/@noble/curves/esm/secp256k1.js
   var secp256k1_exports = {};
   __export(secp256k1_exports, {
     encodeToCurve: () => encodeToCurve,
@@ -7038,7 +7038,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var secp256k1P, secp256k1N, _0n6, _1n6, _2n4, divNearest, Fpk1, secp256k1, TAGGED_HASH_PREFIXES, pointToBytes, numTo32b, modP, modN, Point, GmulAdd, num, schnorr, isoMap, mapSWU, secp256k1_hasher, hashToCurve, encodeToCurve;
   var init_secp256k1 = __esm({
-    "node_modules/@noble/curves/esm/secp256k1.js"() {
+    "temp_genlayer/node_modules/@noble/curves/esm/secp256k1.js"() {
       init_sha2();
       init_utils2();
       init_shortw_utils();
@@ -7165,7 +7165,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/signature/recoverPublicKey.js
+  // temp_genlayer/node_modules/viem/_esm/utils/signature/recoverPublicKey.js
   async function recoverPublicKey({ hash: hash3, signature }) {
     const hashHex = isHex(hash3) ? hash3 : toHex(hash3);
     const { secp256k1: secp256k12 } = await Promise.resolve().then(() => (init_secp256k1(), secp256k1_exports));
@@ -7196,7 +7196,7 @@ ${prettyStateOverride(stateOverride)}`;
     throw new Error("Invalid yParityOrV value");
   }
   var init_recoverPublicKey = __esm({
-    "node_modules/viem/_esm/utils/signature/recoverPublicKey.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/signature/recoverPublicKey.js"() {
       init_isHex();
       init_size();
       init_fromHex();
@@ -7204,18 +7204,18 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/signature/recoverAddress.js
+  // temp_genlayer/node_modules/viem/_esm/utils/signature/recoverAddress.js
   async function recoverAddress({ hash: hash3, signature }) {
     return publicKeyToAddress(await recoverPublicKey({ hash: hash3, signature }));
   }
   var init_recoverAddress = __esm({
-    "node_modules/viem/_esm/utils/signature/recoverAddress.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/signature/recoverAddress.js"() {
       init_publicKeyToAddress();
       init_recoverPublicKey();
     }
   });
 
-  // node_modules/viem/_esm/utils/encoding/toRlp.js
+  // temp_genlayer/node_modules/viem/_esm/utils/encoding/toRlp.js
   function toRlp(bytes, to = "hex") {
     const encodable = getEncodable(bytes);
     const cursor = createCursor(new Uint8Array(encodable.length));
@@ -7304,7 +7304,7 @@ ${prettyStateOverride(stateOverride)}`;
     throw new BaseError2("Length is too large.");
   }
   var init_toRlp = __esm({
-    "node_modules/viem/_esm/utils/encoding/toRlp.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/encoding/toRlp.js"() {
       init_base();
       init_cursor2();
       init_toBytes();
@@ -7312,7 +7312,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/authorization/hashAuthorization.js
+  // temp_genlayer/node_modules/viem/_esm/utils/authorization/hashAuthorization.js
   function hashAuthorization(parameters) {
     const { chainId, nonce, to } = parameters;
     const address = parameters.contractAddress ?? parameters.address;
@@ -7329,7 +7329,7 @@ ${prettyStateOverride(stateOverride)}`;
     return hash3;
   }
   var init_hashAuthorization = __esm({
-    "node_modules/viem/_esm/utils/authorization/hashAuthorization.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/authorization/hashAuthorization.js"() {
       init_concat();
       init_toBytes();
       init_toHex();
@@ -7338,7 +7338,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/authorization/recoverAuthorizationAddress.js
+  // temp_genlayer/node_modules/viem/_esm/utils/authorization/recoverAuthorizationAddress.js
   async function recoverAuthorizationAddress(parameters) {
     const { authorization, signature } = parameters;
     return recoverAddress({
@@ -7347,16 +7347,16 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_recoverAuthorizationAddress = __esm({
-    "node_modules/viem/_esm/utils/authorization/recoverAuthorizationAddress.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/authorization/recoverAuthorizationAddress.js"() {
       init_recoverAddress();
       init_hashAuthorization();
     }
   });
 
-  // node_modules/viem/_esm/errors/estimateGas.js
+  // temp_genlayer/node_modules/viem/_esm/errors/estimateGas.js
   var EstimateGasExecutionError;
   var init_estimateGas = __esm({
-    "node_modules/viem/_esm/errors/estimateGas.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/estimateGas.js"() {
       init_formatEther();
       init_formatGwei();
       init_base();
@@ -7396,10 +7396,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/errors/node.js
+  // temp_genlayer/node_modules/viem/_esm/errors/node.js
   var ExecutionRevertedError, FeeCapTooHighError, FeeCapTooLowError, NonceTooHighError, NonceTooLowError, NonceMaxValueError, InsufficientFundsError, IntrinsicGasTooHighError, IntrinsicGasTooLowError, TransactionTypeNotSupportedError, TipAboveFeeCapError, UnknownNodeError;
   var init_node = __esm({
-    "node_modules/viem/_esm/errors/node.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/node.js"() {
       init_formatGwei();
       init_base();
       ExecutionRevertedError = class extends BaseError2 {
@@ -7582,7 +7582,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/errors/getNodeError.js
+  // temp_genlayer/node_modules/viem/_esm/utils/errors/getNodeError.js
   function getNodeError(err, args) {
     const message = (err.details || "").toLowerCase();
     const executionRevertedError = err instanceof BaseError2 ? err.walk((e) => e?.code === ExecutionRevertedError.code) : err;
@@ -7631,13 +7631,13 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_getNodeError = __esm({
-    "node_modules/viem/_esm/utils/errors/getNodeError.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/errors/getNodeError.js"() {
       init_base();
       init_node();
     }
   });
 
-  // node_modules/viem/_esm/utils/errors/getEstimateGasError.js
+  // temp_genlayer/node_modules/viem/_esm/utils/errors/getEstimateGasError.js
   function getEstimateGasError(err, { docsPath: docsPath8, ...args }) {
     const cause = (() => {
       const cause2 = getNodeError(err, args);
@@ -7651,14 +7651,14 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_getEstimateGasError = __esm({
-    "node_modules/viem/_esm/utils/errors/getEstimateGasError.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/errors/getEstimateGasError.js"() {
       init_estimateGas();
       init_node();
       init_getNodeError();
     }
   });
 
-  // node_modules/viem/_esm/utils/formatters/extract.js
+  // temp_genlayer/node_modules/viem/_esm/utils/formatters/extract.js
   function extract(value_, { format }) {
     if (!format)
       return {};
@@ -7677,11 +7677,11 @@ ${prettyStateOverride(stateOverride)}`;
     return value;
   }
   var init_extract = __esm({
-    "node_modules/viem/_esm/utils/formatters/extract.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/formatters/extract.js"() {
     }
   });
 
-  // node_modules/viem/_esm/utils/formatters/transactionRequest.js
+  // temp_genlayer/node_modules/viem/_esm/utils/formatters/transactionRequest.js
   function formatTransactionRequest(request, _) {
     const rpcRequest = {};
     if (typeof request.authorizationList !== "undefined")
@@ -7735,7 +7735,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var rpcTransactionType;
   var init_transactionRequest = __esm({
-    "node_modules/viem/_esm/utils/formatters/transactionRequest.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/formatters/transactionRequest.js"() {
       init_toHex();
       rpcTransactionType = {
         legacy: "0x0",
@@ -7747,7 +7747,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/stateOverride.js
+  // temp_genlayer/node_modules/viem/_esm/utils/stateOverride.js
   function serializeStateMapping(stateMapping) {
     if (!stateMapping || stateMapping.length === 0)
       return void 0;
@@ -7800,7 +7800,7 @@ ${prettyStateOverride(stateOverride)}`;
     return rpcStateOverride;
   }
   var init_stateOverride2 = __esm({
-    "node_modules/viem/_esm/utils/stateOverride.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/stateOverride.js"() {
       init_address();
       init_data();
       init_stateOverride();
@@ -7809,10 +7809,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/constants/number.js
+  // temp_genlayer/node_modules/viem/_esm/constants/number.js
   var maxInt8, maxInt16, maxInt24, maxInt32, maxInt40, maxInt48, maxInt56, maxInt64, maxInt72, maxInt80, maxInt88, maxInt96, maxInt104, maxInt112, maxInt120, maxInt128, maxInt136, maxInt144, maxInt152, maxInt160, maxInt168, maxInt176, maxInt184, maxInt192, maxInt200, maxInt208, maxInt216, maxInt224, maxInt232, maxInt240, maxInt248, maxInt256, minInt8, minInt16, minInt24, minInt32, minInt40, minInt48, minInt56, minInt64, minInt72, minInt80, minInt88, minInt96, minInt104, minInt112, minInt120, minInt128, minInt136, minInt144, minInt152, minInt160, minInt168, minInt176, minInt184, minInt192, minInt200, minInt208, minInt216, minInt224, minInt232, minInt240, minInt248, minInt256, maxUint8, maxUint16, maxUint24, maxUint32, maxUint40, maxUint48, maxUint56, maxUint64, maxUint72, maxUint80, maxUint88, maxUint96, maxUint104, maxUint112, maxUint120, maxUint128, maxUint136, maxUint144, maxUint152, maxUint160, maxUint168, maxUint176, maxUint184, maxUint192, maxUint200, maxUint208, maxUint216, maxUint224, maxUint232, maxUint240, maxUint248, maxUint256;
   var init_number = __esm({
-    "node_modules/viem/_esm/constants/number.js"() {
+    "temp_genlayer/node_modules/viem/_esm/constants/number.js"() {
       maxInt8 = 2n ** (8n - 1n) - 1n;
       maxInt16 = 2n ** (16n - 1n) - 1n;
       maxInt24 = 2n ** (24n - 1n) - 1n;
@@ -7912,7 +7912,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/transaction/assertRequest.js
+  // temp_genlayer/node_modules/viem/_esm/utils/transaction/assertRequest.js
   function assertRequest(args) {
     const { account: account_, maxFeePerGas, maxPriorityFeePerGas, to } = args;
     const account = account_ ? parseAccount(account_) : void 0;
@@ -7926,7 +7926,7 @@ ${prettyStateOverride(stateOverride)}`;
       throw new TipAboveFeeCapError({ maxFeePerGas, maxPriorityFeePerGas });
   }
   var init_assertRequest = __esm({
-    "node_modules/viem/_esm/utils/transaction/assertRequest.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/transaction/assertRequest.js"() {
       init_parseAccount();
       init_number();
       init_address();
@@ -7935,10 +7935,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/errors/fee.js
+  // temp_genlayer/node_modules/viem/_esm/errors/fee.js
   var BaseFeeScalarError, Eip1559FeesNotSupportedError, MaxFeePerGasTooLowError;
   var init_fee = __esm({
-    "node_modules/viem/_esm/errors/fee.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/fee.js"() {
       init_formatGwei();
       init_base();
       BaseFeeScalarError = class extends BaseError2 {
@@ -7963,10 +7963,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/errors/block.js
+  // temp_genlayer/node_modules/viem/_esm/errors/block.js
   var BlockNotFoundError;
   var init_block = __esm({
-    "node_modules/viem/_esm/errors/block.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/block.js"() {
       init_base();
       BlockNotFoundError = class extends BaseError2 {
         constructor({ blockHash, blockNumber }) {
@@ -7981,7 +7981,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/formatters/transaction.js
+  // temp_genlayer/node_modules/viem/_esm/utils/formatters/transaction.js
   function formatTransaction(transaction, _) {
     const transaction_ = {
       ...transaction,
@@ -8047,7 +8047,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var transactionType;
   var init_transaction2 = __esm({
-    "node_modules/viem/_esm/utils/formatters/transaction.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/formatters/transaction.js"() {
       init_fromHex();
       transactionType = {
         "0x0": "legacy",
@@ -8059,7 +8059,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/formatters/block.js
+  // temp_genlayer/node_modules/viem/_esm/utils/formatters/block.js
   function formatBlock(block, _) {
     const transactions2 = (block.transactions ?? []).map((transaction) => {
       if (typeof transaction === "string")
@@ -8085,12 +8085,12 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_block2 = __esm({
-    "node_modules/viem/_esm/utils/formatters/block.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/formatters/block.js"() {
       init_transaction2();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getBlock.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getBlock.js
   async function getBlock(client, { blockHash, blockNumber, blockTag = client.experimental_blockTag ?? "latest", includeTransactions: includeTransactions_ } = {}) {
     const includeTransactions = includeTransactions_ ?? false;
     const blockNumberHex = blockNumber !== void 0 ? numberToHex(blockNumber) : void 0;
@@ -8112,14 +8112,14 @@ ${prettyStateOverride(stateOverride)}`;
     return format(block, "getBlock");
   }
   var init_getBlock = __esm({
-    "node_modules/viem/_esm/actions/public/getBlock.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getBlock.js"() {
       init_block();
       init_toHex();
       init_block2();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getGasPrice.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getGasPrice.js
   async function getGasPrice(client) {
     const gasPrice = await client.request({
       method: "eth_gasPrice"
@@ -8127,11 +8127,11 @@ ${prettyStateOverride(stateOverride)}`;
     return BigInt(gasPrice);
   }
   var init_getGasPrice = __esm({
-    "node_modules/viem/_esm/actions/public/getGasPrice.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getGasPrice.js"() {
     }
   });
 
-  // node_modules/viem/_esm/actions/public/estimateMaxPriorityFeePerGas.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/estimateMaxPriorityFeePerGas.js
   async function estimateMaxPriorityFeePerGas(client, args) {
     return internal_estimateMaxPriorityFeePerGas(client, args);
   }
@@ -8170,7 +8170,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   }
   var init_estimateMaxPriorityFeePerGas = __esm({
-    "node_modules/viem/_esm/actions/public/estimateMaxPriorityFeePerGas.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/estimateMaxPriorityFeePerGas.js"() {
       init_fee();
       init_fromHex();
       init_getAction();
@@ -8179,7 +8179,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/estimateFeesPerGas.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/estimateFeesPerGas.js
   async function estimateFeesPerGas(client, args) {
     return internal_estimateFeesPerGas(client, args);
   }
@@ -8232,7 +8232,7 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_estimateFeesPerGas = __esm({
-    "node_modules/viem/_esm/actions/public/estimateFeesPerGas.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/estimateFeesPerGas.js"() {
       init_fee();
       init_getAction();
       init_estimateMaxPriorityFeePerGas();
@@ -8241,7 +8241,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/block/formatBlockParameter.js
+  // temp_genlayer/node_modules/viem/_esm/utils/block/formatBlockParameter.js
   function formatBlockParameter(parameters) {
     const { blockHash, blockNumber, blockTag, requireCanonical } = parameters;
     if (requireCanonical !== void 0 && !blockHash)
@@ -8253,13 +8253,13 @@ ${prettyStateOverride(stateOverride)}`;
     return blockTag ?? "latest";
   }
   var init_formatBlockParameter = __esm({
-    "node_modules/viem/_esm/utils/block/formatBlockParameter.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/block/formatBlockParameter.js"() {
       init_base();
       init_toHex();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getTransactionCount.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getTransactionCount.js
   async function getTransactionCount(client, { address, blockHash, blockNumber, blockTag = "latest", requireCanonical }) {
     const block = formatBlockParameter({
       blockHash,
@@ -8276,13 +8276,13 @@ ${prettyStateOverride(stateOverride)}`;
     return hexToNumber(count);
   }
   var init_getTransactionCount = __esm({
-    "node_modules/viem/_esm/actions/public/getTransactionCount.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getTransactionCount.js"() {
       init_formatBlockParameter();
       init_fromHex();
     }
   });
 
-  // node_modules/viem/_esm/utils/blob/blobsToCommitments.js
+  // temp_genlayer/node_modules/viem/_esm/utils/blob/blobsToCommitments.js
   function blobsToCommitments(parameters) {
     const { kzg } = parameters;
     const to = parameters.to ?? (typeof parameters.blobs[0] === "string" ? "hex" : "bytes");
@@ -8293,13 +8293,13 @@ ${prettyStateOverride(stateOverride)}`;
     return to === "bytes" ? commitments : commitments.map((x) => bytesToHex(x));
   }
   var init_blobsToCommitments = __esm({
-    "node_modules/viem/_esm/utils/blob/blobsToCommitments.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/blob/blobsToCommitments.js"() {
       init_toBytes();
       init_toHex();
     }
   });
 
-  // node_modules/viem/_esm/utils/blob/blobsToProofs.js
+  // temp_genlayer/node_modules/viem/_esm/utils/blob/blobsToProofs.js
   function blobsToProofs(parameters) {
     const { kzg } = parameters;
     const to = parameters.to ?? (typeof parameters.blobs[0] === "string" ? "hex" : "bytes");
@@ -8314,22 +8314,22 @@ ${prettyStateOverride(stateOverride)}`;
     return to === "bytes" ? proofs : proofs.map((x) => bytesToHex(x));
   }
   var init_blobsToProofs = __esm({
-    "node_modules/viem/_esm/utils/blob/blobsToProofs.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/blob/blobsToProofs.js"() {
       init_toBytes();
       init_toHex();
     }
   });
 
-  // node_modules/@noble/hashes/esm/sha256.js
+  // temp_genlayer/node_modules/@noble/hashes/esm/sha256.js
   var sha2562;
   var init_sha256 = __esm({
-    "node_modules/@noble/hashes/esm/sha256.js"() {
+    "temp_genlayer/node_modules/@noble/hashes/esm/sha256.js"() {
       init_sha2();
       sha2562 = sha256;
     }
   });
 
-  // node_modules/viem/_esm/utils/hash/sha256.js
+  // temp_genlayer/node_modules/viem/_esm/utils/hash/sha256.js
   function sha2563(value, to_) {
     const to = to_ || "hex";
     const bytes = sha2562(isHex(value, { strict: false }) ? toBytes(value) : value);
@@ -8338,7 +8338,7 @@ ${prettyStateOverride(stateOverride)}`;
     return toHex(bytes);
   }
   var init_sha2562 = __esm({
-    "node_modules/viem/_esm/utils/hash/sha256.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/hash/sha256.js"() {
       init_sha256();
       init_isHex();
       init_toBytes();
@@ -8346,7 +8346,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/blob/commitmentToVersionedHash.js
+  // temp_genlayer/node_modules/viem/_esm/utils/blob/commitmentToVersionedHash.js
   function commitmentToVersionedHash(parameters) {
     const { commitment, version: version4 = 1 } = parameters;
     const to = parameters.to ?? (typeof commitment === "string" ? "hex" : "bytes");
@@ -8355,13 +8355,13 @@ ${prettyStateOverride(stateOverride)}`;
     return to === "bytes" ? versionedHash : bytesToHex(versionedHash);
   }
   var init_commitmentToVersionedHash = __esm({
-    "node_modules/viem/_esm/utils/blob/commitmentToVersionedHash.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/blob/commitmentToVersionedHash.js"() {
       init_toHex();
       init_sha2562();
     }
   });
 
-  // node_modules/viem/_esm/utils/blob/commitmentsToVersionedHashes.js
+  // temp_genlayer/node_modules/viem/_esm/utils/blob/commitmentsToVersionedHashes.js
   function commitmentsToVersionedHashes(parameters) {
     const { commitments, version: version4 } = parameters;
     const to = parameters.to ?? (typeof commitments[0] === "string" ? "hex" : "bytes");
@@ -8376,15 +8376,15 @@ ${prettyStateOverride(stateOverride)}`;
     return hashes;
   }
   var init_commitmentsToVersionedHashes = __esm({
-    "node_modules/viem/_esm/utils/blob/commitmentsToVersionedHashes.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/blob/commitmentsToVersionedHashes.js"() {
       init_commitmentToVersionedHash();
     }
   });
 
-  // node_modules/viem/_esm/constants/blob.js
+  // temp_genlayer/node_modules/viem/_esm/constants/blob.js
   var blobsPerTransaction, bytesPerFieldElement, fieldElementsPerBlob, bytesPerBlob, maxBytesPerTransaction;
   var init_blob = __esm({
-    "node_modules/viem/_esm/constants/blob.js"() {
+    "temp_genlayer/node_modules/viem/_esm/constants/blob.js"() {
       blobsPerTransaction = 6;
       bytesPerFieldElement = 32;
       fieldElementsPerBlob = 4096;
@@ -8395,10 +8395,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/errors/blob.js
+  // temp_genlayer/node_modules/viem/_esm/errors/blob.js
   var BlobSizeTooLargeError, EmptyBlobError;
   var init_blob2 = __esm({
-    "node_modules/viem/_esm/errors/blob.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/blob.js"() {
       init_base();
       BlobSizeTooLargeError = class extends BaseError2 {
         constructor({ maxSize, size: size5 }) {
@@ -8416,7 +8416,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/blob/toBlobs.js
+  // temp_genlayer/node_modules/viem/_esm/utils/blob/toBlobs.js
   function toBlobs(parameters) {
     const to = parameters.to ?? (typeof parameters.data === "string" ? "hex" : "bytes");
     const data = typeof parameters.data === "string" ? hexToBytes(parameters.data) : parameters.data;
@@ -8451,7 +8451,7 @@ ${prettyStateOverride(stateOverride)}`;
     return to === "bytes" ? blobs.map((x) => x.bytes) : blobs.map((x) => bytesToHex(x.bytes));
   }
   var init_toBlobs = __esm({
-    "node_modules/viem/_esm/utils/blob/toBlobs.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/blob/toBlobs.js"() {
       init_blob();
       init_blob2();
       init_cursor2();
@@ -8461,7 +8461,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/blob/toBlobSidecars.js
+  // temp_genlayer/node_modules/viem/_esm/utils/blob/toBlobSidecars.js
   function toBlobSidecars(parameters) {
     const { data, kzg, to } = parameters;
     const blobs = parameters.blobs ?? toBlobs({ data, to });
@@ -8477,14 +8477,14 @@ ${prettyStateOverride(stateOverride)}`;
     return sidecars;
   }
   var init_toBlobSidecars = __esm({
-    "node_modules/viem/_esm/utils/blob/toBlobSidecars.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/blob/toBlobSidecars.js"() {
       init_blobsToCommitments();
       init_blobsToProofs();
       init_toBlobs();
     }
   });
 
-  // node_modules/viem/_esm/utils/transaction/getTransactionType.js
+  // temp_genlayer/node_modules/viem/_esm/utils/transaction/getTransactionType.js
   function getTransactionType(transaction) {
     if (transaction.type)
       return transaction.type;
@@ -8503,12 +8503,12 @@ ${prettyStateOverride(stateOverride)}`;
     throw new InvalidSerializableTransactionError({ transaction });
   }
   var init_getTransactionType = __esm({
-    "node_modules/viem/_esm/utils/transaction/getTransactionType.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/transaction/getTransactionType.js"() {
       init_transaction();
     }
   });
 
-  // node_modules/viem/_esm/utils/errors/getTransactionError.js
+  // temp_genlayer/node_modules/viem/_esm/utils/errors/getTransactionError.js
   function getTransactionError(err, { docsPath: docsPath8, ...args }) {
     const cause = (() => {
       const cause2 = getNodeError(err, args);
@@ -8522,14 +8522,14 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_getTransactionError = __esm({
-    "node_modules/viem/_esm/utils/errors/getTransactionError.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/errors/getTransactionError.js"() {
       init_node();
       init_transaction();
       init_getNodeError();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getChainId.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getChainId.js
   async function getChainId(client) {
     const chainIdHex = await client.request({
       method: "eth_chainId"
@@ -8537,12 +8537,12 @@ ${prettyStateOverride(stateOverride)}`;
     return hexToNumber(chainIdHex);
   }
   var init_getChainId = __esm({
-    "node_modules/viem/_esm/actions/public/getChainId.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getChainId.js"() {
       init_fromHex();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/fillTransaction.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/fillTransaction.js
   async function fillTransaction(client, parameters) {
     const { account = client.account, accessList, authorizationList, chain = client.chain, blobVersionedHashes, blobs, data, gas, gasPrice, maxFeePerBlobGas, maxFeePerGas, maxPriorityFeePerGas, nonce: nonce_, nonceManager, to, type, value, ...rest } = parameters;
     const nonce = await (async () => {
@@ -8647,7 +8647,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   }
   var init_fillTransaction = __esm({
-    "node_modules/viem/_esm/actions/public/fillTransaction.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/fillTransaction.js"() {
       init_parseAccount();
       init_fee();
       init_getTransactionError();
@@ -8661,7 +8661,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/prepareTransactionRequest.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/prepareTransactionRequest.js
   async function prepareTransactionRequest(client, args) {
     let request = args;
     request.account ??= client.account;
@@ -8873,7 +8873,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var defaultParameters, eip1559NetworkCache, supportsFillTransaction;
   var init_prepareTransactionRequest = __esm({
-    "node_modules/viem/_esm/actions/wallet/prepareTransactionRequest.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/prepareTransactionRequest.js"() {
       init_parseAccount();
       init_estimateFeesPerGas();
       init_estimateGas2();
@@ -8903,7 +8903,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/estimateGas.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/estimateGas.js
   async function estimateGas(client, args) {
     const { account: account_ = client.account, prepare = true } = args;
     const account = account_ ? parseAccount(account_) : void 0;
@@ -8973,7 +8973,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   }
   var init_estimateGas2 = __esm({
-    "node_modules/viem/_esm/actions/public/estimateGas.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/estimateGas.js"() {
       init_parseAccount();
       init_base();
       init_recoverAuthorizationAddress();
@@ -8987,7 +8987,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/estimateContractGas.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/estimateContractGas.js
   async function estimateContractGas(client, parameters) {
     const { abi: abi2, address, args, functionName, dataSuffix = typeof client.dataSuffix === "string" ? client.dataSuffix : client.dataSuffix?.value, ...request } = parameters;
     const data = encodeFunctionData({
@@ -9015,7 +9015,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   }
   var init_estimateContractGas = __esm({
-    "node_modules/viem/_esm/actions/public/estimateContractGas.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/estimateContractGas.js"() {
       init_parseAccount();
       init_encodeFunctionData();
       init_getContractError();
@@ -9024,7 +9024,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/address/isAddressEqual.js
+  // temp_genlayer/node_modules/viem/_esm/utils/address/isAddressEqual.js
   function isAddressEqual(a, b) {
     if (!isAddress(a, { strict: false }))
       throw new InvalidAddressError({ address: a });
@@ -9033,13 +9033,13 @@ ${prettyStateOverride(stateOverride)}`;
     return a.toLowerCase() === b.toLowerCase();
   }
   var init_isAddressEqual = __esm({
-    "node_modules/viem/_esm/utils/address/isAddressEqual.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/address/isAddressEqual.js"() {
       init_address();
       init_isAddress();
     }
   });
 
-  // node_modules/viem/_esm/utils/formatters/log.js
+  // temp_genlayer/node_modules/viem/_esm/utils/formatters/log.js
   function formatLog(log, { args, eventName } = {}) {
     return {
       ...log,
@@ -9053,11 +9053,11 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_log2 = __esm({
-    "node_modules/viem/_esm/utils/formatters/log.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/formatters/log.js"() {
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/decodeEventLog.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/decodeEventLog.js
   function decodeEventLog(parameters) {
     const { abi: abi2, data, strict: strict_, topics } = parameters;
     const strict = strict_ ?? true;
@@ -9144,7 +9144,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var docsPath3;
   var init_decodeEventLog = __esm({
-    "node_modules/viem/_esm/utils/abi/decodeEventLog.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/decodeEventLog.js"() {
       init_abi();
       init_cursor();
       init_size();
@@ -9155,7 +9155,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/parseEventLogs.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/parseEventLogs.js
   function parseEventLogs(parameters) {
     const { abi: abi2, args, logs, strict = true } = parameters;
     const eventName = (() => {
@@ -9260,7 +9260,7 @@ ${prettyStateOverride(stateOverride)}`;
     return false;
   }
   var init_parseEventLogs = __esm({
-    "node_modules/viem/_esm/utils/abi/parseEventLogs.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/parseEventLogs.js"() {
       init_isAddressEqual();
       init_toBytes();
       init_log2();
@@ -9270,7 +9270,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getLogs.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getLogs.js
   async function getLogs(client, { address, blockHash, fromBlock, toBlock, event, events: events_, args, strict: strict_ } = {}) {
     const strict = strict_ ?? false;
     const events = events_ ?? (event ? [event] : void 0);
@@ -9315,7 +9315,7 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_getLogs = __esm({
-    "node_modules/viem/_esm/actions/public/getLogs.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getLogs.js"() {
       init_encodeEventTopics();
       init_parseEventLogs();
       init_toHex();
@@ -9323,7 +9323,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getContractEvents.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getContractEvents.js
   async function getContractEvents(client, parameters) {
     const { abi: abi2, address, args, blockHash, eventName, fromBlock, toBlock, strict } = parameters;
     const event = eventName ? getAbiItem({ abi: abi2, name: eventName }) : void 0;
@@ -9340,14 +9340,14 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_getContractEvents = __esm({
-    "node_modules/viem/_esm/actions/public/getContractEvents.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getContractEvents.js"() {
       init_getAbiItem();
       init_getAction();
       init_getLogs();
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/decodeFunctionResult.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/decodeFunctionResult.js
   function decodeFunctionResult(parameters) {
     const { abi: abi2, args, functionName, data } = parameters;
     let abiItem = abi2[0];
@@ -9370,7 +9370,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var docsPath4;
   var init_decodeFunctionResult = __esm({
-    "node_modules/viem/_esm/utils/abi/decodeFunctionResult.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/decodeFunctionResult.js"() {
       init_abi();
       init_decodeAbiParameters();
       init_getAbiItem();
@@ -9378,25 +9378,25 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/version.js
+  // temp_genlayer/node_modules/ox/_esm/core/version.js
   var version3;
   var init_version3 = __esm({
-    "node_modules/ox/_esm/core/version.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/version.js"() {
       version3 = "0.1.1";
     }
   });
 
-  // node_modules/ox/_esm/core/internal/errors.js
+  // temp_genlayer/node_modules/ox/_esm/core/internal/errors.js
   function getVersion() {
     return version3;
   }
   var init_errors2 = __esm({
-    "node_modules/ox/_esm/core/internal/errors.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/internal/errors.js"() {
       init_version3();
     }
   });
 
-  // node_modules/ox/_esm/core/Errors.js
+  // temp_genlayer/node_modules/ox/_esm/core/Errors.js
   function walk2(err, fn) {
     if (fn?.(err))
       return err;
@@ -9406,7 +9406,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var BaseError3;
   var init_Errors = __esm({
-    "node_modules/ox/_esm/core/Errors.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/Errors.js"() {
       init_errors2();
       BaseError3 = class _BaseError extends Error {
         static setStaticOptions(options) {
@@ -9531,7 +9531,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/internal/bytes.js
+  // temp_genlayer/node_modules/ox/_esm/core/internal/bytes.js
   function assertSize2(bytes, size_) {
     if (size2(bytes) > size_)
       throw new SizeOverflowError2({
@@ -9597,7 +9597,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var charCodeMap2;
   var init_bytes = __esm({
-    "node_modules/ox/_esm/core/internal/bytes.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/internal/bytes.js"() {
       init_Bytes();
       charCodeMap2 = {
         zero: 48,
@@ -9610,7 +9610,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/internal/hex.js
+  // temp_genlayer/node_modules/ox/_esm/core/internal/hex.js
   function assertSize3(hex, size_) {
     if (size3(hex) > size_)
       throw new SizeOverflowError3({
@@ -9666,12 +9666,12 @@ ${prettyStateOverride(stateOverride)}`;
     return `0x${data}`;
   }
   var init_hex = __esm({
-    "node_modules/ox/_esm/core/internal/hex.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/internal/hex.js"() {
       init_Hex();
     }
   });
 
-  // node_modules/ox/_esm/core/Json.js
+  // temp_genlayer/node_modules/ox/_esm/core/Json.js
   function stringify2(value, replacer, space) {
     return JSON.stringify(value, (key, value2) => {
       if (typeof replacer === "function")
@@ -9683,12 +9683,12 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var bigIntSuffix;
   var init_Json = __esm({
-    "node_modules/ox/_esm/core/Json.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/Json.js"() {
       bigIntSuffix = "#__bigint";
     }
   });
 
-  // node_modules/ox/_esm/core/Bytes.js
+  // temp_genlayer/node_modules/ox/_esm/core/Bytes.js
   function assert(value) {
     if (value instanceof Uint8Array)
       return;
@@ -9806,7 +9806,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var decoder, encoder3, InvalidBytesBooleanError2, InvalidBytesTypeError, SizeOverflowError2, SliceOffsetOutOfBoundsError2, SizeExceedsPaddingSizeError2;
   var init_Bytes = __esm({
-    "node_modules/ox/_esm/core/Bytes.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/Bytes.js"() {
       init_Errors();
       init_Hex();
       init_bytes();
@@ -9878,7 +9878,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/Hex.js
+  // temp_genlayer/node_modules/ox/_esm/core/Hex.js
   function assert2(value, options = {}) {
     const { strict = false } = options;
     if (!value)
@@ -10004,7 +10004,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var encoder4, hexes3, IntegerOutOfRangeError2, InvalidHexTypeError, InvalidHexValueError2, SizeOverflowError3, SliceOffsetOutOfBoundsError3, SizeExceedsPaddingSizeError3;
   var init_Hex = __esm({
-    "node_modules/ox/_esm/core/Hex.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/Hex.js"() {
       init_Errors();
       init_hex();
       init_Json();
@@ -10085,7 +10085,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/Withdrawal.js
+  // temp_genlayer/node_modules/ox/_esm/core/Withdrawal.js
   function toRpc(withdrawal) {
     return {
       address: withdrawal.address,
@@ -10095,12 +10095,12 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_Withdrawal = __esm({
-    "node_modules/ox/_esm/core/Withdrawal.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/Withdrawal.js"() {
       init_Hex();
     }
   });
 
-  // node_modules/ox/_esm/core/BlockOverrides.js
+  // temp_genlayer/node_modules/ox/_esm/core/BlockOverrides.js
   function toRpc2(blockOverrides) {
     return {
       ...typeof blockOverrides.baseFeePerGas === "bigint" && {
@@ -10130,16 +10130,16 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_BlockOverrides = __esm({
-    "node_modules/ox/_esm/core/BlockOverrides.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/BlockOverrides.js"() {
       init_Hex();
       init_Withdrawal();
     }
   });
 
-  // node_modules/viem/_esm/constants/abis.js
+  // temp_genlayer/node_modules/viem/_esm/constants/abis.js
   var multicall3Abi, batchGatewayAbi, universalResolverErrors, universalResolverResolveAbi, universalResolverReverseAbi, textResolverAbi, addressResolverAbi, erc1271Abi, erc6492SignatureValidatorAbi, erc20Abi;
   var init_abis = __esm({
-    "node_modules/viem/_esm/constants/abis.js"() {
+    "temp_genlayer/node_modules/viem/_esm/constants/abis.js"() {
       multicall3Abi = [
         {
           inputs: [
@@ -10682,18 +10682,18 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/constants/contract.js
+  // temp_genlayer/node_modules/viem/_esm/constants/contract.js
   var aggregate3Signature;
   var init_contract2 = __esm({
-    "node_modules/viem/_esm/constants/contract.js"() {
+    "temp_genlayer/node_modules/viem/_esm/constants/contract.js"() {
       aggregate3Signature = "0x82ad56cb";
     }
   });
 
-  // node_modules/viem/_esm/constants/contracts.js
+  // temp_genlayer/node_modules/viem/_esm/constants/contracts.js
   var deploylessCallViaBytecodeBytecode, deploylessCallViaFactoryBytecode, erc6492SignatureValidatorByteCode, multicall3Bytecode;
   var init_contracts = __esm({
-    "node_modules/viem/_esm/constants/contracts.js"() {
+    "temp_genlayer/node_modules/viem/_esm/constants/contracts.js"() {
       deploylessCallViaBytecodeBytecode = "0x608060405234801561001057600080fd5b5060405161018e38038061018e83398101604081905261002f91610124565b6000808351602085016000f59050803b61004857600080fd5b6000808351602085016000855af16040513d6000823e81610067573d81fd5b3d81f35b634e487b7160e01b600052604160045260246000fd5b600082601f83011261009257600080fd5b81516001600160401b038111156100ab576100ab61006b565b604051601f8201601f19908116603f011681016001600160401b03811182821017156100d9576100d961006b565b6040528181528382016020018510156100f157600080fd5b60005b82811015610110576020818601810151838301820152016100f4565b506000918101602001919091529392505050565b6000806040838503121561013757600080fd5b82516001600160401b0381111561014d57600080fd5b61015985828601610081565b602085015190935090506001600160401b0381111561017757600080fd5b61018385828601610081565b915050925092905056fe";
       deploylessCallViaFactoryBytecode = "0x608060405234801561001057600080fd5b506040516102c03803806102c083398101604081905261002f916101e6565b836001600160a01b03163b6000036100e457600080836001600160a01b03168360405161005c9190610270565b6000604051808303816000865af19150503d8060008114610099576040519150601f19603f3d011682016040523d82523d6000602084013e61009e565b606091505b50915091508115806100b857506001600160a01b0386163b155b156100e1578060405163101bb98d60e01b81526004016100d8919061028c565b60405180910390fd5b50505b6000808451602086016000885af16040513d6000823e81610103573d81fd5b3d81f35b80516001600160a01b038116811461011e57600080fd5b919050565b634e487b7160e01b600052604160045260246000fd5b60005b8381101561015457818101518382015260200161013c565b50506000910152565b600082601f83011261016e57600080fd5b81516001600160401b0381111561018757610187610123565b604051601f8201601f19908116603f011681016001600160401b03811182821017156101b5576101b5610123565b6040528181528382016020018510156101cd57600080fd5b6101de826020830160208701610139565b949350505050565b600080600080608085870312156101fc57600080fd5b61020585610107565b60208601519094506001600160401b0381111561022157600080fd5b61022d8782880161015d565b93505061023c60408601610107565b60608601519092506001600160401b0381111561025857600080fd5b6102648782880161015d565b91505092959194509250565b60008251610282818460208701610139565b9190910192915050565b60208152600082518060208401526102ab816040850160208701610139565b601f01601f1916919091016040019291505056fe";
       erc6492SignatureValidatorByteCode = "0x608060405234801561001057600080fd5b5060405161069438038061069483398101604081905261002f9161051e565b600061003c848484610048565b9050806000526001601ff35b60007f64926492649264926492649264926492649264926492649264926492649264926100748361040c565b036101e7576000606080848060200190518101906100929190610577565b60405192955090935091506000906001600160a01b038516906100b69085906105dd565b6000604051808303816000865af19150503d80600081146100f3576040519150601f19603f3d011682016040523d82523d6000602084013e6100f8565b606091505b50509050876001600160a01b03163b60000361016057806101605760405162461bcd60e51b815260206004820152601e60248201527f5369676e617475726556616c696461746f723a206465706c6f796d656e74000060448201526064015b60405180910390fd5b604051630b135d3f60e11b808252906001600160a01b038a1690631626ba7e90610190908b9087906004016105f9565b602060405180830381865afa1580156101ad573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906101d19190610633565b6001600160e01b03191614945050505050610405565b6001600160a01b0384163b1561027a57604051630b135d3f60e11b808252906001600160a01b03861690631626ba7e9061022790879087906004016105f9565b602060405180830381865afa158015610244573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906102689190610633565b6001600160e01b031916149050610405565b81516041146102df5760405162461bcd60e51b815260206004820152603a602482015260008051602061067483398151915260448201527f3a20696e76616c6964207369676e6174757265206c656e6774680000000000006064820152608401610157565b6102e7610425565b5060208201516040808401518451859392600091859190811061030c5761030c61065d565b016020015160f81c9050601b811480159061032b57508060ff16601c14155b1561038c5760405162461bcd60e51b815260206004820152603b602482015260008051602061067483398151915260448201527f3a20696e76616c6964207369676e617475726520762076616c756500000000006064820152608401610157565b60408051600081526020810180835289905260ff83169181019190915260608101849052608081018390526001600160a01b0389169060019060a0016020604051602081039080840390855afa1580156103ea573d6000803e3d6000fd5b505050602060405103516001600160a01b0316149450505050505b9392505050565b600060208251101561041d57600080fd5b508051015190565b60405180606001604052806003906020820280368337509192915050565b6001600160a01b038116811461045857600080fd5b50565b634e487b7160e01b600052604160045260246000fd5b60005b8381101561048c578181015183820152602001610474565b50506000910152565b600082601f8301126104a657600080fd5b81516001600160401b038111156104bf576104bf61045b565b604051601f8201601f19908116603f011681016001600160401b03811182821017156104ed576104ed61045b565b60405281815283820160200185101561050557600080fd5b610516826020830160208701610471565b949350505050565b60008060006060848603121561053357600080fd5b835161053e81610443565b6020850151604086015191945092506001600160401b0381111561056157600080fd5b61056d86828701610495565b9150509250925092565b60008060006060848603121561058c57600080fd5b835161059781610443565b60208501519093506001600160401b038111156105b357600080fd5b6105bf86828701610495565b604086015190935090506001600160401b0381111561056157600080fd5b600082516105ef818460208701610471565b9190910192915050565b828152604060208201526000825180604084015261061e816060850160208701610471565b601f01601f1916919091016060019392505050565b60006020828403121561064557600080fd5b81516001600160e01b03198116811461040557600080fd5b634e487b7160e01b600052603260045260246000fdfe5369676e617475726556616c696461746f72237265636f7665725369676e6572";
@@ -10701,10 +10701,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/errors/chain.js
+  // temp_genlayer/node_modules/viem/_esm/errors/chain.js
   var ChainDoesNotSupportContract, ChainMismatchError, ChainNotFoundError, ClientChainNotConfiguredError;
   var init_chain = __esm({
-    "node_modules/viem/_esm/errors/chain.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/chain.js"() {
       init_base();
       ChainDoesNotSupportContract = class extends BaseError2 {
         constructor({ blockNumber, chain, contract }) {
@@ -10752,7 +10752,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/encodeDeployData.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/encodeDeployData.js
   function encodeDeployData(parameters) {
     const { abi: abi2, args, bytecode } = parameters;
     if (!args || args.length === 0)
@@ -10769,7 +10769,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var docsPath5;
   var init_encodeDeployData = __esm({
-    "node_modules/viem/_esm/utils/abi/encodeDeployData.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/encodeDeployData.js"() {
       init_abi();
       init_concat();
       init_encodeAbiParameters();
@@ -10777,7 +10777,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/chain/getChainContractAddress.js
+  // temp_genlayer/node_modules/viem/_esm/utils/chain/getChainContractAddress.js
   function getChainContractAddress({ blockNumber, chain, contract: name }) {
     const contract = chain?.contracts?.[name];
     if (!contract)
@@ -10797,12 +10797,12 @@ ${prettyStateOverride(stateOverride)}`;
     return contract.address;
   }
   var init_getChainContractAddress = __esm({
-    "node_modules/viem/_esm/utils/chain/getChainContractAddress.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/chain/getChainContractAddress.js"() {
       init_chain();
     }
   });
 
-  // node_modules/viem/_esm/utils/errors/getCallError.js
+  // temp_genlayer/node_modules/viem/_esm/utils/errors/getCallError.js
   function getCallError(err, { docsPath: docsPath8, ...args }) {
     const cause = (() => {
       const cause2 = getNodeError(err, args);
@@ -10816,14 +10816,14 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_getCallError = __esm({
-    "node_modules/viem/_esm/utils/errors/getCallError.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/errors/getCallError.js"() {
       init_contract();
       init_node();
       init_getNodeError();
     }
   });
 
-  // node_modules/viem/_esm/utils/promise/withResolvers.js
+  // temp_genlayer/node_modules/viem/_esm/utils/promise/withResolvers.js
   function withResolvers() {
     let resolve = () => void 0;
     let reject = () => void 0;
@@ -10834,11 +10834,11 @@ ${prettyStateOverride(stateOverride)}`;
     return { promise, resolve, reject };
   }
   var init_withResolvers = __esm({
-    "node_modules/viem/_esm/utils/promise/withResolvers.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/promise/withResolvers.js"() {
     }
   });
 
-  // node_modules/viem/_esm/utils/promise/createBatchScheduler.js
+  // temp_genlayer/node_modules/viem/_esm/utils/promise/createBatchScheduler.js
   function createBatchScheduler({ fn, id, shouldSplitBatch, wait: wait2 = 0, sort }) {
     const exec = async () => {
       const scheduler = getScheduler();
@@ -10884,16 +10884,16 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var schedulerCache;
   var init_createBatchScheduler = __esm({
-    "node_modules/viem/_esm/utils/promise/createBatchScheduler.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/promise/createBatchScheduler.js"() {
       init_withResolvers();
       schedulerCache = /* @__PURE__ */ new Map();
     }
   });
 
-  // node_modules/viem/_esm/errors/ccip.js
+  // temp_genlayer/node_modules/viem/_esm/errors/ccip.js
   var OffchainLookupError, OffchainLookupResponseMalformedError, OffchainLookupSenderMismatchError;
   var init_ccip = __esm({
-    "node_modules/viem/_esm/errors/ccip.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/ccip.js"() {
       init_stringify();
       init_base();
       init_utils3();
@@ -10943,7 +10943,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/decodeFunctionData.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/decodeFunctionData.js
   function decodeFunctionData(parameters) {
     const { abi: abi2, data } = parameters;
     const signature = slice(data, 0, 4);
@@ -10958,7 +10958,7 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_decodeFunctionData = __esm({
-    "node_modules/viem/_esm/utils/abi/decodeFunctionData.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/decodeFunctionData.js"() {
       init_abi();
       init_slice();
       init_toFunctionSelector();
@@ -10967,7 +10967,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/encodeErrorResult.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/encodeErrorResult.js
   function encodeErrorResult(parameters) {
     const { abi: abi2, errorName, args } = parameters;
     let abiItem = abi2[0];
@@ -10991,7 +10991,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var docsPath6;
   var init_encodeErrorResult = __esm({
-    "node_modules/viem/_esm/utils/abi/encodeErrorResult.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/encodeErrorResult.js"() {
       init_abi();
       init_concat();
       init_toFunctionSelector();
@@ -11002,7 +11002,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/abi/encodeFunctionResult.js
+  // temp_genlayer/node_modules/viem/_esm/utils/abi/encodeFunctionResult.js
   function encodeFunctionResult(parameters) {
     const { abi: abi2, functionName, result } = parameters;
     let abiItem = abi2[0];
@@ -11029,7 +11029,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var docsPath7;
   var init_encodeFunctionResult = __esm({
-    "node_modules/viem/_esm/utils/abi/encodeFunctionResult.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/abi/encodeFunctionResult.js"() {
       init_abi();
       init_encodeAbiParameters();
       init_getAbiItem();
@@ -11037,7 +11037,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/ens/localBatchGatewayRequest.js
+  // temp_genlayer/node_modules/viem/_esm/utils/ens/localBatchGatewayRequest.js
   async function localBatchGatewayRequest(parameters) {
     const { data, ccipRequest: ccipRequest2 } = parameters;
     const { args: [queries] } = decodeFunctionData({ abi: batchGatewayAbi, data });
@@ -11073,7 +11073,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var localBatchGatewayUrl;
   var init_localBatchGatewayRequest = __esm({
-    "node_modules/viem/_esm/utils/ens/localBatchGatewayRequest.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/ens/localBatchGatewayRequest.js"() {
       init_abis();
       init_solidity();
       init_decodeFunctionData();
@@ -11083,7 +11083,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/ccip.js
+  // temp_genlayer/node_modules/viem/_esm/utils/ccip.js
   var ccip_exports = {};
   __export(ccip_exports, {
     ccipRequest: () => ccipRequest,
@@ -11188,7 +11188,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var offchainLookupSignature, offchainLookupAbiItem;
   var init_ccip2 = __esm({
-    "node_modules/viem/_esm/utils/ccip.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/ccip.js"() {
       init_call();
       init_ccip();
       init_request();
@@ -11230,7 +11230,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/call.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/call.js
   async function call(client, args) {
     const { account: account_ = client.account, authorizationList, batch = Boolean(client.batch?.multicall), blockHash, blockNumber, blockTag = client.experimental_blockTag ?? "latest", requireCanonical, accessList, blobs, blockOverrides, code, data: data_, factory, factoryData, gas, gasPrice, maxFeePerBlobGas, maxFeePerGas, maxPriorityFeePerGas, nonce, requestOptions, to, value, stateOverride, ...rest } = args;
     const account = account_ ? parseAccount(account_) : void 0;
@@ -11471,7 +11471,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var requestOptionsId, requestOptionsIds;
   var init_call = __esm({
-    "node_modules/viem/_esm/actions/public/call.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/call.js"() {
       init_exports();
       init_BlockOverrides();
       init_parseAccount();
@@ -11499,7 +11499,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/readContract.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/readContract.js
   async function readContract(client, parameters) {
     const { abi: abi2, address, args, functionName, ...rest } = parameters;
     const calldata2 = encodeFunctionData({
@@ -11530,7 +11530,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   }
   var init_readContract = __esm({
-    "node_modules/viem/_esm/actions/public/readContract.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/readContract.js"() {
       init_decodeFunctionResult();
       init_encodeFunctionData();
       init_getContractError();
@@ -11539,7 +11539,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/simulateContract.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/simulateContract.js
   async function simulateContract(client, parameters) {
     const { abi: abi2, address, args, functionName, dataSuffix = typeof client.dataSuffix === "string" ? client.dataSuffix : client.dataSuffix?.value, ...callRequest } = parameters;
     const account = callRequest.account ? parseAccount(callRequest.account) : client.account;
@@ -11583,7 +11583,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   }
   var init_simulateContract = __esm({
-    "node_modules/viem/_esm/actions/public/simulateContract.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/simulateContract.js"() {
       init_parseAccount();
       init_decodeFunctionResult();
       init_encodeFunctionData();
@@ -11593,7 +11593,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/observe.js
+  // temp_genlayer/node_modules/viem/_esm/utils/observe.js
   function observe(observerId, callbacks, fn) {
     const callbackId = ++callbackCount;
     const getListeners = () => listenersCache.get(observerId) || [];
@@ -11644,14 +11644,14 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var listenersCache, cleanupCache, callbackCount;
   var init_observe = __esm({
-    "node_modules/viem/_esm/utils/observe.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/observe.js"() {
       listenersCache = /* @__PURE__ */ new Map();
       cleanupCache = /* @__PURE__ */ new Map();
       callbackCount = 0;
     }
   });
 
-  // node_modules/viem/_esm/utils/wait.js
+  // temp_genlayer/node_modules/viem/_esm/utils/wait.js
   async function wait(time, { signal } = {}) {
     return new Promise((resolve, reject) => {
       if (signal?.aborted) {
@@ -11672,12 +11672,12 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_wait = __esm({
-    "node_modules/viem/_esm/utils/wait.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/wait.js"() {
       init_utils3();
     }
   });
 
-  // node_modules/viem/_esm/utils/poll.js
+  // temp_genlayer/node_modules/viem/_esm/utils/poll.js
   function poll(fn, { emitOnBegin, initialWaitTime, interval }) {
     let active = true;
     const unwatch = () => active = false;
@@ -11700,12 +11700,12 @@ ${prettyStateOverride(stateOverride)}`;
     return unwatch;
   }
   var init_poll = __esm({
-    "node_modules/viem/_esm/utils/poll.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/poll.js"() {
       init_wait();
     }
   });
 
-  // node_modules/viem/_esm/utils/promise/withCache.js
+  // temp_genlayer/node_modules/viem/_esm/utils/promise/withCache.js
   function getCache(cacheKey2) {
     const buildCache = (cacheKey3, cache) => ({
       clear: () => cache.delete(cacheKey3),
@@ -11746,13 +11746,13 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var promiseCache, responseCache;
   var init_withCache = __esm({
-    "node_modules/viem/_esm/utils/promise/withCache.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/promise/withCache.js"() {
       promiseCache = /* @__PURE__ */ new Map();
       responseCache = /* @__PURE__ */ new Map();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getBlockNumber.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getBlockNumber.js
   async function getBlockNumber(client, { cacheTime = client.cacheTime } = {}) {
     const blockNumberHex = await withCache(() => client.request({
       method: "eth_blockNumber"
@@ -11761,13 +11761,13 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var cacheKey;
   var init_getBlockNumber = __esm({
-    "node_modules/viem/_esm/actions/public/getBlockNumber.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getBlockNumber.js"() {
       init_withCache();
       cacheKey = (id) => `blockNumber.${id}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getFilterChanges.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getFilterChanges.js
   async function getFilterChanges(_client, { filter }) {
     const strict = "strict" in filter && filter.strict;
     const logs = await filter.request({
@@ -11786,13 +11786,13 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_getFilterChanges = __esm({
-    "node_modules/viem/_esm/actions/public/getFilterChanges.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getFilterChanges.js"() {
       init_parseEventLogs();
       init_log2();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/uninstallFilter.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/uninstallFilter.js
   async function uninstallFilter(_client, { filter }) {
     return filter.request({
       method: "eth_uninstallFilter",
@@ -11800,11 +11800,11 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_uninstallFilter = __esm({
-    "node_modules/viem/_esm/actions/public/uninstallFilter.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/uninstallFilter.js"() {
     }
   });
 
-  // node_modules/viem/_esm/actions/public/watchContractEvent.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/watchContractEvent.js
   function watchContractEvent(client, parameters) {
     const { abi: abi2, address, args, batch = true, eventName, fromBlock, onError, onLogs, poll: poll_, pollingInterval = client.pollingInterval, strict: strict_ } = parameters;
     const enablePolling = (() => {
@@ -11980,7 +11980,7 @@ ${prettyStateOverride(stateOverride)}`;
     return enablePolling ? pollContractEvent() : subscribeContractEvent();
   }
   var init_watchContractEvent = __esm({
-    "node_modules/viem/_esm/actions/public/watchContractEvent.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/watchContractEvent.js"() {
       init_abi();
       init_rpc();
       init_decodeEventLog();
@@ -11998,10 +11998,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/errors/account.js
+  // temp_genlayer/node_modules/viem/_esm/errors/account.js
   var AccountNotFoundError, AccountTypeNotSupportedError;
   var init_account = __esm({
-    "node_modules/viem/_esm/errors/account.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/account.js"() {
       init_base();
       AccountNotFoundError = class extends BaseError2 {
         constructor({ docsPath: docsPath8 } = {}) {
@@ -12027,7 +12027,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/chain/assertCurrentChain.js
+  // temp_genlayer/node_modules/viem/_esm/utils/chain/assertCurrentChain.js
   function assertCurrentChain({ chain, currentChainId }) {
     if (!chain)
       throw new ChainNotFoundError();
@@ -12035,12 +12035,12 @@ ${prettyStateOverride(stateOverride)}`;
       throw new ChainMismatchError({ chain, currentChainId });
   }
   var init_assertCurrentChain = __esm({
-    "node_modules/viem/_esm/utils/chain/assertCurrentChain.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/chain/assertCurrentChain.js"() {
       init_chain();
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/sendRawTransaction.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/sendRawTransaction.js
   async function sendRawTransaction(client, { serializedTransaction }) {
     return client.request({
       method: "eth_sendRawTransaction",
@@ -12048,11 +12048,11 @@ ${prettyStateOverride(stateOverride)}`;
     }, { retryCount: 0 });
   }
   var init_sendRawTransaction = __esm({
-    "node_modules/viem/_esm/actions/wallet/sendRawTransaction.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/sendRawTransaction.js"() {
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/sendTransaction.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/sendTransaction.js
   async function sendTransaction(client, parameters) {
     const { account: account_ = client.account, assertChainId = true, chain = client.chain, accessList, authorizationList, blobs, data, dataSuffix = typeof client.dataSuffix === "string" ? client.dataSuffix : client.dataSuffix?.value, gas, gasPrice, maxFeePerBlobGas, maxFeePerGas, maxPriorityFeePerGas, nonce, type, value, ...rest } = parameters;
     if (typeof account_ === "undefined")
@@ -12203,7 +12203,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var supportsWalletNamespace;
   var init_sendTransaction = __esm({
-    "node_modules/viem/_esm/actions/wallet/sendTransaction.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/sendTransaction.js"() {
       init_parseAccount();
       init_account();
       init_base();
@@ -12223,12 +12223,12 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/writeContract.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/writeContract.js
   async function writeContract(client, parameters) {
     return writeContract.internal(client, sendTransaction, "sendTransaction", parameters);
   }
   var init_writeContract = __esm({
-    "node_modules/viem/_esm/actions/wallet/writeContract.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/writeContract.js"() {
       init_parseAccount();
       init_account();
       init_encodeFunctionData();
@@ -12271,7 +12271,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/getContract.js
+  // temp_genlayer/node_modules/viem/_esm/actions/getContract.js
   function getContract({ abi: abi2, address, client: client_ }) {
     const client = client_;
     const [publicClient, walletClient] = (() => {
@@ -12441,7 +12441,7 @@ ${prettyStateOverride(stateOverride)}`;
     return { args, options };
   }
   var init_getContract = __esm({
-    "node_modules/viem/_esm/actions/getContract.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/getContract.js"() {
       init_getAction();
       init_createContractEventFilter();
       init_estimateContractGas();
@@ -12453,10 +12453,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/errors/calls.js
+  // temp_genlayer/node_modules/viem/_esm/errors/calls.js
   var BundleFailedError;
   var init_calls = __esm({
-    "node_modules/viem/_esm/errors/calls.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/calls.js"() {
       init_base();
       BundleFailedError = class extends BaseError2 {
         constructor(result) {
@@ -12475,7 +12475,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/promise/withRetry.js
+  // temp_genlayer/node_modules/viem/_esm/utils/promise/withRetry.js
   function withRetry(fn, { delay: delay_ = 100, retryCount = 2, shouldRetry: shouldRetry2 = () => true, signal } = {}) {
     return new Promise((resolve, reject) => {
       const attemptRetry = async ({ count = 0 } = {}) => {
@@ -12516,13 +12516,13 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_withRetry = __esm({
-    "node_modules/viem/_esm/utils/promise/withRetry.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/promise/withRetry.js"() {
       init_utils3();
       init_wait();
     }
   });
 
-  // node_modules/viem/_esm/utils/formatters/transactionReceipt.js
+  // temp_genlayer/node_modules/viem/_esm/utils/formatters/transactionReceipt.js
   function formatTransactionReceipt(transactionReceipt, _) {
     const receipt = {
       ...transactionReceipt,
@@ -12545,7 +12545,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var receiptStatuses;
   var init_transactionReceipt = __esm({
-    "node_modules/viem/_esm/utils/formatters/transactionReceipt.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/formatters/transactionReceipt.js"() {
       init_fromHex();
       init_log2();
       init_transaction2();
@@ -12556,7 +12556,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/sendCalls.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/sendCalls.js
   async function sendCalls(client, parameters) {
     const { account: account_ = client.account, chain = client.chain, experimental_fallback, experimental_fallbackDelay = 32, forceAtomic = false, id, version: version4 = "2.0.0" } = parameters;
     const account = account_ ? parseAccount(account_) : null;
@@ -12668,7 +12668,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var fallbackMagicIdentifier, fallbackTransactionErrorMagicIdentifier;
   var init_sendCalls = __esm({
-    "node_modules/viem/_esm/actions/wallet/sendCalls.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/sendCalls.js"() {
       init_parseAccount();
       init_base();
       init_rpc();
@@ -12685,7 +12685,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/getCallsStatus.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/getCallsStatus.js
   async function getCallsStatus(client, parameters) {
     async function getStatus(id) {
       const isTransactions = id.endsWith(fallbackMagicIdentifier.slice(2));
@@ -12750,7 +12750,7 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_getCallsStatus = __esm({
-    "node_modules/viem/_esm/actions/wallet/getCallsStatus.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/getCallsStatus.js"() {
       init_slice();
       init_trim();
       init_fromHex();
@@ -12759,7 +12759,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/waitForCallsStatus.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/waitForCallsStatus.js
   async function waitForCallsStatus(client, parameters) {
     const {
       id,
@@ -12813,7 +12813,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var WaitForCallsStatusTimeoutError;
   var init_waitForCallsStatus = __esm({
-    "node_modules/viem/_esm/actions/wallet/waitForCallsStatus.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/waitForCallsStatus.js"() {
       init_base();
       init_calls();
       init_getAction();
@@ -12831,7 +12831,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/uid.js
+  // temp_genlayer/node_modules/viem/_esm/utils/uid.js
   function uid(length = 11) {
     if (!buffer || index + length > size4 * 2) {
       buffer = "";
@@ -12844,13 +12844,13 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var size4, index, buffer;
   var init_uid = __esm({
-    "node_modules/viem/_esm/utils/uid.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/uid.js"() {
       size4 = 256;
       index = size4;
     }
   });
 
-  // node_modules/viem/_esm/clients/createClient.js
+  // temp_genlayer/node_modules/viem/_esm/clients/createClient.js
   function createClient(parameters) {
     const { batch, chain, ccipRead, dataSuffix, key = "base", name = "Base Client", tokens, type = "base" } = parameters;
     const experimental_blockTag = parameters.experimental_blockTag ?? (typeof chain?.experimental_preconfirmationTime === "number" ? "pending" : void 0);
@@ -12931,13 +12931,13 @@ ${prettyStateOverride(stateOverride)}`;
     return wrapped;
   }
   var init_createClient = __esm({
-    "node_modules/viem/_esm/clients/createClient.js"() {
+    "temp_genlayer/node_modules/viem/_esm/clients/createClient.js"() {
       init_parseAccount();
       init_uid();
     }
   });
 
-  // node_modules/viem/_esm/utils/ens/errors.js
+  // temp_genlayer/node_modules/viem/_esm/utils/ens/errors.js
   function isNullUniversalResolverError(err) {
     if (!(err instanceof BaseError2))
       return false;
@@ -12959,13 +12959,13 @@ ${prettyStateOverride(stateOverride)}`;
     return false;
   }
   var init_errors3 = __esm({
-    "node_modules/viem/_esm/utils/ens/errors.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/ens/errors.js"() {
       init_base();
       init_contract();
     }
   });
 
-  // node_modules/viem/_esm/utils/ens/encodedLabelToLabelhash.js
+  // temp_genlayer/node_modules/viem/_esm/utils/ens/encodedLabelToLabelhash.js
   function encodedLabelToLabelhash(label) {
     if (label.length !== 66)
       return null;
@@ -12979,12 +12979,12 @@ ${prettyStateOverride(stateOverride)}`;
     return hash3;
   }
   var init_encodedLabelToLabelhash = __esm({
-    "node_modules/viem/_esm/utils/ens/encodedLabelToLabelhash.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/ens/encodedLabelToLabelhash.js"() {
       init_isHex();
     }
   });
 
-  // node_modules/viem/_esm/utils/ens/namehash.js
+  // temp_genlayer/node_modules/viem/_esm/utils/ens/namehash.js
   function namehash(name) {
     let result = new Uint8Array(32).fill(0);
     if (!name)
@@ -12998,7 +12998,7 @@ ${prettyStateOverride(stateOverride)}`;
     return bytesToHex(result);
   }
   var init_namehash = __esm({
-    "node_modules/viem/_esm/utils/ens/namehash.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/ens/namehash.js"() {
       init_concat();
       init_toBytes();
       init_toHex();
@@ -13007,16 +13007,16 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/ens/encodeLabelhash.js
+  // temp_genlayer/node_modules/viem/_esm/utils/ens/encodeLabelhash.js
   function encodeLabelhash(hash3) {
     return `[${hash3.slice(2)}]`;
   }
   var init_encodeLabelhash = __esm({
-    "node_modules/viem/_esm/utils/ens/encodeLabelhash.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/ens/encodeLabelhash.js"() {
     }
   });
 
-  // node_modules/viem/_esm/utils/ens/labelhash.js
+  // temp_genlayer/node_modules/viem/_esm/utils/ens/labelhash.js
   function labelhash(label) {
     const result = new Uint8Array(32).fill(0);
     if (!label)
@@ -13024,7 +13024,7 @@ ${prettyStateOverride(stateOverride)}`;
     return encodedLabelToLabelhash(label) || keccak256(stringToBytes(label));
   }
   var init_labelhash = __esm({
-    "node_modules/viem/_esm/utils/ens/labelhash.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/ens/labelhash.js"() {
       init_toBytes();
       init_toHex();
       init_keccak256();
@@ -13032,7 +13032,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/ens/packetToBytes.js
+  // temp_genlayer/node_modules/viem/_esm/utils/ens/packetToBytes.js
   function packetToBytes(packet) {
     const value = packet.replace(/^\.|\.$/gm, "");
     if (value.length === 0)
@@ -13053,14 +13053,14 @@ ${prettyStateOverride(stateOverride)}`;
     return bytes;
   }
   var init_packetToBytes = __esm({
-    "node_modules/viem/_esm/utils/ens/packetToBytes.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/ens/packetToBytes.js"() {
       init_toBytes();
       init_encodeLabelhash();
       init_labelhash();
     }
   });
 
-  // node_modules/viem/_esm/actions/ens/getEnsAddress.js
+  // temp_genlayer/node_modules/viem/_esm/actions/ens/getEnsAddress.js
   async function getEnsAddress(client, parameters) {
     const { blockNumber, blockTag, coinType, name, gatewayUrls, strict } = parameters;
     const { chain } = client;
@@ -13137,7 +13137,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   }
   var init_getEnsAddress = __esm({
-    "node_modules/viem/_esm/actions/ens/getEnsAddress.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/ens/getEnsAddress.js"() {
       init_abis();
       init_decodeFunctionResult();
       init_encodeFunctionData();
@@ -13155,10 +13155,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/errors/ens.js
+  // temp_genlayer/node_modules/viem/_esm/errors/ens.js
   var EnsAvatarInvalidMetadataError, EnsAvatarInvalidNftUriError, EnsAvatarUriResolutionError, EnsAvatarUnsupportedNamespaceError;
   var init_ens = __esm({
-    "node_modules/viem/_esm/errors/ens.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/ens.js"() {
       init_base();
       EnsAvatarInvalidMetadataError = class extends BaseError2 {
         constructor({ data }) {
@@ -13192,7 +13192,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/ens/avatar/utils.js
+  // temp_genlayer/node_modules/viem/_esm/utils/ens/avatar/utils.js
   async function isImageUri(uri) {
     try {
       const res = await fetch(uri, { method: "HEAD" });
@@ -13360,7 +13360,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var networkRegex, ipfsHashRegex, base64Regex, dataURIRegex;
   var init_utils5 = __esm({
-    "node_modules/viem/_esm/utils/ens/avatar/utils.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/ens/avatar/utils.js"() {
       init_readContract();
       init_ens();
       networkRegex = /(?<protocol>https?:\/\/[^/]*|ipfs:\/|ipns:\/|ar:\/)?(?<root>\/)?(?<subpath>ipfs\/|ipns\/)?(?<target>[\w\-.]+)(?<subtarget>\/.*)?/;
@@ -13370,7 +13370,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/ens/avatar/parseAvatarRecord.js
+  // temp_genlayer/node_modules/viem/_esm/utils/ens/avatar/parseAvatarRecord.js
   async function parseAvatarRecord(client, { gatewayUrls, record }) {
     if (/eip155:/i.test(record))
       return parseNftAvatarUri(client, { gatewayUrls, record });
@@ -13400,12 +13400,12 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_parseAvatarRecord = __esm({
-    "node_modules/viem/_esm/utils/ens/avatar/parseAvatarRecord.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/ens/avatar/parseAvatarRecord.js"() {
       init_utils5();
     }
   });
 
-  // node_modules/viem/_esm/actions/ens/getEnsText.js
+  // temp_genlayer/node_modules/viem/_esm/actions/ens/getEnsText.js
   async function getEnsText(client, parameters) {
     const { blockNumber, blockTag, key, name, gatewayUrls, strict } = parameters;
     const { chain } = client;
@@ -13459,7 +13459,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   }
   var init_getEnsText = __esm({
-    "node_modules/viem/_esm/actions/ens/getEnsText.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/ens/getEnsText.js"() {
       init_abis();
       init_decodeFunctionResult();
       init_encodeFunctionData();
@@ -13474,7 +13474,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/ens/getEnsAvatar.js
+  // temp_genlayer/node_modules/viem/_esm/actions/ens/getEnsAvatar.js
   async function getEnsAvatar(client, { blockNumber, blockTag, assetGatewayUrls, name, gatewayUrls, strict, universalResolverAddress }) {
     const record = await getAction(client, getEnsText, "getEnsText")({
       blockNumber,
@@ -13497,14 +13497,14 @@ ${prettyStateOverride(stateOverride)}`;
     }
   }
   var init_getEnsAvatar = __esm({
-    "node_modules/viem/_esm/actions/ens/getEnsAvatar.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/ens/getEnsAvatar.js"() {
       init_parseAvatarRecord();
       init_getAction();
       init_getEnsText();
     }
   });
 
-  // node_modules/viem/_esm/actions/ens/getEnsName.js
+  // temp_genlayer/node_modules/viem/_esm/actions/ens/getEnsName.js
   async function getEnsName(client, parameters) {
     const { address, blockNumber, blockTag, coinType = 60n, gatewayUrls, strict } = parameters;
     const { chain } = client;
@@ -13540,7 +13540,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   }
   var init_getEnsName = __esm({
-    "node_modules/viem/_esm/actions/ens/getEnsName.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/ens/getEnsName.js"() {
       init_abis();
       init_getChainContractAddress();
       init_errors3();
@@ -13550,7 +13550,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/ens/getEnsResolver.js
+  // temp_genlayer/node_modules/viem/_esm/actions/ens/getEnsResolver.js
   async function getEnsResolver(client, parameters) {
     const { blockNumber, blockTag, name } = parameters;
     const { chain } = client;
@@ -13591,7 +13591,7 @@ ${prettyStateOverride(stateOverride)}`;
     return resolverAddress;
   }
   var init_getEnsResolver = __esm({
-    "node_modules/viem/_esm/actions/ens/getEnsResolver.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/ens/getEnsResolver.js"() {
       init_getChainContractAddress();
       init_toHex();
       init_packetToBytes();
@@ -13600,7 +13600,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/createAccessList.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/createAccessList.js
   async function createAccessList(client, args) {
     const { account: account_ = client.account, blockNumber, blockTag = "latest", blobs, data, gas, gasPrice, maxFeePerBlobGas, maxFeePerGas, maxPriorityFeePerGas, to, value, ...rest } = args;
     const account = account_ ? parseAccount(account_) : void 0;
@@ -13643,7 +13643,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   }
   var init_createAccessList = __esm({
-    "node_modules/viem/_esm/actions/public/createAccessList.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/createAccessList.js"() {
       init_parseAccount();
       init_base();
       init_toHex();
@@ -13654,7 +13654,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/createBlockFilter.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/createBlockFilter.js
   async function createBlockFilter(client) {
     const getRequest = createFilterRequestScope(client, {
       method: "eth_newBlockFilter"
@@ -13665,12 +13665,12 @@ ${prettyStateOverride(stateOverride)}`;
     return { id, request: getRequest(id), type: "block" };
   }
   var init_createBlockFilter = __esm({
-    "node_modules/viem/_esm/actions/public/createBlockFilter.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/createBlockFilter.js"() {
       init_createFilterRequestScope();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/createEventFilter.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/createEventFilter.js
   async function createEventFilter(client, { address, args, event, events: events_, fromBlock, strict, toBlock } = {}) {
     const events = events_ ?? (event ? [event] : void 0);
     const getRequest = createFilterRequestScope(client, {
@@ -13711,14 +13711,14 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_createEventFilter = __esm({
-    "node_modules/viem/_esm/actions/public/createEventFilter.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/createEventFilter.js"() {
       init_encodeEventTopics();
       init_toHex();
       init_createFilterRequestScope();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/createPendingTransactionFilter.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/createPendingTransactionFilter.js
   async function createPendingTransactionFilter(client) {
     const getRequest = createFilterRequestScope(client, {
       method: "eth_newPendingTransactionFilter"
@@ -13729,12 +13729,12 @@ ${prettyStateOverride(stateOverride)}`;
     return { id, request: getRequest(id), type: "transaction" };
   }
   var init_createPendingTransactionFilter = __esm({
-    "node_modules/viem/_esm/actions/public/createPendingTransactionFilter.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/createPendingTransactionFilter.js"() {
       init_createFilterRequestScope();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getBalance.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getBalance.js
   async function getBalance(client, { address, blockHash, blockNumber, blockTag = client.experimental_blockTag ?? "latest", requireCanonical }) {
     const block = formatBlockParameter({
       blockHash,
@@ -13771,7 +13771,7 @@ ${prettyStateOverride(stateOverride)}`;
     return BigInt(balance);
   }
   var init_getBalance = __esm({
-    "node_modules/viem/_esm/actions/public/getBalance.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getBalance.js"() {
       init_abis();
       init_decodeFunctionResult();
       init_encodeFunctionData();
@@ -13781,7 +13781,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getBlobBaseFee.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getBlobBaseFee.js
   async function getBlobBaseFee(client) {
     const baseFee = await client.request({
       method: "eth_blobBaseFee"
@@ -13789,11 +13789,11 @@ ${prettyStateOverride(stateOverride)}`;
     return BigInt(baseFee);
   }
   var init_getBlobBaseFee = __esm({
-    "node_modules/viem/_esm/actions/public/getBlobBaseFee.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getBlobBaseFee.js"() {
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getBlockReceipts.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getBlockReceipts.js
   async function getBlockReceipts(client, { blockHash, blockNumber, blockTag = client.experimental_blockTag ?? "latest" } = {}) {
     const blockNumberHex = blockNumber !== void 0 ? numberToHex(blockNumber) : void 0;
     const receipts = await client.request({
@@ -13806,14 +13806,14 @@ ${prettyStateOverride(stateOverride)}`;
     return receipts.map((receipt) => format(receipt, "getBlockReceipts"));
   }
   var init_getBlockReceipts = __esm({
-    "node_modules/viem/_esm/actions/public/getBlockReceipts.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getBlockReceipts.js"() {
       init_block();
       init_toHex();
       init_transactionReceipt();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getBlockTransactionCount.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getBlockTransactionCount.js
   async function getBlockTransactionCount(client, { blockHash, blockNumber, blockTag = "latest" } = {}) {
     const blockNumberHex = blockNumber !== void 0 ? numberToHex(blockNumber) : void 0;
     let count;
@@ -13831,13 +13831,13 @@ ${prettyStateOverride(stateOverride)}`;
     return hexToNumber(count);
   }
   var init_getBlockTransactionCount = __esm({
-    "node_modules/viem/_esm/actions/public/getBlockTransactionCount.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getBlockTransactionCount.js"() {
       init_fromHex();
       init_toHex();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getCode.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getCode.js
   async function getCode(client, { address, blockHash, blockNumber, blockTag = "latest", requireCanonical }) {
     const block = formatBlockParameter({
       blockHash,
@@ -13856,12 +13856,12 @@ ${prettyStateOverride(stateOverride)}`;
     return hex;
   }
   var init_getCode = __esm({
-    "node_modules/viem/_esm/actions/public/getCode.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getCode.js"() {
       init_formatBlockParameter();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getDelegation.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getDelegation.js
   async function getDelegation(client, { address, blockNumber, blockTag = "latest" }) {
     const code = await getCode(client, {
       address,
@@ -13876,7 +13876,7 @@ ${prettyStateOverride(stateOverride)}`;
     return getAddress(slice(code, 3, 23));
   }
   var init_getDelegation = __esm({
-    "node_modules/viem/_esm/actions/public/getDelegation.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getDelegation.js"() {
       init_getAddress();
       init_size();
       init_slice();
@@ -13884,10 +13884,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/errors/eip712.js
+  // temp_genlayer/node_modules/viem/_esm/errors/eip712.js
   var Eip712DomainNotFoundError;
   var init_eip712 = __esm({
-    "node_modules/viem/_esm/errors/eip712.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/eip712.js"() {
       init_base();
       Eip712DomainNotFoundError = class extends BaseError2 {
         constructor({ address }) {
@@ -13905,7 +13905,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getEip712Domain.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getEip712Domain.js
   async function getEip712Domain(client, parameters) {
     const { address, factory, factoryData } = parameters;
     try {
@@ -13937,7 +13937,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var abi;
   var init_getEip712Domain = __esm({
-    "node_modules/viem/_esm/actions/public/getEip712Domain.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getEip712Domain.js"() {
       init_eip712();
       init_getAction();
       init_readContract();
@@ -13961,7 +13961,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/formatters/feeHistory.js
+  // temp_genlayer/node_modules/viem/_esm/utils/formatters/feeHistory.js
   function formatFeeHistory(feeHistory) {
     return {
       baseFeePerGas: feeHistory.baseFeePerGas.map((value) => BigInt(value)),
@@ -13971,11 +13971,11 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_feeHistory = __esm({
-    "node_modules/viem/_esm/utils/formatters/feeHistory.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/formatters/feeHistory.js"() {
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getFeeHistory.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getFeeHistory.js
   async function getFeeHistory(client, { blockCount, blockNumber, blockTag = "latest", rewardPercentiles }) {
     const blockNumberHex = typeof blockNumber === "bigint" ? numberToHex(blockNumber) : void 0;
     const feeHistory = await client.request({
@@ -13989,13 +13989,13 @@ ${prettyStateOverride(stateOverride)}`;
     return formatFeeHistory(feeHistory);
   }
   var init_getFeeHistory = __esm({
-    "node_modules/viem/_esm/actions/public/getFeeHistory.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getFeeHistory.js"() {
       init_toHex();
       init_feeHistory();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getFilterLogs.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getFilterLogs.js
   async function getFilterLogs(_client, { filter }) {
     const strict = filter.strict ?? false;
     const logs = await filter.request({
@@ -14012,13 +14012,13 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_getFilterLogs = __esm({
-    "node_modules/viem/_esm/actions/public/getFilterLogs.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getFilterLogs.js"() {
       init_parseEventLogs();
       init_log2();
     }
   });
 
-  // node_modules/viem/_esm/utils/authorization/verifyAuthorization.js
+  // temp_genlayer/node_modules/viem/_esm/utils/authorization/verifyAuthorization.js
   async function verifyAuthorization({ address, authorization, signature }) {
     return isAddressEqual(getAddress(address), await recoverAuthorizationAddress({
       authorization,
@@ -14026,14 +14026,14 @@ ${prettyStateOverride(stateOverride)}`;
     }));
   }
   var init_verifyAuthorization = __esm({
-    "node_modules/viem/_esm/utils/authorization/verifyAuthorization.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/authorization/verifyAuthorization.js"() {
       init_getAddress();
       init_isAddressEqual();
       init_recoverAuthorizationAddress();
     }
   });
 
-  // node_modules/viem/_esm/utils/promise/withDedupe.js
+  // temp_genlayer/node_modules/viem/_esm/utils/promise/withDedupe.js
   function withDedupe(fn, { enabled = true, id }) {
     if (!enabled || !id)
       return fn();
@@ -14045,13 +14045,13 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var promiseCache2;
   var init_withDedupe = __esm({
-    "node_modules/viem/_esm/utils/promise/withDedupe.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/promise/withDedupe.js"() {
       init_lru();
       promiseCache2 = /* @__PURE__ */ new LruMap(8192);
     }
   });
 
-  // node_modules/viem/_esm/utils/buildRequest.js
+  // temp_genlayer/node_modules/viem/_esm/utils/buildRequest.js
   function buildRequest(request, options = {}) {
     return async (args, overrideOptions = {}) => {
       const { dedupe = false, methods, retryDelay = 150, retryCount = 3, signal, uid: uid2 } = {
@@ -14236,7 +14236,7 @@ ${prettyStateOverride(stateOverride)}`;
     return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
   }
   var init_buildRequest = __esm({
-    "node_modules/viem/_esm/utils/buildRequest.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/buildRequest.js"() {
       init_base();
       init_request();
       init_rpc();
@@ -14247,7 +14247,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/chain/defineChain.js
+  // temp_genlayer/node_modules/viem/_esm/utils/chain/defineChain.js
   function defineChain(chain) {
     const chainInstance = {
       formatters: void 0,
@@ -14267,11 +14267,11 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_defineChain = __esm({
-    "node_modules/viem/_esm/utils/chain/defineChain.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/chain/defineChain.js"() {
     }
   });
 
-  // node_modules/viem/_esm/utils/encoding/fromRlp.js
+  // temp_genlayer/node_modules/viem/_esm/utils/encoding/fromRlp.js
   function fromRlp(value, to = "hex") {
     const bytes = (() => {
       if (typeof value === "string") {
@@ -14336,7 +14336,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var rlpDepthLimit;
   var init_fromRlp = __esm({
-    "node_modules/viem/_esm/utils/encoding/fromRlp.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/encoding/fromRlp.js"() {
       init_base();
       init_encoding();
       init_cursor2();
@@ -14346,15 +14346,15 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/constants/strings.js
+  // temp_genlayer/node_modules/viem/_esm/constants/strings.js
   var presignMessagePrefix;
   var init_strings = __esm({
-    "node_modules/viem/_esm/constants/strings.js"() {
+    "temp_genlayer/node_modules/viem/_esm/constants/strings.js"() {
       presignMessagePrefix = "Ethereum Signed Message:\n";
     }
   });
 
-  // node_modules/viem/_esm/utils/signature/toPrefixedMessage.js
+  // temp_genlayer/node_modules/viem/_esm/utils/signature/toPrefixedMessage.js
   function toPrefixedMessage(message_) {
     const message = (() => {
       if (typeof message_ === "string")
@@ -14367,7 +14367,7 @@ ${prettyStateOverride(stateOverride)}`;
     return concat([prefix, message]);
   }
   var init_toPrefixedMessage = __esm({
-    "node_modules/viem/_esm/utils/signature/toPrefixedMessage.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/signature/toPrefixedMessage.js"() {
       init_strings();
       init_concat();
       init_size();
@@ -14375,21 +14375,21 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/signature/hashMessage.js
+  // temp_genlayer/node_modules/viem/_esm/utils/signature/hashMessage.js
   function hashMessage(message, to_) {
     return keccak256(toPrefixedMessage(message), to_);
   }
   var init_hashMessage = __esm({
-    "node_modules/viem/_esm/utils/signature/hashMessage.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/signature/hashMessage.js"() {
       init_keccak256();
       init_toPrefixedMessage();
     }
   });
 
-  // node_modules/viem/_esm/errors/typedData.js
+  // temp_genlayer/node_modules/viem/_esm/errors/typedData.js
   var InvalidDomainError, InvalidPrimaryTypeError, InvalidStructTypeError;
   var init_typedData = __esm({
-    "node_modules/viem/_esm/errors/typedData.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/typedData.js"() {
       init_stringify();
       init_base();
       InvalidDomainError = class extends BaseError2 {
@@ -14418,7 +14418,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/typedData.js
+  // temp_genlayer/node_modules/viem/_esm/utils/typedData.js
   function serializeTypedData(parameters) {
     const { domain: domain_, message: message_, primaryType, types } = parameters;
     const normalizeData = (struct, data_) => {
@@ -14508,7 +14508,7 @@ ${prettyStateOverride(stateOverride)}`;
       throw new InvalidStructTypeError({ type });
   }
   var init_typedData2 = __esm({
-    "node_modules/viem/_esm/utils/typedData.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/typedData.js"() {
       init_abi();
       init_address();
       init_typedData();
@@ -14520,7 +14520,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/signature/hashTypedData.js
+  // temp_genlayer/node_modules/viem/_esm/utils/signature/hashTypedData.js
   function hashTypedData(parameters) {
     const { domain = {}, message, primaryType } = parameters;
     const types = {
@@ -14630,7 +14630,7 @@ ${prettyStateOverride(stateOverride)}`;
     return [{ type }, value];
   }
   var init_hashTypedData = __esm({
-    "node_modules/viem/_esm/utils/signature/hashTypedData.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/signature/hashTypedData.js"() {
       init_encodeAbiParameters();
       init_concat();
       init_toHex();
@@ -14639,10 +14639,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/internal/lru.js
+  // temp_genlayer/node_modules/ox/_esm/core/internal/lru.js
   var LruMap2;
   var init_lru2 = __esm({
-    "node_modules/ox/_esm/core/internal/lru.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/internal/lru.js"() {
       LruMap2 = class extends Map {
         constructor(size5) {
           super();
@@ -14675,10 +14675,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/Caches.js
+  // temp_genlayer/node_modules/ox/_esm/core/Caches.js
   var caches, checksum;
   var init_Caches = __esm({
-    "node_modules/ox/_esm/core/Caches.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/Caches.js"() {
       init_lru2();
       caches = {
         checksum: /* @__PURE__ */ new LruMap2(8192)
@@ -14687,7 +14687,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/Hash.js
+  // temp_genlayer/node_modules/ox/_esm/core/Hash.js
   function keccak2562(value, options = {}) {
     const { as = typeof value === "string" ? "Hex" : "Bytes" } = options;
     const bytes = keccak_256(from(value));
@@ -14696,14 +14696,14 @@ ${prettyStateOverride(stateOverride)}`;
     return fromBytes(bytes);
   }
   var init_Hash = __esm({
-    "node_modules/ox/_esm/core/Hash.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/Hash.js"() {
       init_sha3();
       init_Bytes();
       init_Hex();
     }
   });
 
-  // node_modules/ox/_esm/core/PublicKey.js
+  // temp_genlayer/node_modules/ox/_esm/core/PublicKey.js
   function assert3(publicKey, options = {}) {
     const { compressed } = options;
     const { prefix, x, y } = publicKey;
@@ -14785,7 +14785,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var InvalidError, InvalidPrefixError, InvalidCompressedPrefixError, InvalidUncompressedPrefixError, InvalidSerializedSizeError;
   var init_PublicKey = __esm({
-    "node_modules/ox/_esm/core/PublicKey.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/PublicKey.js"() {
       init_Bytes();
       init_Errors();
       init_Hex();
@@ -14861,7 +14861,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/Address.js
+  // temp_genlayer/node_modules/ox/_esm/core/Address.js
   function assert4(value, options = {}) {
     const { strict = true } = options;
     if (!addressRegex2.test(value))
@@ -14920,7 +14920,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var addressRegex2, InvalidAddressError2, InvalidInputError, InvalidChecksumError;
   var init_Address = __esm({
-    "node_modules/ox/_esm/core/Address.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/Address.js"() {
       init_Bytes();
       init_Caches();
       init_Errors();
@@ -14965,10 +14965,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/Solidity.js
+  // temp_genlayer/node_modules/ox/_esm/core/Solidity.js
   var arrayRegex, bytesRegex3, integerRegex3, maxInt82, maxInt162, maxInt242, maxInt322, maxInt402, maxInt482, maxInt562, maxInt642, maxInt722, maxInt802, maxInt882, maxInt962, maxInt1042, maxInt1122, maxInt1202, maxInt1282, maxInt1362, maxInt1442, maxInt1522, maxInt1602, maxInt1682, maxInt1762, maxInt1842, maxInt1922, maxInt2002, maxInt2082, maxInt2162, maxInt2242, maxInt2322, maxInt2402, maxInt2482, maxInt2562, minInt82, minInt162, minInt242, minInt322, minInt402, minInt482, minInt562, minInt642, minInt722, minInt802, minInt882, minInt962, minInt1042, minInt1122, minInt1202, minInt1282, minInt1362, minInt1442, minInt1522, minInt1602, minInt1682, minInt1762, minInt1842, minInt1922, minInt2002, minInt2082, minInt2162, minInt2242, minInt2322, minInt2402, minInt2482, minInt2562, maxUint82, maxUint162, maxUint242, maxUint322, maxUint402, maxUint482, maxUint562, maxUint642, maxUint722, maxUint802, maxUint882, maxUint962, maxUint1042, maxUint1122, maxUint1202, maxUint1282, maxUint1362, maxUint1442, maxUint1522, maxUint1602, maxUint1682, maxUint1762, maxUint1842, maxUint1922, maxUint2002, maxUint2082, maxUint2162, maxUint2242, maxUint2322, maxUint2402, maxUint2482, maxUint2562;
   var init_Solidity = __esm({
-    "node_modules/ox/_esm/core/Solidity.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/Solidity.js"() {
       arrayRegex = /^(.*)\[([0-9]*)\]$/;
       bytesRegex3 = /^bytes([1-9]|1[0-9]|2[0-9]|3[0-2])?$/;
       integerRegex3 = /^(u?int)(8|16|24|32|40|48|56|64|72|80|88|96|104|112|120|128|136|144|152|160|168|176|184|192|200|208|216|224|232|240|248|256)?$/;
@@ -15071,7 +15071,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/internal/abiParameters.js
+  // temp_genlayer/node_modules/ox/_esm/core/internal/abiParameters.js
   function decodeParameter2(cursor, param, options) {
     const { checksumAddress: checksumAddress2, staticPosition } = options;
     const arrayComponents = getArrayComponents2(param.type);
@@ -15459,7 +15459,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var sizeOfLength2, sizeOfOffset2;
   var init_abiParameters = __esm({
-    "node_modules/ox/_esm/core/internal/abiParameters.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/internal/abiParameters.js"() {
       init_AbiParameters();
       init_Address();
       init_Bytes();
@@ -15471,7 +15471,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/internal/cursor.js
+  // temp_genlayer/node_modules/ox/_esm/core/internal/cursor.js
   function create(bytes, { recursiveReadLimit = 8192 } = {}) {
     const cursor = Object.create(staticCursor2);
     cursor.bytes = bytes;
@@ -15482,7 +15482,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var staticCursor2, NegativeOffsetError2, PositionOutOfBoundsError2, RecursiveReadLimitExceededError2;
   var init_cursor3 = __esm({
-    "node_modules/ox/_esm/core/internal/cursor.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/internal/cursor.js"() {
       init_Errors();
       staticCursor2 = {
         bytes: new Uint8Array(),
@@ -15679,7 +15679,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/AbiParameters.js
+  // temp_genlayer/node_modules/ox/_esm/core/AbiParameters.js
   function decode(parameters, data, options = {}) {
     const { as = "Array", checksumAddress: checksumAddress2 = false } = options;
     const bytes = typeof data === "string" ? fromHex2(data) : data;
@@ -15749,7 +15749,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var DataSizeTooSmallError, ZeroDataError, ArrayLengthMismatchError, BytesSizeMismatchError2, LengthMismatchError, InvalidArrayError2, InvalidTypeError;
   var init_AbiParameters = __esm({
-    "node_modules/ox/_esm/core/AbiParameters.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/AbiParameters.js"() {
       init_exports();
       init_Address();
       init_Bytes();
@@ -15894,7 +15894,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/Rlp.js
+  // temp_genlayer/node_modules/ox/_esm/core/Rlp.js
   function from6(value, options) {
     const { as } = options;
     const encodable = getEncodable2(value);
@@ -15988,7 +15988,7 @@ ${prettyStateOverride(stateOverride)}`;
     throw new BaseError3("Length is too large.");
   }
   var init_Rlp = __esm({
-    "node_modules/ox/_esm/core/Rlp.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/Rlp.js"() {
       init_Bytes();
       init_Errors();
       init_Hex();
@@ -15996,7 +15996,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/Signature.js
+  // temp_genlayer/node_modules/ox/_esm/core/Signature.js
   function assert5(signature, options = {}) {
     const { recovered } = options;
     if (typeof signature.r === "undefined")
@@ -16109,7 +16109,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var InvalidSerializedSizeError2, MissingPropertiesError, InvalidRError, InvalidSError, InvalidYParityError, InvalidVError;
   var init_Signature = __esm({
-    "node_modules/ox/_esm/core/Signature.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/Signature.js"() {
       init_Errors();
       init_Hex();
       init_Json();
@@ -16188,7 +16188,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/Authorization.js
+  // temp_genlayer/node_modules/ox/_esm/core/Authorization.js
   function from8(authorization, options = {}) {
     if (typeof authorization.chainId === "string")
       return fromRpc3(authorization);
@@ -16226,7 +16226,7 @@ ${prettyStateOverride(stateOverride)}`;
     ];
   }
   var init_Authorization = __esm({
-    "node_modules/ox/_esm/core/Authorization.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/Authorization.js"() {
       init_Hash();
       init_Hex();
       init_Rlp();
@@ -16234,7 +16234,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/Secp256k1.js
+  // temp_genlayer/node_modules/ox/_esm/core/Secp256k1.js
   function recoverAddress2(options) {
     return fromPublicKey(recoverPublicKey2(options));
   }
@@ -16246,7 +16246,7 @@ ${prettyStateOverride(stateOverride)}`;
     return from3(point);
   }
   var init_Secp256k1 = __esm({
-    "node_modules/ox/_esm/core/Secp256k1.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/Secp256k1.js"() {
       init_secp256k1();
       init_Address();
       init_Hex();
@@ -16254,7 +16254,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/erc8010/SignatureErc8010.js
+  // temp_genlayer/node_modules/ox/_esm/erc8010/SignatureErc8010.js
   var SignatureErc8010_exports = {};
   __export(SignatureErc8010_exports, {
     InvalidWrappedSignatureError: () => InvalidWrappedSignatureError,
@@ -16327,7 +16327,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var magicBytes, suffixParameters, InvalidWrappedSignatureError;
   var init_SignatureErc8010 = __esm({
-    "node_modules/ox/_esm/erc8010/SignatureErc8010.js"() {
+    "temp_genlayer/node_modules/ox/_esm/erc8010/SignatureErc8010.js"() {
       init_AbiParameters();
       init_Authorization();
       init_Errors();
@@ -16350,17 +16350,17 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/erc8010/index.js
+  // temp_genlayer/node_modules/ox/_esm/erc8010/index.js
   var init_erc8010 = __esm({
-    "node_modules/ox/_esm/erc8010/index.js"() {
+    "temp_genlayer/node_modules/ox/_esm/erc8010/index.js"() {
       init_SignatureErc8010();
     }
   });
 
-  // node_modules/viem/_esm/errors/unit.js
+  // temp_genlayer/node_modules/viem/_esm/errors/unit.js
   var InvalidDecimalNumberError;
   var init_unit2 = __esm({
-    "node_modules/viem/_esm/errors/unit.js"() {
+    "temp_genlayer/node_modules/viem/_esm/errors/unit.js"() {
       init_base();
       InvalidDecimalNumberError = class extends BaseError2 {
         constructor({ value }) {
@@ -16372,7 +16372,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/unit/parseUnits.js
+  // temp_genlayer/node_modules/viem/_esm/utils/unit/parseUnits.js
   function parseUnits(value, decimals) {
     if (!/^(-?)([0-9]*)\.?([0-9]*)$/.test(value))
       throw new InvalidDecimalNumberError({ value });
@@ -16407,31 +16407,31 @@ ${prettyStateOverride(stateOverride)}`;
     return BigInt(`${negative ? "-" : ""}${integer}${fraction}`);
   }
   var init_parseUnits = __esm({
-    "node_modules/viem/_esm/utils/unit/parseUnits.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/unit/parseUnits.js"() {
       init_unit2();
     }
   });
 
-  // node_modules/viem/_esm/utils/unit/parseEther.js
+  // temp_genlayer/node_modules/viem/_esm/utils/unit/parseEther.js
   function parseEther(ether, unit = "wei") {
     return parseUnits(ether, etherUnits[unit]);
   }
   var init_parseEther = __esm({
-    "node_modules/viem/_esm/utils/unit/parseEther.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/unit/parseEther.js"() {
       init_unit();
       init_parseUnits();
     }
   });
 
-  // node_modules/viem/_esm/utils/index.js
+  // temp_genlayer/node_modules/viem/_esm/utils/index.js
   var init_utils6 = __esm({
-    "node_modules/viem/_esm/utils/index.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/index.js"() {
       init_encodeFunctionData();
       init_fromHex();
     }
   });
 
-  // node_modules/viem/_esm/utils/formatters/proof.js
+  // temp_genlayer/node_modules/viem/_esm/utils/formatters/proof.js
   function formatStorageProof(storageProof) {
     return storageProof.map((proof) => ({
       ...proof,
@@ -16447,12 +16447,12 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_proof = __esm({
-    "node_modules/viem/_esm/utils/formatters/proof.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/formatters/proof.js"() {
       init_utils6();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getProof.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getProof.js
   async function getProof(client, { address, blockHash, blockNumber, blockTag = "latest", requireCanonical, storageKeys }) {
     const block = formatBlockParameter({
       blockHash,
@@ -16467,13 +16467,13 @@ ${prettyStateOverride(stateOverride)}`;
     return formatProof(proof);
   }
   var init_getProof = __esm({
-    "node_modules/viem/_esm/actions/public/getProof.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getProof.js"() {
       init_formatBlockParameter();
       init_proof();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getStorageAt.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getStorageAt.js
   async function getStorageAt(client, { address, blockHash, blockNumber, blockTag = "latest", requireCanonical, slot }) {
     const block = formatBlockParameter({
       blockHash,
@@ -16488,12 +16488,12 @@ ${prettyStateOverride(stateOverride)}`;
     return data;
   }
   var init_getStorageAt = __esm({
-    "node_modules/viem/_esm/actions/public/getStorageAt.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getStorageAt.js"() {
       init_formatBlockParameter();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getTransaction.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getTransaction.js
   async function getTransaction(client, { blockHash, blockNumber, blockTag: blockTag_, hash: hash3, index: index2, sender, nonce }) {
     const blockTag = blockTag_ || "latest";
     const blockNumberHex = blockNumber !== void 0 ? numberToHex(blockNumber) : void 0;
@@ -16531,14 +16531,14 @@ ${prettyStateOverride(stateOverride)}`;
     return format(transaction, "getTransaction");
   }
   var init_getTransaction = __esm({
-    "node_modules/viem/_esm/actions/public/getTransaction.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getTransaction.js"() {
       init_transaction();
       init_toHex();
       init_transaction2();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getTransactionConfirmations.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getTransactionConfirmations.js
   async function getTransactionConfirmations(client, { hash: hash3, transactionReceipt }) {
     const [blockNumber, transaction] = await Promise.all([
       getAction(client, getBlockNumber, "getBlockNumber")({}),
@@ -16550,14 +16550,14 @@ ${prettyStateOverride(stateOverride)}`;
     return blockNumber - transactionBlockNumber + 1n;
   }
   var init_getTransactionConfirmations = __esm({
-    "node_modules/viem/_esm/actions/public/getTransactionConfirmations.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getTransactionConfirmations.js"() {
       init_getAction();
       init_getBlockNumber();
       init_getTransaction();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/getTransactionReceipt.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/getTransactionReceipt.js
   async function getTransactionReceipt(client, { hash: hash3 }) {
     const receipt = await client.request({
       method: "eth_getTransactionReceipt",
@@ -16569,13 +16569,13 @@ ${prettyStateOverride(stateOverride)}`;
     return format(receipt, "getTransactionReceipt");
   }
   var init_getTransactionReceipt = __esm({
-    "node_modules/viem/_esm/actions/public/getTransactionReceipt.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/getTransactionReceipt.js"() {
       init_transaction();
       init_transactionReceipt();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/multicall.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/multicall.js
   async function multicall(client, parameters) {
     const { account, authorizationList, allowFailure = true, blockHash, blockNumber, blockOverrides, blockTag, requireCanonical, stateOverride } = parameters;
     const contracts = parameters.contracts;
@@ -16706,7 +16706,7 @@ ${prettyStateOverride(stateOverride)}`;
     return results;
   }
   var init_multicall = __esm({
-    "node_modules/viem/_esm/actions/public/multicall.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/multicall.js"() {
       init_abis();
       init_contracts();
       init_abi();
@@ -16721,7 +16721,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/simulateBlocks.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/simulateBlocks.js
   async function simulateBlocks(client, parameters) {
     const { blockNumber, blockTag = client.experimental_blockTag ?? "latest", blocks, returnFullTransactions, traceTransfers, validation } = parameters;
     try {
@@ -16809,7 +16809,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   }
   var init_simulateBlocks = __esm({
-    "node_modules/viem/_esm/actions/public/simulateBlocks.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/simulateBlocks.js"() {
       init_BlockOverrides();
       init_parseAccount();
       init_abi();
@@ -16829,7 +16829,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/internal/abiItem.js
+  // temp_genlayer/node_modules/ox/_esm/core/internal/abiItem.js
   function normalizeSignature2(signature) {
     let active = true;
     let current = "";
@@ -16930,13 +16930,13 @@ ${prettyStateOverride(stateOverride)}`;
     return;
   }
   var init_abiItem2 = __esm({
-    "node_modules/ox/_esm/core/internal/abiItem.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/internal/abiItem.js"() {
       init_Address();
       init_Errors();
     }
   });
 
-  // node_modules/ox/_esm/core/AbiItem.js
+  // temp_genlayer/node_modules/ox/_esm/core/AbiItem.js
   function from10(abiItem, options = {}) {
     const { prepare = true } = options;
     const item = (() => {
@@ -17062,7 +17062,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var AmbiguityError, NotFoundError;
   var init_AbiItem = __esm({
-    "node_modules/ox/_esm/core/AbiItem.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/AbiItem.js"() {
       init_exports();
       init_Errors();
       init_Hash();
@@ -17109,7 +17109,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/core/AbiConstructor.js
+  // temp_genlayer/node_modules/ox/_esm/core/AbiConstructor.js
   function encode3(...parameters) {
     const [abiConstructor, options] = (() => {
       if (Array.isArray(parameters[0])) {
@@ -17131,14 +17131,14 @@ ${prettyStateOverride(stateOverride)}`;
     return item;
   }
   var init_AbiConstructor = __esm({
-    "node_modules/ox/_esm/core/AbiConstructor.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/AbiConstructor.js"() {
       init_AbiItem();
       init_AbiParameters();
       init_Hex();
     }
   });
 
-  // node_modules/ox/_esm/core/AbiFunction.js
+  // temp_genlayer/node_modules/ox/_esm/core/AbiFunction.js
   function encodeData2(...parameters) {
     const [abiFunction, args = []] = (() => {
       if (Array.isArray(parameters[0])) {
@@ -17169,23 +17169,23 @@ ${prettyStateOverride(stateOverride)}`;
     return getSelector(abiItem);
   }
   var init_AbiFunction = __esm({
-    "node_modules/ox/_esm/core/AbiFunction.js"() {
+    "temp_genlayer/node_modules/ox/_esm/core/AbiFunction.js"() {
       init_AbiItem();
       init_AbiParameters();
       init_Hex();
     }
   });
 
-  // node_modules/viem/_esm/constants/address.js
+  // temp_genlayer/node_modules/viem/_esm/constants/address.js
   var ethAddress, zeroAddress;
   var init_address2 = __esm({
-    "node_modules/viem/_esm/constants/address.js"() {
+    "temp_genlayer/node_modules/viem/_esm/constants/address.js"() {
       ethAddress = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
       zeroAddress = "0x0000000000000000000000000000000000000000";
     }
   });
 
-  // node_modules/viem/_esm/actions/public/simulateCalls.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/simulateCalls.js
   async function simulateCalls(client, parameters) {
     const { blockNumber, blockTag, calls, stateOverrides, traceAssetChanges, traceTransfers, validation } = parameters;
     const account = parameters.account ? parseAccount(parameters.account) : void 0;
@@ -17382,7 +17382,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var getBalanceCode;
   var init_simulateCalls = __esm({
-    "node_modules/viem/_esm/actions/public/simulateCalls.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/simulateCalls.js"() {
       init_AbiConstructor();
       init_AbiFunction();
       init_parseAccount();
@@ -17397,7 +17397,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/erc6492/SignatureErc6492.js
+  // temp_genlayer/node_modules/ox/_esm/erc6492/SignatureErc6492.js
   var SignatureErc6492_exports = {};
   __export(SignatureErc6492_exports, {
     InvalidWrappedSignatureError: () => InvalidWrappedSignatureError2,
@@ -17442,7 +17442,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var magicBytes2, universalSignatureValidatorBytecode, universalSignatureValidatorAbi, InvalidWrappedSignatureError2;
   var init_SignatureErc6492 = __esm({
-    "node_modules/ox/_esm/erc6492/SignatureErc6492.js"() {
+    "temp_genlayer/node_modules/ox/_esm/erc6492/SignatureErc6492.js"() {
       init_AbiParameters();
       init_Errors();
       init_Hex();
@@ -17506,14 +17506,14 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/ox/_esm/erc6492/index.js
+  // temp_genlayer/node_modules/ox/_esm/erc6492/index.js
   var init_erc6492 = __esm({
-    "node_modules/ox/_esm/erc6492/index.js"() {
+    "temp_genlayer/node_modules/ox/_esm/erc6492/index.js"() {
       init_SignatureErc6492();
     }
   });
 
-  // node_modules/viem/_esm/utils/signature/serializeSignature.js
+  // temp_genlayer/node_modules/viem/_esm/utils/signature/serializeSignature.js
   function serializeSignature({ r, s, to = "hex", v, yParity }) {
     const yParity_ = (() => {
       if (yParity === 0 || yParity === 1)
@@ -17528,14 +17528,14 @@ ${prettyStateOverride(stateOverride)}`;
     return hexToBytes(signature);
   }
   var init_serializeSignature = __esm({
-    "node_modules/viem/_esm/utils/signature/serializeSignature.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/signature/serializeSignature.js"() {
       init_secp256k1();
       init_fromHex();
       init_toBytes();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/verifyHash.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/verifyHash.js
   async function verifyHash(client, parameters) {
     const { address, chain = client.chain, hash: hash3, erc6492VerifierAddress: verifierAddress = parameters.universalSignatureVerifierAddress ?? chain?.contracts?.erc6492Verifier?.address, multicallAddress = parameters.multicallAddress ?? chain?.contracts?.multicall3?.address, mode = "auto" } = parameters;
     if (chain?.verifyHash)
@@ -17704,7 +17704,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var VerificationError;
   var init_verifyHash = __esm({
-    "node_modules/viem/_esm/actions/public/verifyHash.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/verifyHash.js"() {
       init_erc6492();
       init_erc8010();
       init_abis();
@@ -17730,7 +17730,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/verifyMessage.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/verifyMessage.js
   async function verifyMessage(client, { address, message, factory, factoryData, signature, ...callRequest }) {
     const hash3 = hashMessage(message);
     return getAction(client, verifyHash, "verifyHash")({
@@ -17743,14 +17743,14 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_verifyMessage = __esm({
-    "node_modules/viem/_esm/actions/public/verifyMessage.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/verifyMessage.js"() {
       init_getAction();
       init_hashMessage();
       init_verifyHash();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/verifyTypedData.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/verifyTypedData.js
   async function verifyTypedData(client, parameters) {
     const { address, factory, factoryData, signature, message, primaryType, types, domain, ...callRequest } = parameters;
     const hash3 = hashTypedData({ message, primaryType, types, domain });
@@ -17764,14 +17764,14 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_verifyTypedData = __esm({
-    "node_modules/viem/_esm/actions/public/verifyTypedData.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/verifyTypedData.js"() {
       init_getAction();
       init_hashTypedData();
       init_verifyHash();
     }
   });
 
-  // node_modules/viem/_esm/actions/public/watchBlockNumber.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/watchBlockNumber.js
   function watchBlockNumber(client, { emitOnBegin = false, emitMissed = false, onBlockNumber, onError, poll: poll_, pollingInterval = client.pollingInterval }) {
     const enablePolling = (() => {
       if (typeof poll_ !== "undefined")
@@ -17863,7 +17863,7 @@ ${prettyStateOverride(stateOverride)}`;
     return enablePolling ? pollBlockNumber() : subscribeBlockNumber();
   }
   var init_watchBlockNumber = __esm({
-    "node_modules/viem/_esm/actions/public/watchBlockNumber.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/watchBlockNumber.js"() {
       init_fromHex();
       init_getAction();
       init_observe();
@@ -17873,7 +17873,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/waitForTransactionReceipt.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/waitForTransactionReceipt.js
   async function waitForTransactionReceipt(client, parameters) {
     const {
       checkReplacement = true,
@@ -18005,7 +18005,7 @@ ${prettyStateOverride(stateOverride)}`;
     return promise;
   }
   var init_waitForTransactionReceipt = __esm({
-    "node_modules/viem/_esm/actions/public/waitForTransactionReceipt.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/waitForTransactionReceipt.js"() {
       init_block();
       init_transaction();
       init_getAction();
@@ -18020,7 +18020,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/watchBlocks.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/watchBlocks.js
   function watchBlocks(client, { blockTag = client.experimental_blockTag ?? "latest", emitMissed = false, emitOnBegin = false, onBlock, onError, includeTransactions: includeTransactions_, poll: poll_, pollingInterval = client.pollingInterval }) {
     const enablePolling = (() => {
       if (typeof poll_ !== "undefined")
@@ -18141,7 +18141,7 @@ ${prettyStateOverride(stateOverride)}`;
     return enablePolling ? pollBlocks() : subscribeBlocks();
   }
   var init_watchBlocks = __esm({
-    "node_modules/viem/_esm/actions/public/watchBlocks.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/watchBlocks.js"() {
       init_getAction();
       init_observe();
       init_poll();
@@ -18150,7 +18150,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/watchEvent.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/watchEvent.js
   function watchEvent(client, { address, args, batch = true, event, events, fromBlock, onError, onLogs, poll: poll_, pollingInterval = client.pollingInterval, strict: strict_ }) {
     const enablePolling = (() => {
       if (typeof poll_ !== "undefined")
@@ -18313,7 +18313,7 @@ ${prettyStateOverride(stateOverride)}`;
     return enablePolling ? pollEvent() : subscribeEvent();
   }
   var init_watchEvent = __esm({
-    "node_modules/viem/_esm/actions/public/watchEvent.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/watchEvent.js"() {
       init_abi();
       init_rpc();
       init_decodeEventLog();
@@ -18331,7 +18331,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/public/watchPendingTransactions.js
+  // temp_genlayer/node_modules/viem/_esm/actions/public/watchPendingTransactions.js
   function watchPendingTransactions(client, { batch = true, onError, onTransactions, poll: poll_, pollingInterval = client.pollingInterval }) {
     const enablePolling = typeof poll_ !== "undefined" ? poll_ : client.transport.type !== "webSocket" && client.transport.type !== "ipc";
     const pollPendingTransactions = () => {
@@ -18405,7 +18405,7 @@ ${prettyStateOverride(stateOverride)}`;
     return enablePolling ? pollPendingTransactions() : subscribePendingTransactions();
   }
   var init_watchPendingTransactions = __esm({
-    "node_modules/viem/_esm/actions/public/watchPendingTransactions.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/public/watchPendingTransactions.js"() {
       init_getAction();
       init_observe();
       init_poll();
@@ -18416,7 +18416,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/utils/siwe/parseSiweMessage.js
+  // temp_genlayer/node_modules/viem/_esm/utils/siwe/parseSiweMessage.js
   function parseSiweMessage(message) {
     const { scheme, statement, ...prefix } = message.match(prefixRegex)?.groups ?? {};
     const { chainId, expirationTime, issuedAt, notBefore, requestId, ...suffix } = message.match(suffixRegex)?.groups ?? {};
@@ -18436,13 +18436,13 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var prefixRegex, suffixRegex;
   var init_parseSiweMessage = __esm({
-    "node_modules/viem/_esm/utils/siwe/parseSiweMessage.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/siwe/parseSiweMessage.js"() {
       prefixRegex = /^(?:(?<scheme>[a-zA-Z][a-zA-Z0-9+-.]*):\/\/)?(?<domain>[a-zA-Z0-9+-.]*(?::[0-9]{1,5})?) (?:wants you to sign in with your Ethereum account:\n)(?<address>0x[a-fA-F0-9]{40})\n\n(?:(?<statement>.*)\n\n)?/;
       suffixRegex = /(?:URI: (?<uri>.+))\n(?:Version: (?<version>.+))\n(?:Chain ID: (?<chainId>\d+))\n(?:Nonce: (?<nonce>[a-zA-Z0-9]+))\n(?:Issued At: (?<issuedAt>.+))(?:\nExpiration Time: (?<expirationTime>.+))?(?:\nNot Before: (?<notBefore>.+))?(?:\nRequest ID: (?<requestId>.+))?/;
     }
   });
 
-  // node_modules/viem/_esm/utils/siwe/validateSiweMessage.js
+  // temp_genlayer/node_modules/viem/_esm/utils/siwe/validateSiweMessage.js
   function validateSiweMessage(parameters) {
     const { address, domain, message, nonce, scheme, time = /* @__PURE__ */ new Date() } = parameters;
     if (domain && message.domain !== domain)
@@ -18468,13 +18468,13 @@ ${prettyStateOverride(stateOverride)}`;
     return true;
   }
   var init_validateSiweMessage = __esm({
-    "node_modules/viem/_esm/utils/siwe/validateSiweMessage.js"() {
+    "temp_genlayer/node_modules/viem/_esm/utils/siwe/validateSiweMessage.js"() {
       init_isAddress();
       init_isAddressEqual();
     }
   });
 
-  // node_modules/viem/_esm/actions/siwe/verifySiweMessage.js
+  // temp_genlayer/node_modules/viem/_esm/actions/siwe/verifySiweMessage.js
   async function verifySiweMessage(client, parameters) {
     const { address, domain, message, nonce, scheme, signature, time = /* @__PURE__ */ new Date(), ...callRequest } = parameters;
     const parsed = parseSiweMessage(message);
@@ -18499,7 +18499,7 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_verifySiweMessage = __esm({
-    "node_modules/viem/_esm/actions/siwe/verifySiweMessage.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/siwe/verifySiweMessage.js"() {
       init_hashMessage();
       init_parseSiweMessage();
       init_validateSiweMessage();
@@ -18507,7 +18507,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/token/internal.js
+  // temp_genlayer/node_modules/viem/_esm/actions/token/internal.js
   function toAmount(amount, decimals) {
     return { amount, decimals, formatted: formatUnits(amount, decimals) };
   }
@@ -18615,7 +18615,7 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_internal = __esm({
-    "node_modules/viem/_esm/actions/token/internal.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/token/internal.js"() {
       init_abis();
       init_isAddress();
       init_isAddressEqual();
@@ -18626,7 +18626,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/token/approve.js
+  // temp_genlayer/node_modules/viem/_esm/actions/token/approve.js
   async function approve(client, parameters) {
     return approve.inner(writeContract, client, parameters);
   }
@@ -18641,7 +18641,7 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_approve = __esm({
-    "node_modules/viem/_esm/actions/token/approve.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/token/approve.js"() {
       init_abis();
       init_parseEventLogs();
       init_estimateContractGas();
@@ -18690,7 +18690,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/sendRawTransactionSync.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/sendRawTransactionSync.js
   async function sendRawTransactionSync(client, { serializedTransaction, throwOnReceiptRevert, timeout }) {
     const receipt = await client.request({
       method: "eth_sendRawTransactionSync",
@@ -18703,13 +18703,13 @@ ${prettyStateOverride(stateOverride)}`;
     return formatted;
   }
   var init_sendRawTransactionSync = __esm({
-    "node_modules/viem/_esm/actions/wallet/sendRawTransactionSync.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/sendRawTransactionSync.js"() {
       init_transaction();
       init_transactionReceipt();
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/sendTransactionSync.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/sendTransactionSync.js
   async function sendTransactionSync(client, parameters) {
     const { account: account_ = client.account, assertChainId = true, chain = client.chain, accessList, authorizationList, blobs, data, dataSuffix = typeof client.dataSuffix === "string" ? client.dataSuffix : client.dataSuffix?.value, gas, gasPrice, maxFeePerBlobGas, maxFeePerGas, maxPriorityFeePerGas, nonce, pollingInterval, throwOnReceiptRevert, type, value, ...rest } = parameters;
     const timeout = parameters.timeout ?? Math.max((chain?.blockTime ?? 0) * 3, 5e3);
@@ -18874,7 +18874,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var supportsWalletNamespace2;
   var init_sendTransactionSync = __esm({
-    "node_modules/viem/_esm/actions/wallet/sendTransactionSync.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/sendTransactionSync.js"() {
       init_parseAccount();
       init_account();
       init_base();
@@ -18896,18 +18896,18 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/writeContractSync.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/writeContractSync.js
   async function writeContractSync(client, parameters) {
     return writeContract.internal(client, sendTransactionSync, "sendTransactionSync", parameters);
   }
   var init_writeContractSync = __esm({
-    "node_modules/viem/_esm/actions/wallet/writeContractSync.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/writeContractSync.js"() {
       init_sendTransactionSync();
       init_writeContract();
     }
   });
 
-  // node_modules/viem/_esm/actions/token/approveSync.js
+  // temp_genlayer/node_modules/viem/_esm/actions/token/approveSync.js
   async function approveSync(client, parameters) {
     const { amount, token, throwOnReceiptRevert = true } = parameters;
     const { decimals } = resolveToken(client, { token });
@@ -18924,7 +18924,7 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_approveSync = __esm({
-    "node_modules/viem/_esm/actions/token/approveSync.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/token/approveSync.js"() {
       init_formatUnits();
       init_writeContractSync();
       init_approve();
@@ -18932,7 +18932,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/token/getAllowance.js
+  // temp_genlayer/node_modules/viem/_esm/actions/token/getAllowance.js
   async function getAllowance(client, parameters) {
     const { account, decimals, spender, token, ...rest } = parameters;
     const [amount, { decimals: resolved }] = await Promise.all([
@@ -18948,7 +18948,7 @@ ${prettyStateOverride(stateOverride)}`;
     return toAmount(amount, resolved);
   }
   var init_getAllowance = __esm({
-    "node_modules/viem/_esm/actions/token/getAllowance.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/token/getAllowance.js"() {
       init_abis();
       init_readContract();
       init_internal();
@@ -18966,7 +18966,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/token/getBalance.js
+  // temp_genlayer/node_modules/viem/_esm/actions/token/getBalance.js
   async function getBalance2(client, parameters) {
     const { account: account_ = client.account, decimals, token, ...rest } = parameters;
     if (!account_)
@@ -18985,7 +18985,7 @@ ${prettyStateOverride(stateOverride)}`;
     return toAmount(amount, resolved);
   }
   var init_getBalance2 = __esm({
-    "node_modules/viem/_esm/actions/token/getBalance.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/token/getBalance.js"() {
       init_parseAccount();
       init_abis();
       init_account();
@@ -19009,7 +19009,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/token/getMetadata.js
+  // temp_genlayer/node_modules/viem/_esm/actions/token/getMetadata.js
   async function getMetadata(client, parameters) {
     const { token, ...rest } = parameters;
     const { address } = resolveToken(client, { token });
@@ -19041,14 +19041,14 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_getMetadata = __esm({
-    "node_modules/viem/_esm/actions/token/getMetadata.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/token/getMetadata.js"() {
       init_abis();
       init_readContract();
       init_internal();
     }
   });
 
-  // node_modules/viem/_esm/actions/token/getTotalSupply.js
+  // temp_genlayer/node_modules/viem/_esm/actions/token/getTotalSupply.js
   async function getTotalSupply(client, parameters) {
     const { decimals, token, ...rest } = parameters;
     const [amount, { decimals: resolved }] = await Promise.all([
@@ -19064,7 +19064,7 @@ ${prettyStateOverride(stateOverride)}`;
     return toAmount(amount, resolved);
   }
   var init_getTotalSupply = __esm({
-    "node_modules/viem/_esm/actions/token/getTotalSupply.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/token/getTotalSupply.js"() {
       init_abis();
       init_readContract();
       init_internal();
@@ -19082,7 +19082,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/token/transfer.js
+  // temp_genlayer/node_modules/viem/_esm/actions/token/transfer.js
   async function transfer(client, parameters) {
     return transfer.inner(writeContract, client, parameters);
   }
@@ -19105,7 +19105,7 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_transfer = __esm({
-    "node_modules/viem/_esm/actions/token/transfer.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/token/transfer.js"() {
       init_abis();
       init_parseEventLogs();
       init_estimateContractGas();
@@ -19154,7 +19154,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/token/transferSync.js
+  // temp_genlayer/node_modules/viem/_esm/actions/token/transferSync.js
   async function transferSync(client, parameters) {
     const { amount, token, throwOnReceiptRevert = true } = parameters;
     const { decimals } = resolveToken(client, { token });
@@ -19171,7 +19171,7 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_transferSync = __esm({
-    "node_modules/viem/_esm/actions/token/transferSync.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/token/transferSync.js"() {
       init_formatUnits();
       init_writeContractSync();
       init_internal();
@@ -19179,9 +19179,9 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/token/index.js
+  // temp_genlayer/node_modules/viem/_esm/actions/token/index.js
   var init_token = __esm({
-    "node_modules/viem/_esm/actions/token/index.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/token/index.js"() {
       init_approve();
       init_approveSync();
       init_getAllowance();
@@ -19193,7 +19193,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/clients/decorators/public.js
+  // temp_genlayer/node_modules/viem/_esm/clients/decorators/public.js
   function publicActions(client) {
     return {
       call: (args) => call(client, args),
@@ -19267,7 +19267,7 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_public = __esm({
-    "node_modules/viem/_esm/clients/decorators/public.js"() {
+    "temp_genlayer/node_modules/viem/_esm/clients/decorators/public.js"() {
       init_getEnsAddress();
       init_getEnsAvatar();
       init_getEnsName();
@@ -19330,7 +19330,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/clients/createPublicClient.js
+  // temp_genlayer/node_modules/viem/_esm/clients/createPublicClient.js
   function createPublicClient(parameters) {
     const { key = "public", name = "Public Client" } = parameters;
     const client = createClient({
@@ -19342,13 +19342,13 @@ ${prettyStateOverride(stateOverride)}`;
     return client.extend(publicActions);
   }
   var init_createPublicClient = __esm({
-    "node_modules/viem/_esm/clients/createPublicClient.js"() {
+    "temp_genlayer/node_modules/viem/_esm/clients/createPublicClient.js"() {
       init_createClient();
       init_public();
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/addChain.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/addChain.js
   async function addChain(client, { chain }) {
     const { id, name, nativeCurrency, rpcUrls, blockExplorers } = chain;
     await client.request({
@@ -19365,12 +19365,12 @@ ${prettyStateOverride(stateOverride)}`;
     }, { dedupe: true, retryCount: 0 });
   }
   var init_addChain = __esm({
-    "node_modules/viem/_esm/actions/wallet/addChain.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/addChain.js"() {
       init_toHex();
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/deployContract.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/deployContract.js
   function deployContract(walletClient, parameters) {
     const { abi: abi2, args, bytecode, ...request } = parameters;
     const calldata2 = encodeDeployData({ abi: abi2, args, bytecode });
@@ -19381,13 +19381,13 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_deployContract = __esm({
-    "node_modules/viem/_esm/actions/wallet/deployContract.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/deployContract.js"() {
       init_encodeDeployData();
       init_sendTransaction();
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/getAddresses.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/getAddresses.js
   async function getAddresses(client) {
     if (client.account?.type === "local")
       return [client.account.address];
@@ -19395,12 +19395,12 @@ ${prettyStateOverride(stateOverride)}`;
     return addresses.map((address) => checksumAddress(address));
   }
   var init_getAddresses = __esm({
-    "node_modules/viem/_esm/actions/wallet/getAddresses.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/getAddresses.js"() {
       init_getAddress();
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/getCapabilities.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/getCapabilities.js
   async function getCapabilities(client, parameters = {}) {
     const { account = client.account, chainId } = parameters;
     const account_ = account ? parseAccount(account) : void 0;
@@ -19421,23 +19421,23 @@ ${prettyStateOverride(stateOverride)}`;
     return typeof chainId === "number" ? capabilities[chainId] : capabilities;
   }
   var init_getCapabilities = __esm({
-    "node_modules/viem/_esm/actions/wallet/getCapabilities.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/getCapabilities.js"() {
       init_parseAccount();
       init_toHex();
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/getPermissions.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/getPermissions.js
   async function getPermissions(client) {
     const permissions = await client.request({ method: "wallet_getPermissions" }, { dedupe: true });
     return permissions;
   }
   var init_getPermissions = __esm({
-    "node_modules/viem/_esm/actions/wallet/getPermissions.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/getPermissions.js"() {
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/prepareAuthorization.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/prepareAuthorization.js
   async function prepareAuthorization(client, parameters) {
     const { account: account_ = client.account, chainId, nonce } = parameters;
     if (!account_)
@@ -19470,7 +19470,7 @@ ${prettyStateOverride(stateOverride)}`;
     return authorization;
   }
   var init_prepareAuthorization = __esm({
-    "node_modules/viem/_esm/actions/wallet/prepareAuthorization.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/prepareAuthorization.js"() {
       init_parseAccount();
       init_account();
       init_isAddressEqual();
@@ -19480,18 +19480,18 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/requestAddresses.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/requestAddresses.js
   async function requestAddresses(client) {
     const addresses = await client.request({ method: "eth_requestAccounts" }, { dedupe: true, retryCount: 0 });
     return addresses.map((address) => getAddress(address));
   }
   var init_requestAddresses = __esm({
-    "node_modules/viem/_esm/actions/wallet/requestAddresses.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/requestAddresses.js"() {
       init_getAddress();
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/requestPermissions.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/requestPermissions.js
   async function requestPermissions(client, permissions) {
     return client.request({
       method: "wallet_requestPermissions",
@@ -19499,11 +19499,11 @@ ${prettyStateOverride(stateOverride)}`;
     }, { retryCount: 0 });
   }
   var init_requestPermissions = __esm({
-    "node_modules/viem/_esm/actions/wallet/requestPermissions.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/requestPermissions.js"() {
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/sendCallsSync.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/sendCallsSync.js
   async function sendCallsSync(client, parameters) {
     const { chain = client.chain } = parameters;
     const timeout = parameters.timeout ?? Math.max((chain?.blockTime ?? 0) * 3, 5e3);
@@ -19516,14 +19516,14 @@ ${prettyStateOverride(stateOverride)}`;
     return status;
   }
   var init_sendCallsSync = __esm({
-    "node_modules/viem/_esm/actions/wallet/sendCallsSync.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/sendCallsSync.js"() {
       init_getAction();
       init_sendCalls();
       init_waitForCallsStatus();
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/showCallsStatus.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/showCallsStatus.js
   async function showCallsStatus(client, parameters) {
     const { id } = parameters;
     await client.request({
@@ -19533,11 +19533,11 @@ ${prettyStateOverride(stateOverride)}`;
     return;
   }
   var init_showCallsStatus = __esm({
-    "node_modules/viem/_esm/actions/wallet/showCallsStatus.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/showCallsStatus.js"() {
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/signAuthorization.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/signAuthorization.js
   async function signAuthorization(client, parameters) {
     const { account: account_ = client.account } = parameters;
     if (!account_)
@@ -19557,14 +19557,14 @@ ${prettyStateOverride(stateOverride)}`;
     return account.signAuthorization(authorization);
   }
   var init_signAuthorization = __esm({
-    "node_modules/viem/_esm/actions/wallet/signAuthorization.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/signAuthorization.js"() {
       init_parseAccount();
       init_account();
       init_prepareAuthorization();
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/signMessage.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/signMessage.js
   async function signMessage(client, { account: account_ = client.account, message }) {
     if (!account_)
       throw new AccountNotFoundError({
@@ -19586,14 +19586,14 @@ ${prettyStateOverride(stateOverride)}`;
     }, { retryCount: 0 });
   }
   var init_signMessage = __esm({
-    "node_modules/viem/_esm/actions/wallet/signMessage.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/signMessage.js"() {
       init_parseAccount();
       init_account();
       init_toHex();
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/signTransaction.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/signTransaction.js
   async function signTransaction(client, parameters) {
     const { account: account_ = client.account, chain = client.chain, ...transaction } = parameters;
     if (!account_)
@@ -19634,7 +19634,7 @@ ${prettyStateOverride(stateOverride)}`;
     }, { retryCount: 0 });
   }
   var init_signTransaction = __esm({
-    "node_modules/viem/_esm/actions/wallet/signTransaction.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/signTransaction.js"() {
       init_parseAccount();
       init_account();
       init_assertCurrentChain();
@@ -19646,7 +19646,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/signTypedData.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/signTypedData.js
   async function signTypedData(client, parameters) {
     const { account: account_ = client.account, domain, message, primaryType } = parameters;
     if (!account_)
@@ -19668,14 +19668,14 @@ ${prettyStateOverride(stateOverride)}`;
     }, { retryCount: 0 });
   }
   var init_signTypedData = __esm({
-    "node_modules/viem/_esm/actions/wallet/signTypedData.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/signTypedData.js"() {
       init_parseAccount();
       init_account();
       init_typedData2();
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/switchChain.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/switchChain.js
   async function switchChain(client, { id }) {
     await client.request({
       method: "wallet_switchEthereumChain",
@@ -19687,12 +19687,12 @@ ${prettyStateOverride(stateOverride)}`;
     }, { retryCount: 0 });
   }
   var init_switchChain = __esm({
-    "node_modules/viem/_esm/actions/wallet/switchChain.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/switchChain.js"() {
       init_toHex();
     }
   });
 
-  // node_modules/viem/_esm/actions/wallet/watchAsset.js
+  // temp_genlayer/node_modules/viem/_esm/actions/wallet/watchAsset.js
   async function watchAsset(client, params) {
     const added = await client.request({
       method: "wallet_watchAsset",
@@ -19701,11 +19701,11 @@ ${prettyStateOverride(stateOverride)}`;
     return added;
   }
   var init_watchAsset = __esm({
-    "node_modules/viem/_esm/actions/wallet/watchAsset.js"() {
+    "temp_genlayer/node_modules/viem/_esm/actions/wallet/watchAsset.js"() {
     }
   });
 
-  // node_modules/viem/_esm/clients/decorators/wallet.js
+  // temp_genlayer/node_modules/viem/_esm/clients/decorators/wallet.js
   function walletActions(client) {
     return {
       addChain: (args) => addChain(client, args),
@@ -19745,7 +19745,7 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_wallet = __esm({
-    "node_modules/viem/_esm/clients/decorators/wallet.js"() {
+    "temp_genlayer/node_modules/viem/_esm/clients/decorators/wallet.js"() {
       init_fillTransaction();
       init_getChainId();
       init_token();
@@ -19779,7 +19779,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/viem/_esm/clients/transports/createTransport.js
+  // temp_genlayer/node_modules/viem/_esm/clients/transports/createTransport.js
   function createTransport({ key, methods, name, request, retryCount = 3, retryDelay = 150, timeout, type }, value) {
     const uid2 = uid();
     return {
@@ -19798,13 +19798,13 @@ ${prettyStateOverride(stateOverride)}`;
     };
   }
   var init_createTransport = __esm({
-    "node_modules/viem/_esm/clients/transports/createTransport.js"() {
+    "temp_genlayer/node_modules/viem/_esm/clients/transports/createTransport.js"() {
       init_buildRequest();
       init_uid();
     }
   });
 
-  // node_modules/viem/_esm/clients/transports/custom.js
+  // temp_genlayer/node_modules/viem/_esm/clients/transports/custom.js
   function custom(provider, config = {}) {
     const { key = "custom", methods, name = "Custom Provider", retryDelay } = config;
     return ({ retryCount: defaultRetryCount }) => createTransport({
@@ -19818,14 +19818,14 @@ ${prettyStateOverride(stateOverride)}`;
     });
   }
   var init_custom = __esm({
-    "node_modules/viem/_esm/clients/transports/custom.js"() {
+    "temp_genlayer/node_modules/viem/_esm/clients/transports/custom.js"() {
       init_createTransport();
     }
   });
 
-  // node_modules/viem/_esm/index.js
+  // temp_genlayer/node_modules/viem/_esm/index.js
   var init_esm = __esm({
-    "node_modules/viem/_esm/index.js"() {
+    "temp_genlayer/node_modules/viem/_esm/index.js"() {
       init_getContract();
       init_createClient();
       init_createPublicClient();
@@ -19852,10 +19852,10 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/genlayer-js/dist/chunk-XCQTIUTU.js
+  // temp_genlayer/node_modules/genlayer-js/dist/chunk-XCQTIUTU.js
   var chains_exports, SIMULATOR_JSON_RPC_URL, CONSENSUS_MAIN_CONTRACT, CONSENSUS_DATA_CONTRACT, localnet, SIMULATOR_JSON_RPC_URL2, EXPLORER_URL, CONSENSUS_MAIN_CONTRACT2, CONSENSUS_DATA_CONTRACT2, studionet, VALIDATOR_WALLET_ABI, STAKING_ABI, TESTNET_JSON_RPC_URL, STAKING_CONTRACT, FEE_MANAGER_CONTRACT, ROUNDS_STORAGE_CONTRACT, APPEALS_CONTRACT, EXPLORER_URL2, CONSENSUS_MAIN_CONTRACT3, CONSENSUS_DATA_CONTRACT3, testnetAsimov, TESTNET_JSON_RPC_URL2, STAKING_CONTRACT2, FEE_MANAGER_CONTRACT2, ROUNDS_STORAGE_CONTRACT2, APPEALS_CONTRACT2, EXPLORER_URL3, CONSENSUS_MAIN_CONTRACT4, CONSENSUS_DATA_CONTRACT4, testnetBradbury;
   var init_chunk_XCQTIUTU = __esm({
-    "node_modules/genlayer-js/dist/chunk-XCQTIUTU.js"() {
+    "temp_genlayer/node_modules/genlayer-js/dist/chunk-XCQTIUTU.js"() {
       init_chunk_MLKGABMK();
       init_esm();
       init_esm();
@@ -36164,7 +36164,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/genlayer-js/dist/chunk-EY35NPSE.js
+  // temp_genlayer/node_modules/genlayer-js/dist/chunk-EY35NPSE.js
   function isDecidedState(status) {
     return DECIDED_STATES.some(
       (state) => transactionsStatusNameToNumber[state] === status
@@ -36172,7 +36172,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var CalldataAddress, transactionsStatusNumberToName, transactionsStatusNameToNumber, DECIDED_STATES, transactionResultNumberToName, executionResultNumberToName, voteTypeNumberToName;
   var init_chunk_EY35NPSE = __esm({
-    "node_modules/genlayer-js/dist/chunk-EY35NPSE.js"() {
+    "temp_genlayer/node_modules/genlayer-js/dist/chunk-EY35NPSE.js"() {
       CalldataAddress = class {
         bytes;
         constructor(addr) {
@@ -36294,7 +36294,7 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/genlayer-js/dist/index.js
+  // temp_genlayer/node_modules/genlayer-js/dist/index.js
   function accountActions(client) {
     return {
       fundAccount: async ({ address, amount }) => {
@@ -36827,7 +36827,7 @@ ${prettyStateOverride(stateOverride)}`;
   }
   var calldata_exports, BITS_IN_TYPE, TYPE_SPECIAL, TYPE_PINT, TYPE_NINT, TYPE_BYTES, TYPE_STR, TYPE_ARR, TYPE_MAP, SPECIAL_NULL, SPECIAL_FALSE, SPECIAL_TRUE, SPECIAL_ADDR, transactions_exports, abi_exports, calldata, transactions, RESULT_CODES, contractActions, validateAccount, CREATED_TRANSACTION_EVENT_ABI, ADD_TRANSACTION_ABI_V5, ADD_TRANSACTION_ABI_V6, getAddTransactionInputCount, _encodeAddTransactionData, _encodeSubmitAppealData, _sendConsensusCall, isAddTransactionAbiMismatchError, extractTxIdFromLogs, _sendTransaction, transactionsConfig, FIELDS_TO_REMOVE, FIELD_NAME_MAPPINGS, decodeInputData, decodeTransaction, simplifyTransactionReceipt, decodeLocalnetTransaction, receiptActions, transactionActions, snapID, networks, connect, metamaskClient, FALLBACK_GAS, GAS_BUFFER_MULTIPLIER, COMBINED_ERROR_ABI, stakingActions, PROVIDER_METHODS, assertChainMatch, getCustomTransportConfig, createClient2, createPublicClient2;
   var init_dist = __esm({
-    "node_modules/genlayer-js/dist/index.js"() {
+    "temp_genlayer/node_modules/genlayer-js/dist/index.js"() {
       init_chunk_XCQTIUTU();
       init_chunk_EY35NPSE();
       init_chunk_MLKGABMK();
@@ -38684,27 +38684,31 @@ ${prettyStateOverride(stateOverride)}`;
     }
   });
 
-  // node_modules/genlayer-js/dist/chains/index.js
+  // temp_genlayer/node_modules/genlayer-js/dist/chains/index.js
   var init_chains = __esm({
-    "node_modules/genlayer-js/dist/chains/index.js"() {
+    "temp_genlayer/node_modules/genlayer-js/dist/chains/index.js"() {
       init_chunk_XCQTIUTU();
       init_chunk_MLKGABMK();
     }
   });
 
-  // wrapper.js
+  // temp_genlayer/wrapper.js
   var require_wrapper = __commonJS({
-    "wrapper.js"() {
+    "temp_genlayer/wrapper.js"() {
       init_dist();
       init_chains();
       init_esm();
-      window.callGenLayer = async function(contract, method, args, accountAddress) {
+      window.callGenLayer = async function(contract, method, args, accountAddress, value) {
         if (!accountAddress) throw new Error("Account address is missing");
         const client = createClient2({ chain: studionet, transport: custom(window.ethereum) });
-        const txHash = await client.writeContract({ address: contract, functionName: method, args, account: { address: accountAddress } });
+        const txArgs = { address: contract, functionName: method, args, account: { address: accountAddress } };
+        if (value) {
+          txArgs.value = BigInt(value);
+        }
+        const txHash = await client.writeContract(txArgs);
         let receipt;
         try {
-          receipt = await client.waitForTransactionReceipt({ hash: txHash, timeout: 300000 });
+          receipt = await client.waitForTransactionReceipt({ hash: txHash, timeout: 3e5 });
         } catch (err) {
           if (err && err.message && err.message.includes("Timed out")) {
             console.warn("GenLayer transaction receipt polling timed out. Will fallback to UI polling.");
