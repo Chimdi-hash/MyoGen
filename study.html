@@ -976,7 +976,10 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
     const txStatus = await waitForGenLayerFinalized(txHash);
 
     if (txStatus.isError) {
-      throw new Error(`Contract execution failed. Check GenLayer Explorer for tx: ${txHash}`);
+      // GENVM ERROR = contract raised a Python exception (e.g. term already exists, bad input).
+      // GEN may or may not have been deducted — refresh to get real balance.
+      await refreshBalance();
+      throw new Error(`Contract error — check GenLayer Explorer for tx: ${txHash.slice(0,10)}...`);
     }
 
     // On timeout, try reading result anyway (may have finalized without us noticing)
@@ -1020,7 +1023,14 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
     }
 
     if (statusObj.status === 'REJECTED') {
-      showToast(`❌ Rejected — 1 GEN slashed to treasury. Reason: "${statusObj.reasoning}"`, 'error', 12000);
+      // 1 GEN already deducted (payable call took it). Show clear slash notification.
+      showToast(
+        `❌ SLASHED — Your 1 GEN stake was burned. Reason: "${statusObj.reasoning}"`,
+        'error', 15000
+      );
+      // Update pending reward badge to confirm no reward
+      const badge = document.getElementById('pending-reward-badge');
+      if (badge) badge.style.display = 'none';
       showState('idle');
       await refreshBalance();
       return;
@@ -1032,7 +1042,10 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
     renderResult(cachedData.explanation, term, txHash);
     showState('result');
     addToSessionHistory(term);
-    showToast(`✅ Accepted! +2 GEN reward added to your balance. AI: "${statusObj.reasoning}"`, 'success', 12000);
+    showToast(
+      `✅ ACCEPTED — +2 GEN reward credited to your account! AI: "${statusObj.reasoning}"`,
+      'success', 15000
+    );
 
   } catch (err) {
     showState('idle');
