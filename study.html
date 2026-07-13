@@ -626,7 +626,7 @@
           ⬡ Connect Wallet
         </button>
         <div id="wallet-info-bar" class="wallet-info" style="display:none;">
-          <span id="pending-reward-badge" style="display:none; margin-right: 12px; font-family: var(--font-mono); font-size: 0.75rem; background: rgba(0,220,100,0.15); border: 1px solid rgba(0,220,100,0.4); color: #00dc64; padding: 3px 10px; border-radius: 20px; white-space: nowrap;">+0 GEN earned</span>
+          <button id="withdraw-reward-btn" style="display:none; cursor: pointer; margin-right: 12px; font-family: var(--font-mono); font-size: 0.75rem; background: rgba(0,220,100,0.15); border: 1px solid rgba(0,220,100,0.4); color: #00dc64; padding: 3px 10px; border-radius: 20px; white-space: nowrap; transition: all 0.2s;">+0 GEN earned (Click to Claim)</button>
           <span id="wallet-balance-display" class="wallet-balance" style="margin-right: 10px; font-family: var(--font-mono); color: var(--gold); font-size: 0.85rem; padding-right: 10px; border-right: 1px solid var(--glass-border);"></span>
           <span id="wallet-address-display" class="wallet-address"></span>
           <button id="disconnect-btn" class="btn-disconnect" aria-label="Disconnect">Disconnect</button>
@@ -1031,7 +1031,7 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
         'error', 15000
       );
       // Update pending reward badge to confirm no reward
-      const badge = document.getElementById('pending-reward-badge');
+      const badge = document.getElementById('withdraw-reward-btn');
       if (badge) badge.style.display = 'none';
       
       showState('idle');
@@ -1077,10 +1077,10 @@ async function refreshBalance() {
       const pendingRaw = await window.readGenLayer(CONTRACT_ADDRESS, 'get_pending_reward', [addr.toLowerCase()]);
       const pendingWei = String(pendingRaw || '0');
       const pendingGen = (Number(pendingWei) / 1e18).toFixed(4);
-      const badge = document.getElementById('pending-reward-badge');
+      const badge = document.getElementById('withdraw-reward-btn');
       if (badge) {
         if (Number(pendingGen) > 0) {
-          badge.textContent = `+${pendingGen} GEN earned`;
+          badge.textContent = `Claim ${pendingGen} GEN Reward`;
           badge.style.display = 'inline-block';
         } else {
           badge.style.display = 'none';

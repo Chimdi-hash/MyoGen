@@ -187,6 +187,31 @@ Return ONLY a valid JSON object (no markdown, no extra text):
         key = user_address.strip().lower()
         return self.pending_rewards[key] if key in self.pending_rewards else "0"
 
+    # ── Write: Withdraw Rewards (Deterministic) ──────────────────
+
+    @gl.public.write
+    def withdraw_rewards(self) -> str:
+        # A purely deterministic method to pull rewards.
+        # This sidesteps GenVM issues with emitting external messages 
+        # from transactions that use non-deterministic AI consensus.
+        caller = gl.message.sender_address
+        caller_str = self._addr(caller)
+        
+        pending_str = self.pending_rewards[caller_str] if caller_str in self.pending_rewards else "0"
+        pending_amount = int(pending_str)
+        
+        if pending_amount == 0:
+            return "No rewards to withdraw."
+            
+        # Zero the balance first (Checks-Effects-Interactions pattern)
+        self.pending_rewards[caller_str] = "0"
+        
+        # Emit the native transfer
+        caller_contract = gl.get_contract_at(caller)
+        caller_contract.emit_transfer(value=u256(pending_amount), on='finalized')
+        
+        return f"Successfully withdrew {pending_amount} wei."
+
     # ── Internal ──────────────────────────────────────────────────
 
     def _record(self, caller_str: str, term_lower: str, term_display: str,
