@@ -1022,10 +1022,13 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
     }
 
     if (statusObj.status === 'REJECTED') {
-      // 1 GEN already deducted (payable call took it). Show clear slash notification.
+      // Clean up reasoning to be professional and concise
+      let reasonText = statusObj.reasoning || "Definition did not match scientific evidence.";
+      if (reasonText.length > 100) reasonText = reasonText.substring(0, 97) + "...";
+      
       showToast(
-        `❌ SLASHED — Your 1 GEN stake was burned. Reason: "${statusObj.reasoning}"`,
-        'error', 15000
+        `❌ SLASHED — 1 GEN burned. Reason: ${reasonText}`,
+        'error', 10000
       );
       showState('idle');
       await refreshBalance();
