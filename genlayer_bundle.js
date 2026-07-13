@@ -38744,8 +38744,9 @@ ${prettyStateOverride(stateOverride)}`;
         const statusChanges = tx.current_status_changes || [];
         const monitoring = tx.current_monitoring || {};
         const resultName = tx.result_name || "";
-        const isFinalized = statusChanges.includes("FINALIZED") || "FINALIZED" in monitoring || // timestamp present once finalized
-        resultName !== "";
+        const status = (tx.status || "").toUpperCase();
+        const TERMINAL = ["FINALIZED", "ACCEPTED", "CANCELLED", "UNDETERMINED"];
+        const isFinalized = TERMINAL.some((s) => statusChanges.includes(s)) || TERMINAL.some((s) => s in monitoring) || resultName !== "" || TERMINAL.includes(status);
         let executionResult = "PENDING";
         try {
           const validators = tx.consensus_data?.validators || [];
@@ -38758,7 +38759,8 @@ ${prettyStateOverride(stateOverride)}`;
           isFinalized,
           isSuccess: isFinalized && executionResult !== "ERROR",
           isError: isFinalized && executionResult === "ERROR",
-          resultName
+          resultName,
+          status
         };
       };
     }

@@ -35,7 +35,6 @@ window.getNativeBalance = async function(address) {
 };
 
 // ── Poll tx status via eth_getTransactionByHash (GenLayer-specific) ──
-// Returns: { isFinalized, isSuccess, isError, resultName }
 window.getGenLayerTxStatus = async function(txHash) {
   const resp = await fetch(GENLAYER_RPC, {
     method: 'POST',
@@ -51,18 +50,20 @@ window.getGenLayerTxStatus = async function(txHash) {
   if (!data.result) return { isFinalized: false, isSuccess: false, isError: false };
 
   const tx = data.result;
+  const statusChanges  = tx.current_status_changes || [];
+  const monitoring     = tx.current_monitoring    || {};
+  const resultName     = tx.result_name           || '';
+  const status         = (tx.status               || '').toUpperCase();
 
-  // Use multiple signals — GenLayer sets current_monitoring.FINALIZED timestamp when done
-  const statusChanges = tx.current_status_changes || [];
-  const monitoring = tx.current_monitoring || {};
-  const resultName = tx.result_name || '';
-
+  // GenLayer uses various terminal state names — treat all as "finalized"
+  const TERMINAL = ['FINALIZED', 'ACCEPTED', 'CANCELLED', 'UNDETERMINED'];
   const isFinalized =
-    statusChanges.includes('FINALIZED') ||
-    'FINALIZED' in monitoring ||          // timestamp present once finalized
-    resultName !== '';                     // result_name only set after finalization
+    TERMINAL.some(s => statusChanges.includes(s)) ||
+    TERMINAL.some(s => s in monitoring)           ||
+    resultName !== ''                              ||
+    TERMINAL.includes(status);
 
-  // Check GenVM execution result from validators
+  // GenVM execution result from the first validator
   let executionResult = 'PENDING';
   try {
     const validators = tx.consensus_data?.validators || [];
@@ -76,6 +77,7 @@ window.getGenLayerTxStatus = async function(txHash) {
     isFinalized,
     isSuccess: isFinalized && executionResult !== 'ERROR',
     isError:   isFinalized && executionResult === 'ERROR',
-    resultName
+    resultName,
+    status,
   };
 };
