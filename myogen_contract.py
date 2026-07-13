@@ -62,28 +62,44 @@ class MyogenDictionary(gl.Contract):
         # ── AI validation ──
         def build_prompt() -> str:
             return gl.nondet.exec_prompt(
-                f"""You are MYOGEN, an expert in muscle physiology and anatomy.
+                f"""You are a STRICT scientific fact-checker for the MYOGEN muscle physiology dictionary.
+Your job is to REJECT incorrect definitions. Be extremely critical.
 
-A student proposes:
-  Term: "{term_clean}"
-  Definition: "{proposed_definition}"
-  Evidence URL: "{evidence_url}"
+Term proposed: "{term_clean}"
+Proposed definition: "{proposed_definition}"
+Evidence URL: "{evidence_url}"
 
-Steps:
-1. Fetch the evidence URL and read its content.
-2. Decide whether the proposed definition is scientifically accurate.
-3. Return ONLY a valid JSON object — no markdown, no extra text:
+STEP 1 — Fetch the evidence URL and read it carefully.
+STEP 2 — Find what the source says about "{term_clean}".
+STEP 3 — Compare the proposed definition against the source facts.
+STEP 4 — Apply REJECTION CRITERIA below.
+
+MANDATORY REJECTION RULES (set is_accurate=false if ANY apply):
+- The definition describes the WRONG biological function (e.g. calls a structural protein a "digestive enzyme")
+- The definition places the term in the WRONG organ system (e.g. digestive/pancreas when it should be muscular)
+- The definition mentions WRONG molecule types (e.g. enzyme vs protein, actin vs myosin)
+- The definition is factually about a COMPLETELY DIFFERENT thing than what the evidence URL describes
+- The definition contains made-up or hallucinated information not supported by the source
+- The term has nothing to do with muscle physiology or anatomy
+
+EXAMPLE OF REQUIRED REJECTION:
+- Term: "Titin", Proposed: "a digestive enzyme produced in the pancreas" → is_accurate: false
+  Because: Titin is the largest structural protein in muscle sarcomeres, NOT a digestive enzyme.
+
+Only set is_accurate=true if the proposed definition correctly describes the term as shown in the evidence URL.
+
+Return ONLY a valid JSON object (no markdown, no extra text):
 {{
-  "is_accurate": true,
-  "reasoning": "One-sentence justification referencing the evidence.",
-  "term": "{term_clean}",
-  "definition": "Refined 2-3 sentence definition for medical students.",
-  "category": "Anatomy & Physiology",
-  "detailed_explanation": "4-6 sentences on mechanism and clinical relevance.",
-  "key_facts": ["fact 1", "fact 2", "fact 3"],
-  "related_terms": ["term A", "term B"],
-  "clinical_relevance": "1-2 sentences.",
-  "muscle_groups_involved": ["muscle 1"]
+    "is_accurate": false,
+    "reasoning": "The evidence URL states that '{term_clean}' is [quote exact description from source]. The proposed definition incorrectly states [specific wrong claim]. This is factually incorrect and does not match the source.",
+    "term": "{term_clean}",
+    "definition": "Correct definition based on the evidence URL (only fill if is_accurate=true, otherwise leave as empty string).",
+    "category": "Anatomy & Physiology",
+    "detailed_explanation": "Fill only if is_accurate=true, otherwise empty string.",
+    "key_facts": [],
+    "related_terms": [],
+    "clinical_relevance": "",
+    "muscle_groups_involved": []
 }}"""
             )
 
