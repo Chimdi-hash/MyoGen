@@ -19,6 +19,7 @@ class MyogenDictionary(gl.Contract):
     # ── Storage ───────────────────────────────────────────────────
     query_history:   TreeMap[str, str]   # lower(address) → JSON history list
     all_terms_cache: TreeMap[str, str]   # lower(term)    → JSON term data
+    pending_rewards: TreeMap[str, str]   # lower(address) → wei amount string
     treasury:        u256                # accumulated slashed GEN (wei)
     total_queries:   u256
     popular_terms_list: str
@@ -146,11 +147,12 @@ Return ONLY a valid JSON object (no markdown, no extra text):
         stake_int  = int(stake)
 
         if is_accurate:
-            # ── ACCEPTED: Return 2x stake natively using emit_transfer ──
-            # Send 2 GEN directly to the caller's EOA wallet on transaction finalization
+            # ── ACCEPTED: Return 2x stake via pending_rewards ledger ──
+            # (GenLayer Testnet currently drops emit_transfer to EOAs silently. 
+            # We track rewards internally so users don't lose funds.)
             reward_amount = stake_int * 2
-            caller_contract = gl.get_contract_at(caller)
-            caller_contract.emit_transfer(value=u256(reward_amount), on='finalized')
+            prev = int(self.pending_rewards[caller_str]) if caller_str in self.pending_rewards else 0
+            self.pending_rewards[caller_str] = str(prev + reward_amount)
 
             self.all_terms_cache[term_lower] = json.dumps({
                 "explanation":        safe_exp,
@@ -178,6 +180,12 @@ Return ONLY a valid JSON object (no markdown, no extra text):
 
         self.total_queries += 1
 
+    # ── View: pending reward balance ─────────────────────────────
+
+    @gl.public.view
+    def get_pending_reward(self, user_address: str) -> str:
+        key = user_address.strip().lower()
+        return self.pending_rewards[key] if key in self.pending_rewards else "0"
 
     # ── Internal ──────────────────────────────────────────────────
 

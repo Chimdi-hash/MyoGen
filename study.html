@@ -626,6 +626,7 @@
           ⬡ Connect Wallet
         </button>
         <div id="wallet-info-bar" class="wallet-info" style="display:none;">
+          <span id="pending-reward-badge" style="display:none; margin-right: 12px; font-family: var(--font-mono); font-size: 0.75rem; background: rgba(0,220,100,0.15); border: 1px solid rgba(0,220,100,0.4); color: #00dc64; padding: 3px 10px; border-radius: 20px; white-space: nowrap;">+0 GEN earned</span>
           <span id="wallet-balance-display" class="wallet-balance" style="margin-right: 10px; font-family: var(--font-mono); color: var(--gold); font-size: 0.85rem; padding-right: 10px; border-right: 1px solid var(--glass-border);"></span>
           <span id="wallet-address-display" class="wallet-address"></span>
           <button id="disconnect-btn" class="btn-disconnect" aria-label="Disconnect">Disconnect</button>
@@ -1029,6 +1030,10 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
         `❌ SLASHED — 1 GEN burned. Reason: ${reasonText}`,
         'error', 15000
       );
+      // Update pending reward badge to confirm no reward
+      const badge = document.getElementById('pending-reward-badge');
+      if (badge) badge.style.display = 'none';
+      
       showState('idle');
       await refreshBalance();
       return;
@@ -1056,7 +1061,7 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
   }
 }
 
-// ── Refresh live GEN balance ──
+// ── Refresh live GEN balance + pending rewards badge ──
 async function refreshBalance() {
   try {
     if (!window.getNativeBalance || !window.myogenWallet?.address) return;
@@ -1066,6 +1071,22 @@ async function refreshBalance() {
     const bal = await window.getNativeBalance(addr);
     const balEl = document.getElementById('wallet-balance-display');
     if (balEl) balEl.textContent = `${bal} GEN`;
+
+    // Pending reward (use lowercase to match contract storage key)
+    try {
+      const pendingRaw = await window.readGenLayer(CONTRACT_ADDRESS, 'get_pending_reward', [addr.toLowerCase()]);
+      const pendingWei = String(pendingRaw || '0');
+      const pendingGen = (Number(pendingWei) / 1e18).toFixed(4);
+      const badge = document.getElementById('pending-reward-badge');
+      if (badge) {
+        if (Number(pendingGen) > 0) {
+          badge.textContent = `+${pendingGen} GEN earned`;
+          badge.style.display = 'inline-block';
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+    } catch(e) { /* pending reward fetch is non-fatal */ }
 
   } catch(e) { console.warn('Balance refresh failed:', e); }
 }
