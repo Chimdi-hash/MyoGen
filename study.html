@@ -1694,6 +1694,44 @@ document.addEventListener('DOMContentLoaded', () => {
     if (origUpdate) origUpdate();
     updateSidebarWallet();
   };
+
+  // ── Withdraw Rewards Event ──
+  const withdrawBtn = document.getElementById('withdraw-reward-btn');
+  if (withdrawBtn) {
+    withdrawBtn.addEventListener('click', async () => {
+      if (!window.myogenWallet?.address) return;
+      
+      const originalText = withdrawBtn.textContent;
+      withdrawBtn.textContent = "Processing...";
+      withdrawBtn.style.pointerEvents = "none";
+      
+      try {
+        const txHash = await window.callGenLayer(
+          CONTRACT_ADDRESS,
+          'withdraw_rewards',
+          [],
+          window.myogenWallet.address,
+          '0'
+        );
+        showToast("Tx submitted. Waiting for GenLayer finalization...", "info", 6000);
+        
+        // Wait for finalization
+        const txStatus = await waitForGenLayerFinalized(txHash);
+        if (txStatus.isError) {
+          throw new Error("Transaction failed on GenLayer.");
+        }
+        
+        showToast("Rewards successfully claimed! They have been transferred to your wallet.", "success", 6000);
+        await refreshBalance();
+      } catch (err) {
+        console.error("Withdraw error:", err);
+        showToast("Failed to withdraw: " + err.message, "error", 5000);
+      } finally {
+        withdrawBtn.textContent = originalText;
+        withdrawBtn.style.pointerEvents = "auto";
+      }
+    });
+  }
 });
 </script>
 </body>
