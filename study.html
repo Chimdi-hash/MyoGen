@@ -1022,13 +1022,12 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
     }
 
     if (statusObj.status === 'REJECTED') {
-      // Clean up reasoning to be professional and concise
+      // Show full professional reasoning without truncation
       let reasonText = statusObj.reasoning || "Definition did not match scientific evidence.";
-      if (reasonText.length > 100) reasonText = reasonText.substring(0, 97) + "...";
       
       showToast(
         `❌ SLASHED — 1 GEN burned. Reason: ${reasonText}`,
-        'error', 10000
+        'error', 15000
       );
       showState('idle');
       await refreshBalance();
