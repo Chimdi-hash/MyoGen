@@ -393,25 +393,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     disconnectBtn.addEventListener('click', disconnectWallet);
   }
 });
-
-// ── Admin Tools ──
-window.fundTreasuryUI = async function() {
-  if (!window.myogenWallet || !window.myogenWallet.address) {
-    showToast('Please connect your wallet first', 'error', 3000);
-    return;
-  }
-  try {
-    showToast('Sending transaction... please confirm in MetaMask.', 'info', 5000);
-    const txHash = await window.callGenLayer(
-        CONTRACT_ADDRESS,
-        'fund_treasury',
-        [],
-        window.myogenWallet.address,
-        "10000000000000000000" // 10 GEN
-    );
-    showToast(`✔ Treasury funded with 10 GEN! Tx: ${txHash.slice(0,10)}...`, 'success', 8000);
-  } catch(e) {
-    console.error('Funding failed:', e);
-    showToast('Funding failed or rejected by user.', 'error', 5000);
-  }
-};
