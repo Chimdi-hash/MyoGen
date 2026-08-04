@@ -39,6 +39,11 @@ class MyogenDictionary(gl.Contract):
     # ── Core Staking + AI Validation ─────────────────────────────
 
     @gl.public.write.payable
+    def fund_treasury(self):
+        """Allow anyone (or the owner) to deposit GEN into the treasury to subsidize rewards."""
+        self.treasury += gl.message.value
+
+    @gl.public.write.payable
     def propose_term(self, term: str, proposed_definition: str, evidence_url: str):
         caller    = gl.message.sender_address
         stake     = gl.message.value
@@ -46,6 +51,9 @@ class MyogenDictionary(gl.Contract):
 
         if stake < ONE_GEN:
             raise Exception("Must stake at least 1 GEN.")
+
+        if self.treasury < int(stake):
+            raise Exception("Insufficient funds in the contract treasury to fully collateralize your reward. Please wait or fund the treasury.")
 
         term_clean = term.strip()
         term_lower = term_clean.lower()
@@ -61,15 +69,21 @@ class MyogenDictionary(gl.Contract):
 
         # ── AI validation ──
         def build_prompt() -> str:
-            return gl.nondet.exec_prompt(
-                f"""You are a STRICT scientific fact-checker for the MYOGEN muscle physiology dictionary.
+            # Fetch the actual web content inside the non-deterministic block
+            web_data = gl.nondet.web.render(evidence_url, mode='text')
+            
+            return f"""You are a STRICT scientific fact-checker for the MYOGEN muscle physiology dictionary.
 Your job is to REJECT incorrect definitions. Be extremely critical.
 
 Term proposed: "{term_clean}"
 Proposed definition: "{proposed_definition}"
 Evidence URL: "{evidence_url}"
 
-STEP 1 — Fetch the evidence URL and read it carefully.
+--- EVIDENCE WEBPAGE CONTENT ---
+{web_data}
+--------------------------------
+
+STEP 1 — Read the evidence webpage content carefully.
 STEP 2 — Find what the source says about "{term_clean}".
 STEP 3 — Compare the proposed definition against the source facts.
 STEP 4 — Apply REJECTION CRITERIA below.
@@ -101,7 +115,6 @@ Return ONLY a valid JSON object (no markdown, no extra text):
     "clinical_relevance": "",
     "muscle_groups_involved": []
 }}"""
-            )
 
         result_str = gl.eq_principle.prompt_non_comparative(
             build_prompt,
@@ -148,12 +161,13 @@ Return ONLY a valid JSON object (no markdown, no extra text):
 
         if is_accurate:
             # ── ACCEPTED: Return 2x stake via pending_rewards ledger ──
-            # (GenLayer Testnet currently drops emit_transfer to EOAs silently. 
-            # We track rewards internally so users don't lose funds.)
-            reward_amount = stake_int * 2
-            prev = int(self.pending_rewards[caller_str]) if caller_str in self.pending_rewards else 0
-            self.pending_rewards[caller_str] = str(prev + reward_amount)
+            current = int(self.pending_rewards.get(caller_str, "0"))
+            self.pending_rewards[caller_str] = str(current + (stake_int * 2))
+            
+            # The extra 1x stake (reward) comes from the treasury
+            self.treasury -= stake_int
 
+            # Cache the successful result
             self.all_terms_cache[term_lower] = json.dumps({
                 "explanation":        safe_exp,
                 "validator_consensus": True,
