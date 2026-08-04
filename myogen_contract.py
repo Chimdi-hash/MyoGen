@@ -51,10 +51,6 @@ class MyogenDictionary(gl.Contract):
 
         if stake < ONE_GEN:
             raise Exception("Must stake at least 1 GEN.")
-
-        if self.treasury < int(stake):
-            raise Exception("Insufficient funds in the contract treasury to fully collateralize your reward. Please wait or fund the treasury.")
-
         term_clean = term.strip()
         term_lower = term_clean.lower()
 
@@ -160,12 +156,13 @@ Return ONLY a valid JSON object (no markdown, no extra text):
         stake_int  = int(stake)
 
         if is_accurate:
-            # ── ACCEPTED: Return 2x stake via pending_rewards ledger ──
+            # ── ACCEPTED: Return 1x stake + up to 1x stake bonus ──
+            bonus = stake_int if self.treasury >= stake_int else self.treasury
             current = int(self.pending_rewards.get(caller_str, "0"))
-            self.pending_rewards[caller_str] = str(current + (stake_int * 2))
+            self.pending_rewards[caller_str] = str(current + stake_int + bonus)
             
-            # The extra 1x stake (reward) comes from the treasury
-            self.treasury -= stake_int
+            # The extra bonus comes from the treasury
+            self.treasury -= bonus
 
             # Cache the successful result
             self.all_terms_cache[term_lower] = json.dumps({
