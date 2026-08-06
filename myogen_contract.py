@@ -24,12 +24,10 @@ class MyogenDictionary(gl.Contract):
     query_history:   TreeMap[str, str]   # lower(address) → JSON history list
     all_terms_cache: TreeMap[str, str]   # lower(term)    → JSON term data
     pending_rewards: TreeMap[str, str]   # lower(address) → wei amount string
-    treasury:        u256                # GEN deposited to collateralize rewards (wei)
     total_queries:   u256
     popular_terms_list: str
 
     def __init__(self):
-        self.treasury        = 0
         self.total_queries   = 0
         self.popular_terms_list = "[]"
 
@@ -44,8 +42,8 @@ class MyogenDictionary(gl.Contract):
 
     @gl.public.write.payable
     def fund_treasury(self):
-        """Allow anyone (or the owner) to deposit GEN into the treasury to subsidize rewards."""
-        self.treasury += gl.message.value
+        """Allow anyone (or the owner) to deposit GEN into the treasury."""
+        pass
 
     @gl.public.write.payable
     def propose_term(self, term: str, proposed_definition: str, evidence_url: str):
@@ -55,9 +53,6 @@ class MyogenDictionary(gl.Contract):
 
         if stake < ONE_GEN:
             raise Exception("Must stake at least 1 GEN.")
-
-        if self.treasury < stake:
-            raise Exception("Insufficient funds in the contract treasury to fully collateralize your reward. Please wait or fund the treasury.")
 
         term_clean = term.strip()
         term_lower = term_clean.lower()
@@ -166,9 +161,6 @@ Return ONLY a valid JSON object (no markdown, no extra text):
         if is_accurate:
             # ── ACCEPTED: Add 2x stake to pending_rewards ledger ──
             reward_wei = stake_int * 2
-            
-            # The 1x bonus must be reserved from the treasury to guarantee collateral
-            self.treasury -= stake_int
             
             # Track the reward for the user to pull later
             current = int(self.pending_rewards.get(caller_str, "0"))
