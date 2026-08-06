@@ -159,14 +159,10 @@ Return ONLY a valid JSON object (no markdown, no extra text):
         stake_int  = int(stake)
 
         if is_accurate:
-            # ── ACCEPTED: Direct native transfer of 1x stake + up to 1x stake bonus ──
-            bonus = stake_int if self.treasury >= stake_int else self.treasury
-            reward_wei = stake_int + bonus
+            # ── ACCEPTED: Direct native transfer of 2x stake ──
+            reward_wei = stake_int * 2
             
-            # The extra bonus comes from the treasury
-            self.treasury -= bonus
-            
-            # Emit direct transfer to user
+            # Emit direct transfer to user (assumes contract is funded)
             _Recipient(caller).emit_transfer(value=u256(reward_wei), on='finalized')
 
             # Cache the successful result
@@ -189,7 +185,9 @@ Return ONLY a valid JSON object (no markdown, no extra text):
                          safe_exp.get("definition", ""),
                          safe_exp.get("reasoning", ""), True)
         else:
-            self.treasury += stake
+            # ── REJECTED: Burn the stake to the null address ──
+            _Recipient(Address("0x0000000000000000000000000000000000000000")).emit_transfer(value=u256(stake_int), on='finalized')
+            
             self._record(caller_str, term_lower, term_clean,
                          proposed_definition,
                          data.get("reasoning", "Definition did not match evidence."), False)
