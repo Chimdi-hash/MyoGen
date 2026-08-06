@@ -4,6 +4,10 @@
 from genlayer import *
 import json
 
+@gl.evm.contract_interface
+class _Recipient:
+    class View: pass
+    class Write: pass
 
 class MyogenDictionary(gl.Contract):
     """
@@ -11,7 +15,7 @@ class MyogenDictionary(gl.Contract):
 
     ECONOMIC MODEL:
     - Stake 1 GEN per proposal.
-    - ACCEPTED  → earn 2 GEN (tracked in pending_rewards, withdrawn via claim_reward).
+    - ACCEPTED  → earn up to 2 GEN via direct native transfer.
     - REJECTED  → 1 GEN slashed to contract treasury.
     All address keys are normalised to lower-case to avoid checksum mismatches.
     """
@@ -19,7 +23,6 @@ class MyogenDictionary(gl.Contract):
     # ── Storage ───────────────────────────────────────────────────
     query_history:   TreeMap[str, str]   # lower(address) → JSON history list
     all_terms_cache: TreeMap[str, str]   # lower(term)    → JSON term data
-    pending_rewards: TreeMap[str, str]   # lower(address) → wei amount string
     treasury:        u256                # accumulated slashed GEN (wei)
     total_queries:   u256
     popular_terms_list: str
@@ -156,13 +159,15 @@ Return ONLY a valid JSON object (no markdown, no extra text):
         stake_int  = int(stake)
 
         if is_accurate:
-            # ── ACCEPTED: Return 1x stake + up to 1x stake bonus ──
+            # ── ACCEPTED: Direct native transfer of 1x stake + up to 1x stake bonus ──
             bonus = stake_int if self.treasury >= stake_int else self.treasury
-            current = int(self.pending_rewards.get(caller_str, "0"))
-            self.pending_rewards[caller_str] = str(current + stake_int + bonus)
+            reward_wei = stake_int + bonus
             
             # The extra bonus comes from the treasury
             self.treasury -= bonus
+            
+            # Emit direct transfer to user
+            _Recipient(Address(caller)).emit_transfer(value=u256(reward_wei), on='finalized')
 
             # Cache the successful result
             self.all_terms_cache[term_lower] = json.dumps({
@@ -190,38 +195,6 @@ Return ONLY a valid JSON object (no markdown, no extra text):
                          data.get("reasoning", "Definition did not match evidence."), False)
 
         self.total_queries += 1
-
-    # ── View: pending reward balance ─────────────────────────────
-
-    @gl.public.view
-    def get_pending_reward(self, user_address: str) -> str:
-        key = user_address.strip().lower()
-        return self.pending_rewards[key] if key in self.pending_rewards else "0"
-
-    # ── Write: Withdraw Rewards (Deterministic) ──────────────────
-
-    @gl.public.write
-    def withdraw_rewards(self) -> str:
-        # A purely deterministic method to pull rewards.
-        # This sidesteps GenVM issues with emitting external messages 
-        # from transactions that use non-deterministic AI consensus.
-        caller = gl.message.sender_address
-        caller_str = self._addr(caller)
-        
-        pending_str = self.pending_rewards[caller_str] if caller_str in self.pending_rewards else "0"
-        pending_amount = int(pending_str)
-        
-        if pending_amount == 0:
-            return "No rewards to withdraw."
-            
-        # Zero the balance first (Checks-Effects-Interactions pattern)
-        self.pending_rewards[caller_str] = "0"
-        
-        # Emit the native transfer
-        caller_contract = gl.get_contract_at(caller)
-        caller_contract.emit_transfer(value=u256(pending_amount), on='finalized')
-        
-        return f"Successfully withdrew {pending_amount} wei."
 
     # ── Internal ──────────────────────────────────────────────────
 
