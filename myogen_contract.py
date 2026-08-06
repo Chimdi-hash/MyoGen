@@ -15,15 +15,16 @@ class MyogenDictionary(gl.Contract):
 
     ECONOMIC MODEL:
     - Stake 1 GEN per proposal.
-    - ACCEPTED  → earn up to 2 GEN via direct native transfer.
-    - REJECTED  → 1 GEN slashed to contract treasury.
+    - ACCEPTED  → earn 2 GEN (tracked in pending_rewards, withdrawn via withdraw_rewards).
+    - REJECTED  → 1 GEN burned to null address.
     All address keys are normalised to lower-case to avoid checksum mismatches.
     """
 
     # ── Storage ───────────────────────────────────────────────────
     query_history:   TreeMap[str, str]   # lower(address) → JSON history list
     all_terms_cache: TreeMap[str, str]   # lower(term)    → JSON term data
-    treasury:        u256                # accumulated slashed GEN (wei)
+    pending_rewards: TreeMap[str, str]   # lower(address) → wei amount string
+    treasury:        u256                # GEN deposited to collateralize rewards (wei)
     total_queries:   u256
     popular_terms_list: str
 
@@ -54,6 +55,10 @@ class MyogenDictionary(gl.Contract):
 
         if stake < ONE_GEN:
             raise Exception("Must stake at least 1 GEN.")
+
+        if self.treasury < stake:
+            raise Exception("Insufficient funds in the contract treasury to fully collateralize your reward. Please wait or fund the treasury.")
+
         term_clean = term.strip()
         term_lower = term_clean.lower()
 
@@ -159,11 +164,15 @@ Return ONLY a valid JSON object (no markdown, no extra text):
         stake_int  = int(stake)
 
         if is_accurate:
-            # ── ACCEPTED: Direct native transfer of 2x stake ──
+            # ── ACCEPTED: Add 2x stake to pending_rewards ledger ──
             reward_wei = stake_int * 2
             
-            # Emit direct transfer to user (assumes contract is funded)
-            _Recipient(caller).emit_transfer(value=u256(reward_wei), on='finalized')
+            # The 1x bonus must be reserved from the treasury to guarantee collateral
+            self.treasury -= stake_int
+            
+            # Track the reward for the user to pull later
+            current = int(self.pending_rewards.get(caller_str, "0"))
+            self.pending_rewards[caller_str] = str(current + reward_wei)
 
             # Cache the successful result
             self.all_terms_cache[term_lower] = json.dumps({
@@ -193,6 +202,35 @@ Return ONLY a valid JSON object (no markdown, no extra text):
                          data.get("reasoning", "Definition did not match evidence."), False)
 
         self.total_queries += 1
+
+    # ── View: pending reward balance ─────────────────────────────
+
+    @gl.public.view
+    def get_pending_reward(self, user_address: str) -> str:
+        key = user_address.strip().lower()
+        return self.pending_rewards[key] if key in self.pending_rewards else "0"
+
+    # ── Write: Withdraw Rewards (Deterministic) ──────────────────
+
+    @gl.public.write
+    def withdraw_rewards(self) -> str:
+        # A purely deterministic method to pull rewards.
+        caller = gl.message.sender_address
+        caller_str = self._addr(caller)
+        
+        pending_str = self.pending_rewards[caller_str] if caller_str in self.pending_rewards else "0"
+        pending_amount = int(pending_str)
+        
+        if pending_amount == 0:
+            raise Exception("No rewards to withdraw.")
+            
+        # Zero the balance first (Checks-Effects-Interactions pattern)
+        self.pending_rewards[caller_str] = "0"
+        
+        # Emit the native transfer (This is guaranteed to work now)
+        _Recipient(caller).emit_transfer(value=u256(pending_amount), on='finalized')
+        
+        return f"Successfully withdrew {pending_amount} wei."
 
     # ── Internal ──────────────────────────────────────────────────
 

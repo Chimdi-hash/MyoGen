@@ -626,6 +626,7 @@
           ⬡ Connect Wallet
         </button>
         <div id="wallet-info-bar" class="wallet-info" style="display:none;">
+          <button id="withdraw-reward-btn" style="display:none; cursor: pointer; margin-right: 12px; font-family: var(--font-mono); font-size: 0.75rem; background: rgba(0,220,100,0.15); border: 1px solid rgba(0,220,100,0.4); color: #00dc64; padding: 3px 10px; border-radius: 20px; white-space: nowrap; transition: all 0.2s;">+0 GEN earned (Click to Claim)</button>
           <span id="wallet-balance-display" class="wallet-balance" style="margin-right: 10px; font-family: var(--font-mono); color: var(--gold); font-size: 0.85rem; padding-right: 10px; border-right: 1px solid var(--glass-border);"></span>
           <span id="wallet-address-display" class="wallet-address"></span>
           <button id="disconnect-btn" class="btn-disconnect" aria-label="Disconnect">Disconnect</button>
@@ -1029,6 +1030,9 @@ async function executeStudyLogic(term, proposedDef, evidenceUrl) {
         `❌ SLASHED — 1 GEN burned. Reason: ${reasonText}`,
         'error', 15000
       );
+      // Update pending reward badge to confirm no reward
+      const badge = document.getElementById('withdraw-reward-btn');
+      if (badge) badge.style.display = 'none';
       
       showState('idle');
       await refreshBalance();
@@ -1068,7 +1072,21 @@ async function refreshBalance() {
     const balEl = document.getElementById('wallet-balance-display');
     if (balEl) balEl.textContent = `${bal} GEN`;
 
-    // Pending reward fetch logic removed as rewards are direct
+    // Pending reward (use lowercase to match contract storage key)
+    try {
+      const pendingRaw = await window.readGenLayer(CONTRACT_ADDRESS, 'get_pending_reward', [addr.toLowerCase()]);
+      const pendingWei = String(pendingRaw || '0');
+      const pendingGen = (Number(pendingWei) / 1e18).toFixed(4);
+      const badge = document.getElementById('withdraw-reward-btn');
+      if (badge) {
+        if (Number(pendingGen) > 0) {
+          badge.textContent = `Claim ${pendingGen} GEN Reward`;
+          badge.style.display = 'inline-block';
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+    } catch(e) { /* pending reward fetch is non-fatal */ }
 
   } catch(e) { console.warn('Balance refresh failed:', e); }
 }
@@ -1677,7 +1695,43 @@ document.addEventListener('DOMContentLoaded', () => {
     updateSidebarWallet();
   };
 
-  // Withdraw logic removed as rewards are sent directly
+  // ── Withdraw Rewards Event ──
+  const withdrawBtn = document.getElementById('withdraw-reward-btn');
+  if (withdrawBtn) {
+    withdrawBtn.addEventListener('click', async () => {
+      if (!window.myogenWallet?.address) return;
+      
+      const originalText = withdrawBtn.textContent;
+      withdrawBtn.textContent = "Processing...";
+      withdrawBtn.style.pointerEvents = "none";
+      
+      try {
+        const txHash = await window.callGenLayer(
+          CONTRACT_ADDRESS,
+          'withdraw_rewards',
+          [],
+          window.myogenWallet.address,
+          '0'
+        );
+        showToast("Tx submitted. Waiting for GenLayer finalization...", "info", 6000);
+        
+        // Wait for finalization
+        const txStatus = await waitForGenLayerFinalized(txHash);
+        if (txStatus.isError) {
+          throw new Error("Transaction failed on GenLayer.");
+        }
+        
+        showToast("Rewards successfully claimed! They have been transferred to your wallet.", "success", 6000);
+        await refreshBalance();
+      } catch (err) {
+        console.error("Withdraw error:", err);
+        showToast("Failed to withdraw: " + err.message, "error", 5000);
+      } finally {
+        withdrawBtn.textContent = originalText;
+        withdrawBtn.style.pointerEvents = "auto";
+      }
+    });
+  }
 });
 </script>
 </body>
