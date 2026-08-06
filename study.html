@@ -1610,14 +1610,35 @@ async function waitForGenLayerFinalized(txHash) {
     attempt++;
     for (const [at, title, sub] of messages) {
       if (attempt === at + 1) {
-        document.getElementById('loading-status-text').textContent = title;
-        document.getElementById('loading-sub-text').textContent = sub;
+        const titleEl = document.getElementById('loading-status-text');
+        const subEl = document.getElementById('loading-sub-text');
+        if (titleEl) titleEl.textContent = title;
+        if (subEl) subEl.textContent = sub;
       }
     }
     await sleep(POLL_MS);
     try {
-      const status = await window.getGenLayerTxStatus(txHash);
-      if (status.isFinalized) return status;
+      // Use standard robust EVM receipt checking instead of GenLayer specific string parsing
+      const resp = await fetch('https://studio.genlayer.com/api', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          method: 'eth_getTransactionReceipt',
+          params: [txHash],
+          id: 1
+        })
+      });
+      const data = await resp.json();
+      if (data && data.result) {
+        const receipt = data.result;
+        // status is '0x1' for success, '0x0' for failure on standard EVM
+        if (receipt.status === '0x1' || receipt.status === 1) {
+          return { isFinalized: true, isSuccess: true, isError: false };
+        } else if (receipt.status === '0x0' || receipt.status === 0) {
+          return { isFinalized: true, isSuccess: false, isError: true };
+        }
+      }
     } catch(e) { console.warn('Tx poll error:', e); }
   }
   // Timed out — return a soft timeout instead of throwing
