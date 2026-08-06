@@ -167,7 +167,7 @@ Return ONLY a valid JSON object (no markdown, no extra text):
             self.treasury -= bonus
             
             # Emit direct transfer to user
-            _Recipient(Address(caller)).emit_transfer(value=u256(reward_wei), on='finalized')
+            _Recipient(caller).emit_transfer(value=u256(reward_wei), on='finalized')
 
             # Cache the successful result
             self.all_terms_cache[term_lower] = json.dumps({
