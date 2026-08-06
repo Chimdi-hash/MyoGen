@@ -1618,25 +1618,31 @@ async function waitForGenLayerFinalized(txHash) {
     }
     await sleep(POLL_MS);
     try {
-      // Use standard robust EVM receipt checking instead of GenLayer specific string parsing
       const resp = await fetch('https://studio.genlayer.com/api', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           jsonrpc: '2.0',
-          method: 'eth_getTransactionReceipt',
+          method: 'eth_getTransactionByHash',
           params: [txHash],
           id: 1
         })
       });
       const data = await resp.json();
       if (data && data.result) {
-        const receipt = data.result;
-        // status is '0x1' for success, '0x0' for failure on standard EVM
-        if (receipt.status === '0x1' || receipt.status === 1) {
-          return { isFinalized: true, isSuccess: true, isError: false };
-        } else if (receipt.status === '0x0' || receipt.status === 0) {
-          return { isFinalized: true, isSuccess: false, isError: true };
+        const tx = data.result;
+        const status = (tx.status || '').toUpperCase();
+        const TERMINAL = ['FINALIZED', 'ACCEPTED'];
+        
+        // If the transaction reaches a terminal consensus state
+        if (TERMINAL.includes(status)) {
+            // We assume success if it finalized. The exact outcome (ACCEPTED/REJECTED) 
+            // will be read from the contract state.
+            return { isFinalized: true, isSuccess: true, isError: false };
+        }
+        
+        if (status === 'ERROR' || status === 'CANCELLED') {
+            return { isFinalized: true, isSuccess: false, isError: true };
         }
       }
     } catch(e) { console.warn('Tx poll error:', e); }
