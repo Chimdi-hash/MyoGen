@@ -29,11 +29,19 @@ class MyogenDictionary(gl.Contract):
     total_queries:   u256
     popular_terms_list: str
 
+    @gl.public.write.payable
     def __init__(self):
         self.total_queries      = u256(0)
         self.popular_terms_list = json.dumps([])
         self.total_pending_rewards = "0"
-        self.total_contract_balance = "0"
+        
+        # Track initial funding during deployment
+        try:
+            initial_value = gl.message.value
+        except AttributeError:
+            initial_value = 0
+            
+        self.total_contract_balance = str(initial_value)
 
     # ── Helpers ───────────────────────────────────────────────────
 
