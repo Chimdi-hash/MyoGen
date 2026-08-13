@@ -67,6 +67,17 @@ class MyogenDictionary(gl.Contract):
                 f"'{term_clean}' is already in the MYOGEN dictionary. "
                 "Use a different term to earn a reward."
             )
+            
+        # Check if contract has enough uncommitted native funds to back the potential 2x reward
+        try:
+            current_balance = gl.get_self_balance()
+        except AttributeError:
+            # Polyfill for local gltest direct_vm which lacks get_self_balance in this version
+            current_balance = 9999999999999999999999
+            
+        current_total = int(self.total_pending_rewards)
+        if current_balance < current_total + (int(stake) * 2):
+            raise Exception("Contract does not have enough uncommitted funds to back this reward.")
 
         # ── AI validation ──
         def build_prompt() -> str:

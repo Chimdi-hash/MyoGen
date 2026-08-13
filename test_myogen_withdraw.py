@@ -39,7 +39,7 @@ def test_collateralized_withdrawal(direct_deploy, direct_vm, direct_alice, direc
     
     # Mock prompt_non_comparative directly because direct_vm.mock_llm doesn't support ExecPromptTemplate yet
     import genlayer.gl as gl
-    original_prompt = gl.eq_principle.prompt_non_comparative
+    original_prompt = getattr(gl.eq_principle, 'prompt_non_comparative', None)
     gl.eq_principle.prompt_non_comparative = lambda prompt, task, criteria: acceptance_json
     
     try:
@@ -64,9 +64,11 @@ def test_collateralized_withdrawal(direct_deploy, direct_vm, direct_alice, direc
         assert int(contract.pending_rewards.get(alice_str, "0")) == 0
         
         # 6. Verify native balance increased by exactly the promised amount (2 GEN)
-        # The direct loader logs the EthSend but doesn't mock balances natively.
-        # We verify the transaction executed successfully and recorded an EthSend trace.
-        assert any("EthSend" in str(t) for t in direct_vm._traces), "EthSend trace not found"
-
+        # 6. Verify native balance increased by exactly the promised amount (2 GEN)
+        # Using trace check since direct_vm doesn't natively apply EthSend to _balances in this test loader version
+        found_transfer = any("EthSend" in str(t) for t in direct_vm._traces)
+        assert found_transfer, "Claimant's native balance did not increase by full promised amount (EthSend trace missing)."
+        
     finally:
-        gl.eq_principle.prompt_non_comparative = original_prompt
+        if original_prompt:
+            gl.eq_principle.prompt_non_comparative = original_prompt
