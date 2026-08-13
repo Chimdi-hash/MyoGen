@@ -1732,6 +1732,7 @@ document.addEventListener('DOMContentLoaded', () => {
       withdrawBtn.textContent = "Processing...";
       withdrawBtn.style.pointerEvents = "none";
       
+      let success = false;
       try {
         const txHash = await window.callGenLayer(
           CONTRACT_ADDRESS,
@@ -1748,14 +1749,34 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error("Transaction failed on GenLayer.");
         }
         
+        success = true;
         showToast("Rewards successfully claimed! They have been transferred to your wallet.", "success", 6000);
+        
+        // Optimistic UI updates to prevent stale RPC reads
+        withdrawBtn.style.display = 'none';
+        const balEl = document.getElementById('wallet-balance-display');
+        if (balEl) {
+           const match = originalText.match(/Claim ([\d.]+) GEN/);
+           if (match) {
+             const amount = parseFloat(match[1]);
+             const cur = parseFloat(balEl.textContent);
+             if (!isNaN(cur) && !isNaN(amount)) {
+                balEl.textContent = (cur + amount).toFixed(4) + " GEN";
+             }
+           }
+        }
+        
+        // Wait 5 seconds for GenLayer RPC state to catch up before refreshing
+        await new Promise(r => setTimeout(r, 5000));
         await refreshBalance();
       } catch (err) {
         console.error("Withdraw error:", err);
         showToast("Failed to withdraw: " + err.message, "error", 5000);
       } finally {
-        withdrawBtn.textContent = originalText;
-        withdrawBtn.style.pointerEvents = "auto";
+        if (!success) {
+            withdrawBtn.textContent = originalText;
+            withdrawBtn.style.pointerEvents = "auto";
+        }
       }
     });
   }
