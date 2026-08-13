@@ -24,12 +24,16 @@ class MyogenDictionary(gl.Contract):
     query_history:   TreeMap[str, str]   # lower(address) → JSON history list
     all_terms_cache: TreeMap[str, str]   # lower(term)    → JSON term data
     pending_rewards: TreeMap[str, str]   # lower(address) → wei amount string
+    total_pending_rewards: str           # Tracks global outstanding reward obligations
+    total_contract_balance: str          # Tracks total native token balance
     total_queries:   u256
     popular_terms_list: str
 
     def __init__(self):
-        self.total_queries   = 0
-        self.popular_terms_list = "[]"
+        self.total_queries      = u256(0)
+        self.popular_terms_list = json.dumps([])
+        self.total_pending_rewards = "0"
+        self.total_contract_balance = "0"
 
     # ── Helpers ───────────────────────────────────────────────────
 
@@ -43,7 +47,8 @@ class MyogenDictionary(gl.Contract):
     @gl.public.write.payable
     def fund_treasury(self):
         """Allow anyone (or the owner) to deposit GEN into the treasury."""
-        pass
+        current_balance = int(self.total_contract_balance)
+        self.total_contract_balance = str(current_balance + gl.message.value)
 
     @gl.public.write.payable
     def propose_term(self, term: str, proposed_definition: str, evidence_url: str):
@@ -59,6 +64,15 @@ class MyogenDictionary(gl.Contract):
 
         if not term_lower:
             raise Exception("Term cannot be empty.")
+            
+        # Update our internal native balance tracker
+        current_balance = int(self.total_contract_balance) + int(stake)
+        self.total_contract_balance = str(current_balance)
+
+        # Check if contract has enough uncommitted funds to back the potential 2x reward
+        current_total = int(self.total_pending_rewards)
+        if current_balance < current_total + (int(stake) * 2):
+            raise Exception("Contract does not have enough uncommitted funds to back this reward.")
 
         if term_lower in self.all_terms_cache:
             raise Exception(
@@ -165,6 +179,9 @@ Return ONLY a valid JSON object (no markdown, no extra text):
             # Track the reward for the user to pull later
             current = int(self.pending_rewards.get(caller_str, "0"))
             self.pending_rewards[caller_str] = str(current + reward_wei)
+            
+            # Update total pending rewards
+            self.total_pending_rewards = str(current_total + reward_wei)
 
             # Cache the successful result
             self.all_terms_cache[term_lower] = json.dumps({
@@ -205,19 +222,27 @@ Return ONLY a valid JSON object (no markdown, no extra text):
     # ── Write: Withdraw Rewards (Deterministic) ──────────────────
 
     @gl.public.write
-    def withdraw_rewards(self) -> str:
-        # A purely deterministic method to pull rewards.
+    def withdraw_rewards(self) -> None:
+        """Withdraws accumulated rewards for the caller."""
         caller = gl.message.sender_address
         caller_str = self._addr(caller)
         
-        pending_str = self.pending_rewards[caller_str] if caller_str in self.pending_rewards else "0"
+        pending_str = self.pending_rewards.get(caller_str, "0")
         pending_amount = int(pending_str)
         
         if pending_amount == 0:
-            raise Exception("No rewards to withdraw.")
+            raise Exception("No rewards available to withdraw.")
             
         # Zero the balance first (Checks-Effects-Interactions pattern)
         self.pending_rewards[caller_str] = "0"
+        
+        # Deduct from total pending rewards
+        current_total = int(self.total_pending_rewards)
+        self.total_pending_rewards = str(current_total - pending_amount)
+        
+        # Deduct from internal contract balance tracker
+        current_balance = int(self.total_contract_balance)
+        self.total_contract_balance = str(current_balance - pending_amount)
         
         # Emit the native transfer (This is guaranteed to work now)
         _Recipient(caller).emit_transfer(value=u256(pending_amount), on='finalized')
