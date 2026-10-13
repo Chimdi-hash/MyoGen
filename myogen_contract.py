@@ -188,6 +188,9 @@ Return ONLY a valid JSON object (no markdown, no extra text):
                 "explanation":        safe_exp,
                 "validator_consensus": True,
                 "proposer":           caller_str,
+                "evidence_url":       evidence_url,
+                "disputed":           False,
+                "dispute_count":      0,
             })
 
             try:
@@ -212,7 +215,161 @@ Return ONLY a valid JSON object (no markdown, no extra text):
 
         self.total_queries += 1
 
-    # ── View: pending reward balance ─────────────────────────────
+    # ── Peer Challenge & Dispute Protocol ────────────────────────
+
+    @gl.public.write.payable
+    def challenge_term(self, term: str, counter_definition: str, counter_evidence_url: str, dispute_reason: str):
+        """
+        PEER CHALLENGE & DISPUTE PROTOCOL:
+        Allows any researcher/user to challenge an existing verified term by staking 1 GEN.
+        If the challenger's counter-evidence and counter-definition prove the existing entry 
+        is inaccurate, outdated, or flawed, the entry is updated, and the challenger earns 2 GEN.
+        If the challenge is frivolous or scientifically invalid, the challenger's 1 GEN is burned.
+        """
+        caller    = gl.message.sender_address
+        stake     = gl.message.value
+        ONE_GEN   = 1000000000000000000      # 1e18 wei
+
+        if stake < ONE_GEN:
+            raise Exception("Must stake at least 1 GEN to file a dispute.")
+
+        term_clean = term.strip()
+        term_lower = term_clean.lower()
+
+        if not term_lower:
+            raise Exception("Term cannot be empty.")
+
+        if term_lower not in self.all_terms_cache:
+            raise Exception(f"'{term_clean}' is not in the dictionary to challenge.")
+
+        # Check contract solvency for potential 2x reward
+        try:
+            current_balance = gl.get_self_balance()
+        except AttributeError:
+            current_balance = 9999999999999999999999
+
+        current_total = int(self.total_pending_rewards)
+        if current_balance < current_total + (int(stake) * 2):
+            raise Exception("Contract does not have enough uncommitted funds to back this dispute reward.")
+
+        existing_raw = self.all_terms_cache[term_lower]
+        try:
+            existing_data = json.loads(existing_raw)
+        except Exception:
+            existing_data = {}
+
+        existing_exp = existing_data.get("explanation", {})
+        existing_def = existing_exp.get("definition", "")
+        existing_evidence = existing_data.get("evidence_url", "N/A")
+        existing_proposer = existing_data.get("proposer", "Unknown")
+
+        # ── Non-deterministic Comparative Adjudication ──
+        def build_dispute_prompt() -> str:
+            counter_web_data = gl.nondet.web.render(counter_evidence_url, mode='text')
+
+            return f"""You are the SUPREME SCIENTIFIC ADJUDICATOR for the MYOGEN muscle physiology dictionary.
+A community member has staked 1 GEN to CHALLENGE and replace an existing verified definition.
+
+=== DISPUTE CASE FILE ===
+Term Under Dispute: "{term_clean}"
+Current Definition in Dictionary: "{existing_def}"
+Original Evidence URL: "{existing_evidence}"
+
+--- CHALLENGER'S CLAIM ---
+Challenger's Proposed Replacement: "{counter_definition}"
+Challenger's Stated Reason for Dispute: "{dispute_reason}"
+Challenger's Evidence URL: "{counter_evidence_url}"
+
+--- CHALLENGER EVIDENCE WEBPAGE CONTENT ---
+{counter_web_data}
+-------------------------------------------
+
+DECISION CRITERIA:
+Set "challenger_wins": true ONLY if:
+1. The challenger's counter-evidence webpage genuinely supports their counter-definition.
+2. The current definition is factually inaccurate, misleading, or substantially outdated, OR the challenger's definition is demonstrably more accurate and complete according to the scientific source.
+3. The claim is relevant to muscle physiology and anatomy.
+
+Set "challenger_wins": false IF:
+- The challenger's counter-evidence does NOT support their counter-definition.
+- The challenge is frivolous, nitpicky, or scientifically unfounded.
+- The current definition was already accurate and the proposed change introduces errors.
+
+Return ONLY a valid JSON object:
+{{
+    "challenger_wins": false,
+    "adjudication_reasoning": "Clear explanation of why the challenge was accepted or rejected based on the evidence.",
+    "definition": "{counter_definition}",
+    "detailed_explanation": "Detailed explanation incorporating the validated facts.",
+    "category": "{existing_exp.get('category', 'Anatomy & Physiology')}"
+}}"""
+
+        result_str = gl.eq_principle.prompt_non_comparative(
+            build_dispute_prompt,
+            task="Adjudicate scientific dispute between existing definition and challenger evidence.",
+            criteria=(
+                "The leader's response is a valid JSON object containing 'challenger_wins' (boolean) "
+                "and 'adjudication_reasoning'. 'challenger_wins' must be true only if the challenger's "
+                "counter-evidence proves the existing definition flawed or superseded."
+            ),
+        )
+
+        try:
+            cleaned = result_str.strip()
+            if "```" in cleaned:
+                s = cleaned.find("{"); e = cleaned.rfind("}") + 1
+                if s >= 0 and e > s:
+                    cleaned = cleaned[s:e]
+            data = json.loads(cleaned)
+            if not isinstance(data, dict):
+                data = {}
+        except Exception:
+            data = {}
+
+        challenger_wins = bool(data.get("challenger_wins", False))
+        caller_str = self._addr(caller)
+        stake_int  = int(stake)
+
+        if challenger_wins:
+            # ── CHALLENGER WINS: Award 2x stake and update dictionary ──
+            reward_wei = stake_int * 2
+            current = int(self.pending_rewards.get(caller_str, "0"))
+            self.pending_rewards[caller_str] = str(current + reward_wei)
+
+            current_total = int(self.total_pending_rewards)
+            self.total_pending_rewards = str(current_total + reward_wei)
+
+            updated_exp = dict(existing_exp)
+            updated_exp["definition"] = data.get("definition", counter_definition)
+            if data.get("detailed_explanation"):
+                updated_exp["detailed_explanation"] = data.get("detailed_explanation")
+            updated_exp["reasoning"] = data.get("adjudication_reasoning", "Updated via peer dispute.")
+
+            dispute_count = int(existing_data.get("dispute_count", 0)) + 1
+
+            self.all_terms_cache[term_lower] = json.dumps({
+                "explanation":        updated_exp,
+                "validator_consensus": True,
+                "proposer":           caller_str,
+                "evidence_url":       counter_evidence_url,
+                "disputed":           True,
+                "dispute_count":      dispute_count,
+                "previous_proposer":  existing_proposer,
+                "last_adjudication":  data.get("adjudication_reasoning", ""),
+            })
+
+            self._record(caller_str, term_lower, term_clean,
+                         updated_exp.get("definition", counter_definition),
+                         f"[DISPUTE WON] {data.get('adjudication_reasoning', '')}", True)
+        else:
+            # ── CHALLENGER LOSES: Burn stake to null address ──
+            _Recipient(Address("0x0000000000000000000000000000000000000000")).emit_transfer(value=u256(stake_int), on='finalized')
+
+            self._record(caller_str, term_lower, term_clean,
+                         counter_definition,
+                         f"[DISPUTE REJECTED] {data.get('adjudication_reasoning', 'Counter-evidence failed to invalidate existing definition.')}", False)
+
+        self.total_queries += 1
 
     @gl.public.view
     def get_pending_reward(self, user_address: str) -> str:
@@ -294,13 +451,38 @@ Return ONLY a valid JSON object (no markdown, no extra text):
 
     @gl.public.view
     def get_treasury_balance(self) -> str:
-        return str(int(self.treasury))
+        try:
+            return str(int(gl.get_self_balance()))
+        except Exception:
+            return "0"
 
     @gl.public.view
     def get_stats(self) -> str:
+        try:
+            bal = int(gl.get_self_balance())
+        except Exception:
+            bal = 0
         return json.dumps({"total_queries": int(self.total_queries),
                            "platform": "MYOGEN", "network": "GenLayer Studio",
-                           "treasury_wei": int(self.treasury)})
+                           "treasury_wei": bal})
+
+    @gl.public.view
+    def get_term_dispute_info(self, term: str) -> str:
+        k = term.strip().lower()
+        if k not in self.all_terms_cache:
+            return json.dumps({"found": False})
+        try:
+            data = json.loads(self.all_terms_cache[k])
+            return json.dumps({
+                "found": True,
+                "disputed": bool(data.get("disputed", False)),
+                "dispute_count": int(data.get("dispute_count", 0)),
+                "proposer": data.get("proposer", ""),
+                "evidence_url": data.get("evidence_url", ""),
+                "last_adjudication": data.get("last_adjudication", ""),
+            })
+        except Exception:
+            return json.dumps({"found": True, "disputed": False, "dispute_count": 0})
 
     @gl.public.view
     def get_popular_terms(self) -> str:

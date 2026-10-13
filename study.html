@@ -782,7 +782,13 @@
         <div class="result-text-col">
 
           <div class="glass-card definition-card">
-            <div class="def-label">// Definition</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.5rem;">
+              <div class="def-label" style="margin-bottom:0;">// Definition</div>
+              <button id="open-dispute-btn" style="background:rgba(255,107,44,0.12);border:1px solid rgba(255,107,44,0.4);color:var(--orange-bright);font-family:var(--font-mono);font-size:0.7rem;padding:0.3rem 0.65rem;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:0.35rem;transition:all 0.2s;" title="Stake 1 GEN to challenge this definition with scientific counter-evidence">
+                ⚖️ Challenge Definition (1 GEN)
+              </button>
+            </div>
+            <div id="dispute-status-pill" style="display:none;font-family:var(--font-mono);font-size:0.65rem;color:var(--orange-bright);background:rgba(255,107,44,0.15);border:1px solid rgba(255,107,44,0.3);padding:0.2rem 0.55rem;border-radius:4px;margin-bottom:0.6rem;"></div>
             <p class="def-text" id="result-definition">—</p>
           </div>
 
@@ -1111,11 +1117,23 @@ function showState(state) {
 
 // ── Render result ──
 function renderResult(data, term, txHash) {
+  window.currentRenderedTerm = term;
   document.getElementById('result-term').textContent = term.charAt(0).toUpperCase() + term.slice(1);
   document.getElementById('result-category').textContent = data.category || 'General';
   document.getElementById('result-definition').textContent = data.definition || 'Definition not available.';
   document.getElementById('result-explanation').textContent = data.detailed_explanation || 'Explanation not available.';
   document.getElementById('result-clinical').textContent = data.clinical_relevance || 'No specific clinical notes.';
+
+  // Peer dispute status pill
+  const disputePill = document.getElementById('dispute-status-pill');
+  if (disputePill) {
+    if (data.disputed || (data.dispute_count && data.dispute_count > 0)) {
+      disputePill.style.display = 'inline-block';
+      disputePill.innerHTML = `⚖️ Refined via Peer Dispute & AI Consensus (${data.dispute_count || 1} challenge won)`;
+    } else {
+      disputePill.style.display = 'none';
+    }
+  }
 
   // Facts
   const factsList = document.getElementById('result-facts');
@@ -1779,8 +1797,121 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
+  // ── Peer Challenge & Dispute Modal Handlers ──
+  const openDisputeBtn = document.getElementById('open-dispute-btn');
+  const disputeModal = document.getElementById('dispute-modal');
+  const closeDisputeBtn = document.getElementById('close-dispute-btn');
+  const cancelDisputeBtn = document.getElementById('cancel-dispute-btn');
+  const submitDisputeBtn = document.getElementById('submit-dispute-btn');
+
+  if (openDisputeBtn && disputeModal) {
+    openDisputeBtn.addEventListener('click', () => {
+      if (!window.myogenWallet?.address) {
+        showToast("Please connect your wallet first to stake and file a dispute.", "warning", 4000);
+        return;
+      }
+      disputeModal.style.display = 'flex';
+    });
+
+    const hideDisputeModal = () => { disputeModal.style.display = 'none'; };
+    if (closeDisputeBtn) closeDisputeBtn.addEventListener('click', hideDisputeModal);
+    if (cancelDisputeBtn) cancelDisputeBtn.addEventListener('click', hideDisputeModal);
+
+    if (submitDisputeBtn) {
+      submitDisputeBtn.addEventListener('click', async () => {
+        const counterDef = document.getElementById('dispute-counter-def').value.trim();
+        const counterUrl = document.getElementById('dispute-counter-url').value.trim();
+        const reason = document.getElementById('dispute-reason').value.trim();
+        const term = window.currentRenderedTerm;
+
+        if (!term) {
+          showToast("No active term selected to dispute.", "error", 4000);
+          return;
+        }
+        if (!counterDef || !counterUrl) {
+          showToast("Please provide both a counter-definition and scientific evidence URL.", "warning", 4000);
+          return;
+        }
+
+        submitDisputeBtn.textContent = "Submitting Dispute...";
+        submitDisputeBtn.style.pointerEvents = "none";
+
+        try {
+          showToast(`Staking 1 GEN to challenge "${term}"...`, "info", 6000);
+          const txHash = await window.callGenLayer(
+            CONTRACT_ADDRESS,
+            'challenge_term',
+            [term, counterDef, counterUrl, reason || "Scientific correction"],
+            window.myogenWallet.address,
+            "1000000000000000000" // 1 GEN in wei
+          );
+
+          // Optimistic deduction
+          const balEl = document.getElementById('wallet-balance-display');
+          if (balEl) {
+            const cur = parseFloat(balEl.textContent);
+            if (!isNaN(cur)) balEl.textContent = `${Math.max(0, cur - 1).toFixed(4)} GEN`;
+          }
+
+          hideDisputeModal();
+          showToast("Dispute transaction submitted! Waiting for GenLayer AI consensus...", "info", 8000);
+
+          const txStatus = await waitForGenLayerFinalized(txHash);
+          if (txStatus.isError) {
+            throw new Error("Dispute transaction failed on GenLayer.");
+          }
+
+          showToast("AI Consensus reached! Refreshing term status...", "success", 6000);
+          await refreshBalance();
+
+          // Refresh the term definition
+          const updatedRaw = await window.readGenLayer(CONTRACT_ADDRESS, 'get_cached_term', [term]);
+          const updatedData = typeof updatedRaw === 'string' ? JSON.parse(updatedRaw) : updatedRaw;
+          if (updatedData && updatedData.explanation) {
+            renderResult(updatedData.explanation, term, txHash);
+          }
+        } catch (err) {
+          console.error("Dispute error:", err);
+          showToast("Failed to file dispute: " + err.message, "error", 5000);
+        } finally {
+          submitDisputeBtn.textContent = "Stake 1 GEN & File Dispute";
+          submitDisputeBtn.style.pointerEvents = "auto";
+        }
+      });
+    }
   }
 });
 </script>
+
+  <!-- DISPUTE MODAL -->
+  <div id="dispute-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:9999;align-items:center;justify-content:center;padding:1rem;">
+    <div style="background:#161618;border:1px solid rgba(255,107,44,0.4);border-radius:12px;width:100%;max-width:540px;padding:1.8rem;color:#fff;box-shadow:0 12px 40px rgba(0,0,0,0.8);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <h3 style="margin:0;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;color:var(--orange-bright);">
+          ⚖️ File Scientific Dispute
+        </h3>
+        <button id="close-dispute-btn" style="background:none;border:none;color:#aaa;font-size:1.4rem;cursor:pointer;">&times;</button>
+      </div>
+      <p style="font-size:0.8rem;color:#bbb;line-height:1.4;margin-bottom:1.2rem;">
+        Stake <strong>1 GEN</strong> to challenge this definition with scientific counter-evidence. GenLayer's AI consensus will adjudicate. If verified, you earn <strong>2 GEN</strong> and update the dictionary. Frivolous disputes are burned.
+      </p>
+      <div style="margin-bottom:0.9rem;">
+        <label style="display:block;font-size:0.75rem;font-family:var(--font-mono);color:var(--orange-core);margin-bottom:0.3rem;">// Counter-Definition</label>
+        <textarea id="dispute-counter-def" rows="3" style="width:100%;box-sizing:border-box;background:#0d0d0f;border:1px solid #333;border-radius:6px;color:#eee;padding:0.6rem;font-size:0.85rem;" placeholder="Scientifically superior definition..."></textarea>
+      </div>
+      <div style="margin-bottom:0.9rem;">
+        <label style="display:block;font-size:0.75rem;font-family:var(--font-mono);color:var(--orange-core);margin-bottom:0.3rem;">// Scientific Evidence URL</label>
+        <input type="url" id="dispute-counter-url" style="width:100%;box-sizing:border-box;background:#0d0d0f;border:1px solid #333;border-radius:6px;color:#eee;padding:0.6rem;font-size:0.85rem;" placeholder="https://en.wikipedia.org/... or PubMed link">
+      </div>
+      <div style="margin-bottom:1.2rem;">
+        <label style="display:block;font-size:0.75rem;font-family:var(--font-mono);color:var(--orange-core);margin-bottom:0.3rem;">// Reason for Dispute</label>
+        <input type="text" id="dispute-reason" style="width:100%;box-sizing:border-box;background:#0d0d0f;border:1px solid #333;border-radius:6px;color:#eee;padding:0.6rem;font-size:0.85rem;" placeholder="e.g. Current definition describes wrong molecule class...">
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:0.8rem;">
+        <button id="cancel-dispute-btn" style="background:#222;border:1px solid #444;color:#ccc;padding:0.5rem 1rem;border-radius:6px;cursor:pointer;">Cancel</button>
+        <button id="submit-dispute-btn" style="background:linear-gradient(135deg,var(--orange-core),var(--orange-bright));border:none;color:#fff;font-weight:600;padding:0.5rem 1.2rem;border-radius:6px;cursor:pointer;">Stake 1 GEN & File Dispute</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
